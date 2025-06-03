@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Productos Disponibles</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    #form-producto { display: none; }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <h3>Productos Disponibles</h3>
+    <div class="card-container" id="contenedor-cards">
+    </div>
+  </div>
+
+  <button id="btn-mostrar-form" class="card-add-button" style="margin-top:20px;">Añadir Producto</button>
+
+  <form id="form-producto" method="POST"
+      action="../backend/routes/api.php?seccion=añadirProducto">
+      <h3>Añadir Nuevo Producto</h3>
+      <label for="name">Nombre:</label>
+      <input type="text" id="name" name="name" required><br><br>
+      <label for="description">Descripción:</label>
+      <textarea id="description" name="description" required></textarea><br><br>
+      <label for="price">Precio:</label>
+      <input type="number" id="price" name="price" required step="0.01"><br><br>
+      <button type="submit">Añadir Producto</button>
+      <button type="button" id="btn-cerrar-form" style="margin-left:10px;">Cancelar</button>
+  </form>
+
+  <script>
+    document.getElementById('btn-mostrar-form').onclick = function() {
+      document.getElementById('form-producto').style.display = 'block';
+      this.style.display = 'none';
+    };
+    document.getElementById('btn-cerrar-form').onclick = function() {
+      document.getElementById('form-producto').style.display = 'none';
+      document.getElementById('btn-mostrar-form').style.display = 'inline-block';
+    };
+  </script>
+
+  <script>
+    async function obtenerProductos() {
+        try {
+            const respuesta = await fetch("../backend/routes/api.php?seccion=productos");
+            const productos = await respuesta.json();
+            if (productos && productos.length > 0) {
+                mostrarCards(productos);
+            } else {
+                document.getElementById("contenedor-cards").innerHTML = "<p>No hay productos disponibles.</p>";
+            }
+        } catch (error) {
+            console.error("Error al obtener los productos", error);
+            document.getElementById("contenedor-cards").innerHTML = "<p>Error al cargar los productos.</p>";
+        }
+    }
+
+    function mostrarCards(productos) {
+        const contenedor = document.getElementById("contenedor-cards");
+        contenedor.innerHTML = "";
+        productos.forEach(producto => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+                <div class="card-content">
+                    <h3 class="card-title">${producto.name}</h3>
+                    <p class="card-text">${producto.description}</p>
+                    <p class="card-text"><b>Precio:</b> $${producto.price}</p>
+                    <a href="#" class="card-button">Ver más</a>
+                </div>
+            `;
+            contenedor.appendChild(card);
+        });
+    }
+
+    obtenerProductos();
+  </script>
+</body>
+</html>

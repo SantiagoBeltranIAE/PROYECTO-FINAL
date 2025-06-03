@@ -21,5 +21,14 @@ class Producto {
             $price
         ]);
     }      
+    public function editar($id, $name, $description, $price) {
+    $stmt = $this->pdo->prepare("UPDATE products SET name = ?, description = ?, price = ? WHERE id = ?");
+    return $stmt->execute([
+        $name,
+        $description,
+        $price,
+        $id
+    ]);
+}
 } 
 ?>
