@@ -23,5 +23,22 @@ function agregarProducto() {
     } else {
         echo json_encode(["Faltan datos obligatorios"]);
     }
+function editarProducto() {
+    global $productoModel;
+    $id = $_POST["id"] ?? '';
+    $name = $_POST["name"] ?? '';
+    $description = $_POST["description"] ?? '';
+    $price = $_POST["price"] ?? '';
+
+    if ($id && $name && $description && $price) {
+        if ($productoModel->editar($id, $name, $description, $price)) {
+            echo json_encode(["Producto editado"]);
+        } else {
+            echo json_encode(["Error al editar el producto"]);
+        }
+    } else {
+        echo json_encode(["Faltan datos obligatorios"]);
+    }
+}
 }
 ?>

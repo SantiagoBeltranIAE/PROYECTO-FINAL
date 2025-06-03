@@ -9,6 +9,8 @@ if ($requestMethod == "POST") {
         agregarProducto();
     } else if ($seccion == "eliminarProducto") {
         eliminarProducto();
+    } else if ($seccion == "editarProducto") {
+        editarProducto();
     } else {
         echo "Sección POST no válida o no especificada.";
     }
