@@ -30,5 +30,10 @@ class Producto {
         $id
     ]);
 }
+
+public function eliminar($id) {
+    $stmt = $this->pdo->prepare("DELETE FROM products WHERE id = ?");
+    return $stmt->execute([$id]);
+}
 } 
 ?>

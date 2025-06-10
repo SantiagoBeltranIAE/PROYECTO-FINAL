@@ -27,4 +27,46 @@ function mostrarProductos(productos) {
     });
 }
 
+// Eliminar producto
+async function eliminarProducto(id) {
+    if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
+    const formData = new FormData();
+    formData.append('id', id);
+    const respuesta = await fetch("../backend/routes/api.php?seccion=eliminarProducto", {
+        method: "POST",
+        body: formData
+    });
+    const resultado = await respuesta.json();
+    alert(resultado[0]);
+    obtenerProductos();
+}
+
+// Editar producto
+function cargarProductoEnFormulario(producto) {
+    document.getElementById('name').value = producto.name;
+    document.getElementById('description').value = producto.description;
+    document.getElementById('price').value = producto.price;
+    document.getElementById('btn-guardar').textContent = "Modificar";
+    window.productoEditandoId = producto.id;
+}
+
+async function guardarEdicionProducto() {
+    const formData = new FormData();
+    formData.append('id', window.productoEditandoId);
+    formData.append('name', document.getElementById('name').value);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('price', document.getElementById('price').value);
+
+    const respuesta = await fetch("../backend/routes/api.php?seccion=editarProducto", {
+        method: "POST",
+        body: formData
+    });
+    const resultado = await respuesta.json();
+    alert(resultado[0]);
+    document.getElementById('form-producto').reset();
+    document.getElementById('btn-guardar').textContent = "Añadir Producto";
+    window.productoEditandoId = null;
+    obtenerProductos();
+}
+
 obtenerProductos();

@@ -66,3 +66,44 @@ body {
 .card-button:hover {
   background: #0056b3;
 }
+
+/* Modal de confirmación */
+.modal-eliminar {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+}
+.modal-eliminar.activo {
+  display: flex;
+}
+.modal-contenido {
+  background: #fff;
+  padding: 30px 25px;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 250px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+}
+.modal-btn {
+  margin: 10px 15px 0 15px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 5px;
+  background: #007bff;
+  color: #fff;
+  font-size: 1em;
+  cursor: pointer;
+}
+.modal-btn:last-child {
+  background: #888;
+}
+.blur {
+  filter: blur(4px);
+  pointer-events: none;
+  user-select: none;
+}
