@@ -27,22 +27,94 @@
       <textarea id="description" name="description" required></textarea><br><br>
       <label for="price">Precio:</label>
       <input type="number" id="price" name="price" required step="0.01"><br><br>
-      <button type="submit">Añadir Producto</button>
+      <button type="submit" id="btn-guardar">Añadir Producto</button>
       <button type="button" id="btn-cerrar-form" style="margin-left:10px;">Cancelar</button>
   </form>
 
+  <!-- Modal de confirmación -->
+  <div id="modal-eliminar" class="modal-eliminar">
+    <div class="modal-contenido">
+      <p>¿Seguro que deseas eliminar este producto?</p>
+      <button id="btn-si-eliminar" class="modal-btn">Sí</button>
+      <button id="btn-no-eliminar" class="modal-btn">No</button>
+    </div>
+  </div>
+
   <script>
+    let productoEditandoId = null;
+    let idAEliminar = null;
+
     document.getElementById('btn-mostrar-form').onclick = function() {
       document.getElementById('form-producto').style.display = 'block';
       this.style.display = 'none';
     };
     document.getElementById('btn-cerrar-form').onclick = function() {
-      document.getElementById('form-producto').style.display = 'none';
-      document.getElementById('btn-mostrar-form').style.display = 'inline-block';
+        document.getElementById('form-producto').reset();
+        document.getElementById('form-producto').style.display = 'none';
+        document.getElementById('btn-mostrar-form').style.display = 'inline-block';
+        productoEditandoId = null;
+        document.getElementById('btn-guardar').textContent = "Añadir Producto";
     };
-  </script>
 
-  <script>
+    document.getElementById('form-producto').onsubmit = async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        let url = "../backend/routes/api.php?seccion=añadirProducto";
+        if (productoEditandoId) {
+            formData.append('id', productoEditandoId);
+            url = "../backend/routes/api.php?seccion=editarProducto";
+        }
+        await fetch(url, {
+            method: "POST",
+            body: formData
+        });
+        form.reset();
+        productoEditandoId = null;
+        document.getElementById('btn-mostrar-form').style.display = 'inline-block';
+        document.getElementById('form-producto').style.display = 'none';
+        document.getElementById('btn-guardar').textContent = "Añadir Producto";
+        obtenerProductos();
+    };
+
+    function cargarEnFormulario(producto) {
+        document.getElementById('form-producto').style.display = 'block';
+        document.getElementById('btn-mostrar-form').style.display = 'none';
+        document.getElementById('name').value = producto.name;
+        document.getElementById('description').value = producto.description;
+        document.getElementById('price').value = producto.price;
+        document.getElementById('btn-guardar').textContent = "Modificar Producto";
+        productoEditandoId = producto.id;
+    }
+
+    function mostrarModalEliminar(id) {
+        idAEliminar = id;
+        document.getElementById('modal-eliminar').classList.add('activo');
+        document.querySelector('.content').classList.add('blur');
+        document.getElementById('form-producto').classList.add('blur');
+    }
+
+    document.getElementById('btn-si-eliminar').onclick = async function() {
+        const formData = new FormData();
+        formData.append('id', idAEliminar);
+        await fetch("../backend/routes/api.php?seccion=eliminarProducto", {
+            method: "POST",
+            body: formData
+        });
+        document.getElementById('modal-eliminar').classList.remove('activo');
+        document.querySelector('.content').classList.remove('blur');
+        document.getElementById('form-producto').classList.remove('blur');
+        obtenerProductos();
+        idAEliminar = null;
+    };
+
+    document.getElementById('btn-no-eliminar').onclick = function() {
+        document.getElementById('modal-eliminar').classList.remove('activo');
+        document.querySelector('.content').classList.remove('blur');
+        document.getElementById('form-producto').classList.remove('blur');
+        idAEliminar = null;
+    };
+
     async function obtenerProductos() {
         try {
             const respuesta = await fetch("../backend/routes/api.php?seccion=productos");
@@ -65,14 +137,32 @@
             const card = document.createElement("div");
             card.className = "card";
             card.innerHTML = `
-                <div class="card-content">
+                <div class="card-content" id="card-content-${producto.id}">
                     <h3 class="card-title">${producto.name}</h3>
                     <p class="card-text">${producto.description}</p>
                     <p class="card-text"><b>Precio:</b> $${producto.price}</p>
-                    <a href="#" class="card-button">Ver más</a>
+                    <button class="card-button editar-btn" data-id="${producto.id}">✏️ Editar</button>
+                    <button class="card-button eliminar-btn" data-id="${producto.id}">🗑️ Eliminar</button>
                 </div>
             `;
             contenedor.appendChild(card);
+        });
+
+        // Eventos para los botones de editar
+        document.querySelectorAll('.editar-btn').forEach(btn => {
+            btn.onclick = function() {
+                const id = this.getAttribute('data-id');
+                const producto = productos.find(p => p.id == id);
+                cargarEnFormulario(producto);
+            };
+        });
+
+        // Eventos para los botones de eliminar
+        document.querySelectorAll('.eliminar-btn').forEach(btn => {
+            btn.onclick = function() {
+                const id = this.getAttribute('data-id');
+                mostrarModalEliminar(id);
+            };
         });
     }
 
