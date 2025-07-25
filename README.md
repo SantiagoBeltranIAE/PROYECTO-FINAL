@@ -1,4 +1,4 @@
-# 🍽️ Vanella Restaurante - Proyecto Web
+# 🍽️ Mestiza Restaurante - Proyecto Web desarrollado por Vanella Dev
 
 Este proyecto es una aplicación web para el restaurante *Mestiza*, desarrollada como trabajo final. Está enfocada en permitir a los clientes realizar reservas, consultar el menú, visualizar eventos próximos y pedir delivery desde la web.
 
