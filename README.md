@@ -92,7 +92,7 @@ La estructura del sistema está basada en las siguientes entidades:
 - `producto` → asociado a → `detalle_pedido`
 - `detalle_pedido` → pertenece a → `pedido`
 
-![Mer_Proyecto.drawio](Mer_Proyecto.drawio.png)
+![Mer.drawio](Mer.drawio.png)
 
 ---
 
