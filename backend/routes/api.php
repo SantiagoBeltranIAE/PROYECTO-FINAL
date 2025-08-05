@@ -1,4 +1,5 @@
 <?php
+require_once("log.php");
 require "../controllers/productos.php";
 
 $requestMethod = $_SERVER["REQUEST_METHOD"];
