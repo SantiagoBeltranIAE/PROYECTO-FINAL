@@ -256,3 +256,23 @@ footer {
   background-color: #b2a473;
 }
 
+.social-media {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.social-media a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.social-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+}
+
