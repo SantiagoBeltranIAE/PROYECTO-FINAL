@@ -1,12 +1,38 @@
-body {
-  height: 100vh;
-  font-family: 'Helvetica', sans-serif;
+/* Reset global */
+* {
   margin: 0;
-  background: #fefaf3;
-  color: #111;
+  padding: 0;
+  box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total de los elementos */
 }
 
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+/* Registrar la fuente personalizada */
+@font-face {
+  font-family: 'MiFuente';
+  src: url('./airstrike.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Helvetica', sans-serif;
+  display: flex;
+  flex-direction: column; /* Coloca el contenido en columna */
+}
+
+main {
+  flex: 1; /* Hace que el contenido principal ocupe el espacio disponible */
+}
+
+/* Navbar */
 .navbar {
+  display: flex;
+  justify-content: center; /* Centra los botones horizontalmente */
+  align-items: center; /* Centra los botones verticalmente */
   background: #c4b68c;
   padding: 0 20px;
 }
@@ -15,7 +41,7 @@ body {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: center; /* Asegura que los botones estén centrados */
   gap: 12px;
   margin: 0;
   padding: 10px 0;
@@ -127,7 +153,8 @@ footer {
   color: #fff;
   text-align: center;
   padding: 40px 20px;
-  margin-top: 60px;
+  margin: 0;
+  width: 100%;
 }
 
 /* Estrellas interactivas */
@@ -254,5 +281,30 @@ footer {
 
 .input-group-text:hover {
   background-color: #b2a473;
+}
+
+.social-media {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.social-media a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.social-icon {
+  width: 50px;
+  height: 50px;
+  margin-right: 5px;
+}
+
+.sobre-nosotros p {
+  margin-bottom: 20px; /* Ajusta el espacio entre párrafos */
+  line-height: 1.6; /* Mejora la legibilidad */
 }
 
