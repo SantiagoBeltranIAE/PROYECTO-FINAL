@@ -5,6 +5,45 @@
   box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total de los elementos */
 }
 
+#navMenu {
+
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+    margin: 0;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    background-color: #eba309;
+    justify-content: space-between;
+    height: 10vh;
+    width: 100vw;
+    position: fixed;
+}
+
+button {
+    border: none;
+    background-color: #eba309;
+    color: white;
+    padding: 16px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 0;
+    cursor: pointer;
+
+}
+
+
+button:hover {
+    background-color: #e96d07;
+    border: none;
+    color: white;
+}
+
 html, body {
   width: 100%;
   height: 100%;
@@ -203,24 +242,6 @@ footer {
   font-family: 'Helvetica', sans-serif;
 }
 
-/* Botones de navegación */
-.fc-button {
-  background-color: #222; /* igual que navbar links */
-  border: none;
-  color: #fff;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 20px; /* igual que navbar píldoras */
-  transition: background-color 0.3s ease;
-  box-shadow: none;
-}
-
-.fc-button:hover,
-.fc-button:focus {
-  background-color: #007bff; /* azul hover igual que navbar */
-  color: #fff;
-  outline: none;
-}
 
 /* Título central */
 .fc-toolbar-title {
