@@ -12,57 +12,75 @@
 
   <body>
     <header>
-      <nav class="navbar">
-        <ul class="navbar-list">
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="sobre_nosotros.html">Sobre Nosotros</a></li>
-          <li><a href="opiniones.html">Opiniones</a></li>
-          <li><a href="menu.html">Menú</a></li>
-          <li><a href="eventos.html">Reservas</a></li>
-          <li><a href="calendario.html">Calendario</a></li>
-        </ul>
-      </nav>
+       <nav id="navMenu">
+        
+          <button type="button" onclick="window.location = 'index.html';"> 
+              Inicio
+          </button>
+          <button type="button" onclick="window.location = 'sobre_nosotros.html';"> 
+              Sobre Nosotros
+          </button>
+          <button type="button" onclick="window.location = 'opiniones.html';"> 
+              Opiniones
+          </button>
+          <button type="button" onclick="window.location = 'menu.html';"> 
+              Menú
+          </button>
+          <button type="button" onclick="window.location = 'eventos.html';"> 
+              Reservas
+          </button>
+          <button type="button" onclick="window.location = 'calendario.html';"> 
+              Calendario
+          </button>
+    </nav>
     </header>
 
     <section class="hero">
-      <img src="style/FOTO.png" alt="Restaurante Mestiza Street Food" class="hero-img"
-        style="max-width: 350px; width: 100%; display: block; margin: 0 auto;">
-      <p class="horarios">ESTADO: ABIERTO<br>DE LUNES A VIERNES 17 A 19 HS</p>
-    </section>
+  <img src="style/FOTO.png" alt="Logo del restaurante Mestiza" class="hero-img"        style="max-width: 350px; width: 100%; display: block; margin: 0 auto;">
+ <p class="horarios">ABIERTO<br> <!-- En un futuro debe ser dinamico -->
+        Lunes a Viernes: 17:00 a 19:00<br>
+        Sábados y Domingos: 13:00 a 23:00</p>    </section>
 
 
     <main>
-      <section class="card">
-        <div class="card-content">
-          <p class="card-text"><strong>Especialidades de la Casa</strong></p>
-        </div>
-      </section>
+   <section> <!-- estas secciones que sean un carrusel-->
+        <div class="mas-populares">
+        <h2 class="card-title">Nuestros mas populares</h2>
+        <!--Acá también podriamos usar las estadisticas y hacerlo dinamico-->
+        <div class="card-container"> 
 
       <section>
         <div class="card-container">
           <div class="card">
-            <img src="style/as.jpg" alt="Plato especial 1" width="100%">
-            <div class="card-content">
+<img src="style/assets/hamburguesa-placeholder.jpg" alt="Plato especial 1" width="100%">            <div class="card-content">
               <h3 class="card-title">Mestiza</h3>
               <p class="card-text">borguesa</p>
+                            <!--Agregar botón de pedir-->
+
+
             </div>
           </div>
+</div>
+        </div>
+      </section>
+
+      <section>
+        <div class="recomendaciones">
+          <!-- y esto que lo peudan editar dede la pagina de admin-->
+        <h2 class="card-title">Recomendaciones de la casa</h2>       
+        <div class="card-container"> 
           <div class="card">
-            <img src="style/as.jpg" alt="Plato especial 2" width="100%">
+             <img src="style/assets/hamburguesa-placeholder.jpg" alt="Plato especial 1" width="100%">
             <div class="card-content">
-              <h3 class="card-title">Mestiza</h3>
-              <p class="card-text">milanesa</p>
-            </div>
-          </div>
-          <div class="card">
-            <img src="style/as.jpg" alt="Plato especial 3" width="100%">
-            <div class="card-content">
-              <h3 class="card-title">Mestiza</h3>
-              <p class="card-text">plato de coso</p>
+              <h3 class="card-title">Mestiza</h3>            
+            <p class="card-text">borguesa</p>
             </div>
           </div>
         </div>
+        </div>
       </section>
+
+      
     </main>
 
     <footer>
