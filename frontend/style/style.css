@@ -58,16 +58,17 @@ body {
 /* Registrar la fuente personalizada */
 @font-face {
   font-family: 'MiFuente';
-  src: url('./airstrike.ttf') format('truetype');
+  src: url('Times New Romance.otf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 body {
-  font-family: 'Helvetica', sans-serif;
-  display: flex;
-  flex-direction: column;
-  /* Coloca el contenido en columna */
+  height: 100vh;
+  font-family: 'MiFuente', sans-serif;
+  margin: 0;
+  background: #fefaf3;
+  color: #111;
 }
 
 main {
