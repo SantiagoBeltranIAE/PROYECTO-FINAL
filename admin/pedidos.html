@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos - Panel Administrativo</title>
+    <link rel="stylesheet" href="../frontend/style/style.css">
+    <style>
+        .sortable {
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .sortable:hover {
+            background-color: #a99666;
+        }
+        
+        .sortable::after {
+            content: " ↕";
+            opacity: 0.5;
+        }
+        
+        .btn-complete {
+            background-color: #28a745;
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        .order-completed {
+            opacity: 0.6;
+            background-color: #f8f9fa;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .order-detail {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="navMenu">
+            <div class="nav-left">
+                <button onclick="window.location.href='productos.html'">Productos</button>
+                <button onclick="window.location.href='pedidos.html'" class="active">Pedidos</button>
+                <button onclick="window.location.href='estadisticas.html'">Estadísticas</button>
+                <button onclick="window.location.href='general.html'">General</button>
+            </div>
+            <div class="nav-right">
+                <button onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>GESTIÓN DE PEDIDOS</h1>
+            <p>Ver y administrar pedidos activos realizados por clientes</p>
+        </div>
+
+        <section class="admin-section">
+            <h2 class="section-title">Pedidos Activos</h2>
+            <p>En esta sección se pueden ver los pedidos activos realizados por clientes. Verás el nombre del cliente, la dirección, la hora a la que se realizó, los productos encargados, el valor de la orden, el medio de pago que eligió y comentarios si se agregaron.</p>
+
+            <!-- Tabla de Pedidos -->
+            <table style="width:100%; border-collapse:collapse; margin-top:20px;" id="ordersTable">
+                <thead>
+                    <tr style="background:#c4b68c; color:white;">
+                        <th style="padding:10px; text-align:left;">Cliente</th>
+                        <th style="padding:10px; text-align:left;">Dirección</th>
+                        <th style="padding:10px; text-align:left; cursor:pointer;" class="sortable" onclick="sortTable(2)">Hora</th>
+                        <th style="padding:10px; text-align:left; cursor:pointer;" class="sortable" onclick="sortTable(3)">Productos</th>
+                        <th style="padding:10px; text-align:left; cursor:pointer;" class="sortable" onclick="sortTable(4)">Monto</th>
+                        <th style="padding:10px; text-align:left;">Pago</th>
+                        <th style="padding:10px; text-align:left;">Comentarios</th>
+                        <th style="padding:10px; text-align:left;">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom:1px solid #ddd;" id="order-1">
+                        <td style="padding:10px;">María González</td>
+                        <td style="padding:10px;">Av. 18 de Julio 1234</td>
+                        <td style="padding:10px;" data-sort="14:30">14:30</td>
+                        <td style="padding:10px;" data-sort="3">
+                            <div class="order-detail">
+                                • 2x Hamburguesa Especial<br>
+                                • 1x Tacos de Pollo
+                            </div>
+                        </td>
+                        <td style="padding:10px;" data-sort="980">$980</td>
+                        <td style="padding:10px;">Tarjeta de Crédito</td>
+                        <td style="padding:10px;">Sin cebolla en las hamburguesas</td>
+                        <td style="padding:10px;">
+                            <button class="btn-complete" onclick="completeOrder(1)">Completar</button>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom:1px solid #ddd;" id="order-2">
+                        <td style="padding:10px;">Carlos Ruiz</td>
+                        <td style="padding:10px;">Rambla República de Francia 456</td>
+                        <td style="padding:10px;" data-sort="15:15">15:15</td>
+                        <td style="padding:10px;" data-sort="1">
+                            <div class="order-detail">
+                                • 1x Hamburguesa Especial
+                            </div>
+                        </td>
+                        <td style="padding:10px;" data-sort="350">$350</td>
+                        <td style="padding:10px;">Efectivo</td>
+                        <td style="padding:10px;">Entrega rápida por favor</td>
+                        <td style="padding:10px;">
+                            <button class="btn-complete" onclick="completeOrder(2)">Completar</button>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom:1px solid #ddd;" id="order-3">
+                        <td style="padding:10px;">Ana Martín</td>
+                        <td style="padding:10px;">Ciudad Vieja 789</td>
+                        <td style="padding:10px;" data-sort="13:45">13:45</td>
+                        <td style="padding:10px;" data-sort="4">
+                            <div class="order-detail">
+                                • 3x Tacos de Pollo<br>
+                                • 1x Hamburguesa Especial
+                            </div>
+                        </td>
+                        <td style="padding:10px;" data-sort="1190">$1190</td>
+                        <td style="padding:10px;">Efectivo</td>
+                        <td style="padding:10px;">-</td>
+                        <td style="padding:10px;">
+                            <button class="btn-complete" onclick="completeOrder(3)">Completar</button>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom:1px solid #ddd;" id="order-4">
+                        <td style="padding:10px;">Roberto Silva</td>
+                        <td style="padding:10px;">Pocitos 321</td>
+                        <td style="padding:10px;" data-sort="16:00">16:00</td>
+                        <td style="padding:10px;" data-sort="2">
+                            <div class="order-detail">
+                                • 2x Tacos de Pollo
+                            </div>
+                        </td>
+                        <td style="padding:10px;" data-sort="560">$560</td>
+                        <td style="padding:10px;">Tarjeta de Débito</td>
+                        <td style="padding:10px;">Agregar salsa extra</td>
+                        <td style="padding:10px;">
+                            <button class="btn-complete" onclick="completeOrder(4)">Completar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                <h3>Filtrar Pedidos:</h3>
+                <p>Presionando en el encabezado correspondiente de la tabla se puede filtrar en modo ascendente y descendente por hora encargada, cantidad de productos que la orden contiene y monto.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Confirmación -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3>Completar Pedido</h3>
+            <p>¿Está seguro de que desea marcar este pedido como completado?</p>
+            <p><strong>Esta acción moverá el pedido fuera de la lista de pedidos activos.</strong></p>
+            <div class="action-buttons">
+                <button class="btn-success" id="confirmCompleteBtn">Aceptar</button>
+                <button class="btn-secondary" onclick="closeConfirmModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Sistema Administrativo del Restaurante. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        let sortDirection = {};
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('ordersTable');
+            const tbody = table.tbody;
+            const rows = Array.from(tbody.rows);
+            
+            // Determinar dirección del sorting
+            const direction = sortDirection[columnIndex] || 'asc';
+            sortDirection[columnIndex] = direction === 'asc' ? 'desc' : 'asc';
+            
+            // Función de comparación
+            rows.sort((a, b) => {
+                let aVal, bVal;
+                
+                if (columnIndex === 2) { // Hora
+                    aVal = a.cells[columnIndex].getAttribute('data-sort');
+                    bVal = b.cells[columnIndex].getAttribute('data-sort');
+                } else if (columnIndex === 3) { // Productos (cantidad)
+                    aVal = parseInt(a.cells[columnIndex].getAttribute('data-sort'));
+                    bVal = parseInt(b.cells[columnIndex].getAttribute('data-sort'));
+                } else if (columnIndex === 4) { // Monto
+                    aVal = parseInt(a.cells[columnIndex].getAttribute('data-sort'));
+                    bVal = parseInt(b.cells[columnIndex].getAttribute('data-sort'));
+                }
+                
+                if (direction === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+            
+            // Reordenar filas
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function completeOrder(orderId) {
+            document.getElementById('confirmCompleteBtn').onclick = function() {
+                const orderRow = document.getElementById(`order-${orderId}`);
+                orderRow.remove();
+                closeConfirmModal();
+                alert('Pedido marcado como completado');
+            };
+            document.getElementById('confirmModal').style.display = 'block';
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+        }
+
+        function logout() {
+            if(confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Cerrar modal al hacer clic fuera de él
+        window.onclick = function(event) {
+            const confirmModal = document.getElementById('confirmModal');
+            if (event.target === confirmModal) {
+                closeConfirmModal();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General - Panel Administrativo</title>
+    <link rel="stylesheet" href="../frontend/style/style.css">
+</head>
+<body>
+    <header>
+        <div id="navMenu">
+            <div class="nav-left">
+                <button onclick="window.location.href='productos.html'">Productos</button>
+                <button onclick="window.location.href='pedidos.html'">Pedidos</button>
+                <button onclick="window.location.href='estadisticas.html'">Estadísticas</button>
+                <button onclick="window.location.href='general.html'" style="background-color: #e96d07;">General</button>
+            </div>
+            <div class="nav-right">
+                <button onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>CONFIGURACIÓN GENERAL</h1>
+            <p>Modificar datos como horarios de atención, métodos de pago y eventos del calendario</p>
+        </div>
+
+        <!-- Calendario -->
+        <section style="background: #fff; border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+            <h2 class="section-title">Calendario de Eventos</h2>
+            <p>Administrar fechas especiales, eventos y promociones</p>
+            
+            <div class="action-buttons">
+                <button onclick="addEvent()">Agregar Evento</button>
+                <button onclick="viewCalendar()">Ver Calendario Completo</button>
+            </div>
+
+            <!-- Calendario Simple -->
+            <div id="calendar" style="max-width: 900px; margin: 40px auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 6px 18px rgb(0 0 0 / 0.08);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #222; padding-bottom: 8px;">
+                    <button onclick="previousMonth()">&lt; Anterior</button>
+                    <h3 id="currentMonth" style="font-family: 'Courier New', monospace; font-size: 1.7rem; font-weight: 900;">Septiembre 2025</h3>
+                    <button onclick="nextMonth()">Siguiente &gt;</button>
+                </div>
+                
+                <!-- Próximos eventos -->
+                <div style="background: #fef3d6; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h4>Próximos Eventos</h4>
+                    <div style="margin-top: 10px;">
+                        <div style="padding: 8px 0; border-bottom: 1px solid #ddd;">
+                            <strong>20 Sept:</strong> Promoción Pizza 2x1
+                        </div>
+                        <div style="padding: 8px 0; border-bottom: 1px solid #ddd;">
+                            <strong>25 Sept:</strong> Noche de Tacos - 20% descuento
+                        </div>
+                        <div style="padding: 8px 0;">
+                            <strong>30 Sept:</strong> Cierre de mes - inventario
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Horarios y Ajustes -->
+        <section style="background: #fff; border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+            <h2 class="section-title">Horarios y Otros Ajustes</h2>
+            
+            <!-- Horarios de Atención -->
+            <div style="margin-bottom: 30px;">
+                <h3 style="color: #333; margin-bottom: 15px;">Horarios de Atención</h3>
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr style="background:#c4b68c; color:white;">
+                            <th style="padding:10px; text-align:left;">Día</th>
+                            <th style="padding:10px; text-align:left;">Apertura</th>
+                            <th style="padding:10px; text-align:left;">Cierre</th>
+                            <th style="padding:10px; text-align:left;">Estado</th>
+                            <th style="padding:10px; text-align:left;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom:1px solid #ddd;">
+                            <td style="padding:10px;">Lunes</td>
+                            <td style="padding:10px;"><input type="time" value="11:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><input type="time" value="22:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><span style="background:#d4edda; color:#155724; padding:4px 8px; border-radius:10px; font-size:12px;">Abierto</span></td>
+                            <td style="padding:10px;">
+                                <button style="padding:5px 10px; font-size:12px;" onclick="saveSchedule('lunes')">Guardar</button>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #ddd;">
+                            <td style="padding:10px;">Martes</td>
+                            <td style="padding:10px;"><input type="time" value="11:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><input type="time" value="22:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><span style="background:#d4edda; color:#155724; padding:4px 8px; border-radius:10px; font-size:12px;">Abierto</span></td>
+                            <td style="padding:10px;">
+                                <button style="padding:5px 10px; font-size:12px;" onclick="saveSchedule('martes')">Guardar</button>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #ddd;">
+                            <td style="padding:10px;">Miércoles</td>
+                            <td style="padding:10px;"><input type="time" value="11:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><input type="time" value="22:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><span style="background:#d4edda; color:#155724; padding:4px 8px; border-radius:10px; font-size:12px;">Abierto</span></td>
+                            <td style="padding:10px;">
+                                <button style="padding:5px 10px; font-size:12px;" onclick="saveSchedule('miercoles')">Guardar</button>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #ddd;">
+                            <td style="padding:10px;">Jueves</td>
+                            <td style="padding:10px;"><input type="time" value="11:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><input type="time" value="22:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><span style="background:#d4edda; color:#155724; padding:4px 8px; border-radius:10px; font-size:12px;">Abierto</span></td>
+                            <td style="padding:10px;">
+                                <button style="padding:5px 10px; font-size:12px;" onclick="saveSchedule('jueves')">Guardar</button>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #ddd;">
+                            <td style="padding:10px;">Viernes</td>
+                            <td style="padding:10px;"><input type="time" value="11:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><input type="time" value="23:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><span style="background:#d4edda; color:#155724; padding:4px 8px; border-radius:10px; font-size:12px;">Abierto</span></td>
+                            <td style="padding:10px;">
+                                <button style="padding:5px 10px; font-size:12px;" onclick="saveSchedule('viernes')">Guardar</button>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #ddd;">
+                            <td style="padding:10px;">Sábado</td>
+                            <td style="padding:10px;"><input type="time" value="12:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><input type="time" value="23:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><span style="background:#d4edda; color:#155724; padding:4px 8px; border-radius:10px; font-size:12px;">Abierto</span></td>
+                            <td style="padding:10px;">
+                                <button style="padding:5px 10px; font-size:12px;" onclick="saveSchedule('sabado')">Guardar</button>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom:1px solid #ddd;">
+                            <td style="padding:10px;">Domingo</td>
+                            <td style="padding:10px;"><input type="time" value="12:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><input type="time" value="21:00" style="border:1px solid #c4b68c; padding:5px; border-radius:4px;"></td>
+                            <td style="padding:10px;"><span style="background:#f8d7da; color:#721c24; padding:4px 8px; border-radius:10px; font-size:12px;">Cerrado</span></td>
+                            <td style="padding:10px;">
+                                <button style="padding:5px 10px; font-size:12px;" onclick="toggleDay('domingo')">Abrir</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Métodos de Pago -->
+            <div style="margin-bottom: 30px;">
+                <h3 style="color: #333; margin-bottom: 15px;">Métodos de Pago Aceptados</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" checked style="transform: scale(1.2);">
+                            <span>Efectivo</span>
+                        </label>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" checked style="transform: scale(1.2);">
+                            <span>Tarjeta de Crédito</span>
+                        </label>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" checked style="transform: scale(1.2);">
+                            <span>Tarjeta de Débito</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="action-buttons" style="margin-top: 15px;">
+                    <button onclick="savePaymentMethods()">Guardar Métodos de Pago</button>
+                </div>
+            </div>
+
+
+    <script>
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+
+        const months = [
+            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ];
+
+        function addEvent() {
+            const eventTitle = prompt('Título del evento:');
+            const eventDate = prompt('Fecha del evento (DD/MM/YYYY):');
+            
+            if (eventTitle && eventDate) {
+                alert(`Evento "${eventTitle}" agregado para el ${eventDate}`);
+                // Aquí se agregaría la lógica para guardar el evento
+            }
+        }
+
+        function viewCalendar() {
+            alert('Abriendo vista completa del calendario...');
+        }
+
+        function previousMonth() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            updateCalendarTitle();
+        }
+
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            updateCalendarTitle();
+        }
+
+        function updateCalendarTitle() {
+            document.getElementById('currentMonth').textContent = `${months[currentMonth]} ${currentYear}`;
+        }
+
+        function saveSchedule(day) {
+            alert(`Horario guardado para ${day}`);
+        }
+
+        function toggleDay(day) {
+            alert(`Cambiando estado del ${day}`);
+        }
+
+        function savePaymentMethods() {
+            alert('Métodos de pago actualizados');
+        }
+
+        function saveRestaurantInfo() {
+            alert('Información del restaurante guardada');
+        }
+
+        function logout() {
+            if(confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+
+       <footer>
+        <p>&copy; 2025 Sistema Administrativo del Restaurante. Todos los derechos reservados.</p>
+    </footer>
+    
+</body>
+
+</html>
