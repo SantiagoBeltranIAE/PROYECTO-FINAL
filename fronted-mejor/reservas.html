@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reservas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="nav-left">
+        <a href="index.html">Inicio</a>
+        <a href="sobre_nosotros.html">Sobre Nosotros</a>
+        <a href="opiniones.html">Opiniones</a>
+        <a href="menu.html">Menú</a>
+      </div>
+      <div class="nav-right">
+        <a href="reservas.html">Reservas</a>
+        <a href="calendario.html">Calendario</a>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h1>Reservas</h1>
+      <form id="form-reservas">
+        <label for="nombre">Nombre Completo:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" name="telefono" required>
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required>
+        <label for="hora">Hora:</label>
+        <input type="time" id="hora" name="hora" required>
+        <label for="lugar">Lugar:</label>
+        <input type="text" id="lugar" name="lugar" required>
+        <label for="tiempo">Duración (en horas):</label>
+        <input type="number" id="tiempo" name="tiempo" required>
+        <button type="submit">Reservar</button>
+      </form>
+    </section>
+  </main>
+ <footer>
+  <p>Bazzurro 1747 esq. B. Manton, Colonia Del Sacramento, Colonia, Uruguay 70000</p>
+  <p>+598 98 107 643</p>
+  <p>&copy; 2025 Mestiza Street Food</p>
+  <div class="social-media">
+    <a href="https://www.instagram.com/mestiza_street_food/" target="_blank">
+      <img src="./imagenes/Instagram-Logo.wine.png" alt="Instagram" class="social-icon">
+    </a>
+    <a href="https://www.facebook.com/p/mestiza_sabores_caseros-100036866965455/?_rdr" target="_blank">
+      <img src="./imagenes/facebook logo.webp" alt="Facebook" class="social-icon">
+    </a>
+  </div>
+</footer>
+</body>
+</html>
