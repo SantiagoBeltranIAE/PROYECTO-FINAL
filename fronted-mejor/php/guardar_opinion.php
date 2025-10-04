@@ -4,16 +4,19 @@ if ($conexion->connect_error) {
     die("Error de conexión: " . $conexion->connect_error);
 }
 
-$nombre = $_POST['nombre'] ?? '';
-$puntuacion = $_POST['puntuacion'] ?? 0;
-$opinion = $_POST['opinion'] ?? '';
+$nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : '';
+$puntuacion = isset($_POST['puntuacion']) ? intval($_POST['puntuacion']) : 0;
+$opinion = isset($_POST['opinion']) ? trim($_POST['opinion']) : '';
 
-if ($nombre && $puntuacion && $opinion) {
-    $stmt = $conexion->prepare("INSERT INTO opiniones (nombre, puntuacion, opinion) VALUES (?, ?, ?)");
+if ($nombre !== '' && $puntuacion > 0 && $opinion !== '') {
+    $stmt = $conexion->prepare("INSERT INTO opiniones (nombre, puntuacion, opinion, fecha) VALUES (?, ?, ?, NOW())");
     $stmt->bind_param("sis", $nombre, $puntuacion, $opinion);
-    $stmt->execute();
+    if ($stmt->execute()) {
+        echo "ok";
+    } else {
+        echo "error";
+    }
     $stmt->close();
-    echo "ok";
 } else {
     echo "error";
 }

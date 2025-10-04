@@ -5,6 +5,7 @@
   <title>Opiniones - Restaurante Mestiza</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./style/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <meta charset="UTF-8">
 </head>
 <body class="pagina-blanca">
@@ -37,10 +38,6 @@
 </nav>
   </header>
   <main class="container my-5">
-    <h1 class="text-center mb-4">Opiniones de Clientes</h1>
-    <!-- Contenedor dinámico -->
-    <div id="opiniones-list" class="mb-5"></div>
-    <hr class="my-5">
     <h2 class="mb-3">Dejanos tu Opinión</h2>
     <form id="form-opinion">
       <div class="mb-3">
@@ -48,14 +45,15 @@
         <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu nombre" required>
       </div>
       <div class="mb-3">
-        <label class="form-label">Puntuación:</label>
-        <div class="star-rating">
-          <input type="radio" name="puntuacion" id="5-stars" value="5" required><label for="5-stars">★</label>
-          <input type="radio" name="puntuacion" id="4-stars" value="4"><label for="4-stars">★</label>
-          <input type="radio" name="puntuacion" id="3-stars" value="3"><label for="3-stars">★</label>
-          <input type="radio" name="puntuacion" id="2-stars" value="2"><label for="2-stars">★</label>
-          <input type="radio" name="puntuacion" id="1-star" value="1"><label for="1-star">★</label>
+        <label class="form-label">Calificación:</label>
+        <div id="star-rating" class="star-rating">
+          <i class="fa-regular fa-star" data-value="1"></i>
+          <i class="fa-regular fa-star" data-value="2"></i>
+          <i class="fa-regular fa-star" data-value="3"></i>
+          <i class="fa-regular fa-star" data-value="4"></i>
+          <i class="fa-regular fa-star" data-value="5"></i>
         </div>
+        <input type="hidden" id="rating" name="puntuacion" value="0">
       </div>
       <div class="mb-3">
         <label for="comentario" class="form-label">Comentario:</label>
@@ -63,7 +61,12 @@
       </div>
       <button type="submit" class="btn btn-primary">Enviar Opinión</button>
     </form>
+    <h1 class="text-center mb-4">Opiniones de Clientes</h1>
+    <div id="opiniones-list" class="mb-5"></div>
+    <hr class="my-5">
+
   </main>
+
   <footer>
     <p>Bazzurro 1747 esq. B. Manton, Colonia Del Sacramento, Colonia, Uruguay 70000</p>
     <p>+598 98 107 643</p>
@@ -80,35 +83,7 @@
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Mostrar opiniones
-    function cargarOpiniones() {
-      fetch('php/mostrar_opiniones.php')
-        .then(response => response.text())
-        .then(html => {
-          document.getElementById('opiniones-list').innerHTML = html;
-        });
-    }
-    cargarOpiniones();
+  <script src="./js/opiniones.js"></script>
 
-    // Enviar opinión
-    document.getElementById('form-opinion').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-      fetch('php/guardar_opinion.php', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.text())
-      .then(res => {
-        if (res.trim() === "ok") {
-          this.reset();
-          cargarOpiniones();
-        } else {
-          alert("Error al guardar la opinión. Completa todos los campos.");
-        }
-      });
-    });
-  </script>
 </body>
 </html>

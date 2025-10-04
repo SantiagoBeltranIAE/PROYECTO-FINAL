@@ -227,3 +227,23 @@ section h1, h1.bienvenida {
 h1, h2, h3, h4, h5, h6, p, section, main {
   color: #000000;
 }
+
+/* Estilo para las estrellas de la valoración */
+.star-rating {
+  font-size: 1.7rem;
+  color: #ffc107;
+  cursor: pointer;
+  display: flex;
+  gap: 4px;
+  user-select: none;
+}
+
+.star-rating .fa-star {
+  transition: color 0.2s;
+  color: #ccc;
+}
+
+.star-rating .fa-star.selected,
+.star-rating .fa-star.hovered {
+  color: #ffc107;
+}
