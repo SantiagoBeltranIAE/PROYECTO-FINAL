@@ -8,6 +8,9 @@
 /* Fondo general de la página */
 body {
   background: #000;
+  min-height: 100vh;
+  flex-direction: column;
+  display: flex;
   overflow-x: hidden;
 }
 
@@ -21,14 +24,16 @@ body.pagina-blanca {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #fff !important; /* Fondo blanco */
-  color: #222 !important; /* Texto oscuro */
+  background-color: #fff !important;
+  /* Fondo blanco */
+  color: #222 !important;
+  /* Texto oscuro */
   padding: 10px 20px;
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* Borde negro inferior en la barra superior */
@@ -37,14 +42,17 @@ body.pagina-blanca {
 }
 
 /* Barras superior e inferior totalmente blancas */
-.navbar, footer {
+.navbar,
+footer {
   background: #fff !important;
   color: #222 !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* Cambia el color de los textos y enlaces en las barras */
-.navbar a, footer, footer p {
+.navbar a,
+footer,
+footer p {
   color: #222 !important;
 }
 
@@ -87,6 +95,60 @@ body.pagina-blanca {
   font-size: 2rem;
 }
 
+/* ---- EN style.css ---- */
+
+/* ---- Estilo para los nuevos enlaces de texto ---- */
+.nav-text {
+  /* Color del texto (ajusta si tu fondo de header no es blanco) */
+  color: #222;
+
+  /* Elimina el subrayado del enlace */
+  text-decoration: none;
+
+  /* Asegura que haya un buen espacio para el texto */
+  padding: 0 15px;
+
+  /* Hace que los enlaces se comporten como bloques, permitiendo la línea divisoria */
+  display: flex;
+  align-items: center;
+  height: 100%;
+  /* Ocupa la altura completa de la navbar */
+
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Efecto hover (cambia el color del texto) */
+.nav-text:hover {
+  color: #0a5b25;
+  /* Color verde/verde oscuro de tu borde */
+  text-decoration: none;
+}
+
+/* ---- Estilos para el Carrusel de Imagenes ---- */
+
+.carousel-inner {
+  height: 550px;
+  overflow: hidden;
+}
+
+.carousel-item {
+  height: 550px;
+}
+
+.carousel-item img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.carousel-indicators {
+  bottom: 10px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+
+}
+
 /* Footer styling */
 footer {
   display: flex;
@@ -95,7 +157,6 @@ footer {
   padding: 10px 20px;
   color: white;
   font-size: 14px;
-  position: fixed;
   bottom: 0;
   width: 100%;
   z-index: 1000;
@@ -106,11 +167,13 @@ footer {
   background: #fff !important;
   color: #222 !important;
   border-top: 1.5px solid #111;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* Color de texto en el footer */
-footer, footer p, footer a {
+footer,
+footer p,
+footer a {
   color: #222 !important;
 }
 
@@ -133,38 +196,45 @@ footer .social-media img:hover {
 }
 
 /* Opcional: para que el texto del footer sea blanco y se vea bien */
-footer, footer p {
+footer,
+footer p {
   color: #fff;
 }
 
 /* Espaciado para el contenido principal */
 main {
-  margin-top: 60px;
+  margin-top: 70px;
   padding: 20px;
+  flex-grow: 1; 
+  padding-bottom: 20px;
+
 }
 
 section {
   margin-bottom: 40px;
 }
 
-section h1, h1.bienvenida {
+section h1,
+h1.bienvenida {
   color: #fff;
   font-size: 24px;
   margin-bottom: 10px;
 }
 
 /* Barra de navegación y footer con imagen de fondo */
-.navbar, footer {
-  background: url('imagenes/fondobarras.jpg') center center/cover no-repeat;
+.navbar,
+footer {
   color: white;
 }
 
 /* Barra superior: íconos alineados y centrados respecto a la línea */
-.nav-left, .nav-right {
+.nav-left,
+.nav-right {
   display: flex;
   align-items: center;
   height: 48px;
-  gap: 0; /* Usaremos padding en los <a> */
+  gap: 0;
+  /* Usaremos padding en los <a> */
 }
 
 .nav-left a,
@@ -173,8 +243,10 @@ section h1, h1.bienvenida {
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 0 18px; /* Igual a ambos lados para centrar el ícono */
-  margin: 0;       /* Elimina margen lateral */
+  padding: 0 18px;
+  /* Igual a ambos lados para centrar el ícono */
+  margin: 0;
+  /* Elimina margen lateral */
   position: relative;
   background: transparent;
   box-sizing: border-box;
@@ -184,32 +256,6 @@ section h1, h1.bienvenida {
 .nav-left a:not(:first-child),
 .nav-right a:not(:first-child) {
   border-left: 2px solid #0a5b25;
-}
-
-/* Íconos del menú superior: tamaño uniforme y alineados */
-.social-icon {
-  width: 40px;
-  height: 40px;
-  aspect-ratio: 1/1;
-  object-fit: contain;
-  display: block;
-  transition: transform 0.2s;
-  background: transparent;
-  margin: 0;
-  border: none;
-  box-shadow: none;
-}
-
-/* Efecto hover en íconos */
-.social-icon:hover {
-  transform: scale(1.2);
-}
-
-/* Elimina el fondo y padding especial del ícono de recepción */
-.navbar img[alt="Reservas"] {
-  background: transparent;
-  padding: 0;
-  border-radius: 0;
 }
 
 .horarios {
@@ -224,7 +270,15 @@ section h1, h1.bienvenida {
 }
 
 /* Títulos y textos principales en blanco */
-h1, h2, h3, h4, h5, h6, p, section, main {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+section,
+main {
   color: #000000;
 }
 
