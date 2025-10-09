@@ -29,10 +29,7 @@ body.pagina-blanca {
   color: #222 !important;
   /* Texto oscuro */
   padding: 10px 20px;
-  position: fixed;
-  top: 0;
   width: 100%;
-  z-index: 1000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
@@ -93,6 +90,16 @@ footer p {
   margin-top: 20px;
   margin-bottom: 40px;
   font-size: 2rem;
+}
+
+/* NUEVO: Contenedor principal fijo para ambas barras */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000; /* Debe estar por encima del contenido */
+    display: flex; 
+    flex-direction: column; /* Apila la barra de navegación y la barra de acción una encima de la otra */
 }
 
 /* ---- EN style.css ---- */
@@ -300,4 +307,83 @@ main {
 .star-rating .fa-star.selected,
 .star-rating .fa-star.hovered {
   color: #ffc107;
+}
+
+.menu-page main {
+    margin-top: 120px; /* Margen para compensar el header doble */
+}
+
+.menu-action-bar {
+    display: flex;
+    justify-content: flex-end; /* Alinea el carrito a la derecha */
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 999; 
+}
+/* ==================================== */
+/* CARRITO Y MENÚ - ESTILOS ESPECÍFICOS */
+/* ==================================== */
+
+/* 1. Compensación para el Header Doble */
+/* Hace espacio en el main para que el contenido no quede debajo del header fijo */
+.menu-page main {
+    margin-top: 120px; 
+}
+
+/* 2. Barra de Acción del Carrito (Posicionamiento Arriba a la Derecha) */
+.menu-action-bar {
+    display: flex;
+    justify-content: flex-end; /* Alinea el contenido (el carrito) a la derecha */
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #f8f9fa; /* Fondo claro para que se distinga */
+    border-top: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 999; 
+}
+
+/* 3. Icono del Carrito y Contador */
+.cart-icon-container {
+    position: relative; 
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.cart-icon {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+}
+
+/* 4. Estilo de las tarjetas de producto */
+.product-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.card-img-top {
+    height: 180px; /* Altura fija para todas las imágenes */
+    object-fit: cover; 
+}
+
+/* 5. Estilos de Notificaciones (Bootstrap modificados) */
+.alert-success {
+    background-color: #28a745; /* Verde */
+}
+.alert-danger {
+    background-color: #dc3545; /* Rojo */
+}
+.alert-success, .alert-danger {
+    color: white !important;
+}
+.btn-close-white { /* Necesario para que la X se vea en fondo oscuro */
+    filter: invert(1) grayscale(100%) brightness(200%);
 }
