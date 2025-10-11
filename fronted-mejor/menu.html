@@ -7,6 +7,7 @@
   <title>Menú - Mestiza Street Food</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="./style/style.css">
+
 </head>
 
 <body class="pagina-blanca menu-page">
@@ -26,11 +27,12 @@
     </nav>
 
     <div class="menu-action-bar justify-content-end">
-      <a href="#" class="cart-icon-container position-relative" title="Ver Carrito" 
-   data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas">
-  <img src="./imagenes/carrito-de-compras.png" alt="Carrito de Compras" class="cart-icon">
-  <span id="cart-counter" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
-</a>
+      <a href="#" class="cart-icon-container position-relative" title="Ver Carrito" data-bs-toggle="offcanvas"
+        data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas">
+        <img src="./imagenes/carrito-de-compras.png" alt="Carrito de Compras" class="cart-icon">
+        <span id="cart-counter"
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+      </a>
     </div>
   </header>
 
@@ -39,51 +41,69 @@
 
     <div id="notification-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050;">
     </div>
-
     <section class="mb-5">
       <h2 class="mb-4 border-bottom pb-2">Hamburguesas</h2>
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         <div class="col">
-          <div class="card h-100 product-card" data-id="H1" data-name="Hamburguesa Clásica" data-precio="12.00">
-            <img src="./imagenes/as.jpg" class="card-img-top" alt="Hamburguesa Clásica">
+          <div class="card h-100 product-card" data-id="H1" data-name="Burger Mestiza" data-size-custom="true"
+            data-toppings-default="Cheddar,Salsa Mestiza,Cebollitas,Pepinillos Encurtidos"
+            data-toppings-allowed="Cheddar,Salsa Mestiza,Cebollitas,Pepinillos Encurtidos,Tomate,Lechuga,Mostaza,Ketchup">
+            <img src="./imagenes/hamburguesa_mestiza.heic" class="card-img-top" alt="Burger Mestiza">
             <div class="card-body d-flex flex-column">
-              <h5 class="card-title">Clásica</h5>
-              <p class="card-text flex-grow-1">Carne de res, queso cheddar, lechuga fresca, tomate y aderezo especial.
+              <h5 class="card-title">Burger Mestiza</h5>
+              <p class="card-text flex-grow-1">Pan de papa con queso, carne smash 110gr, cheddar, salsa "Mestiza",
+                cebollitas y pepinillos encurtidos.</p>
+              <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card h-100 product-card" data-id="H2" data-name="Cheeseburger Dani" data-size-custom="true"
+            data-toppings-default="Cheddar,Mostaza,Ketchup,Cebollitas Brunoise"
+            data-toppings-allowed="Cheddar,Mostaza,Ketchup,Cebollitas Brunoise">
+            <img src="./imagenes/hamburguesa dani.png" class="card-img-top" alt="Cheeseburger Dani">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Cheeseburger Dani</h5>
+              <p class="card-text flex-grow-1">Pan de papa con queso, carne smash 110gr, cheddar, mostaza, ketchup y
+                cebollitas brunoise.</p>
+              <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card h-100 product-card" data-id="H3" data-name="Cheeseburger Javito" data-size-custom="true"
+            data-toppings-default="Cheddar" data-toppings-allowed="Cheddar">
+            <img src="./imagenes/" class="card-img-top" alt="Cheeseburger Javito">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Cheeseburger Javito</h5>
+              <p class="card-text flex-grow-1">Pan de papa con queso, carne smash 110gr, cheddar.</p>
+              <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card h-100 product-card" data-id="H4" data-name="Cheeseburger Kids" data-precio="300">
+            <img src="./imagenes/" class="card-img-top" alt="Cheeseburger Kids">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Cheeseburger Kids</h5>
+              <p class="card-text flex-grow-1">Pan de papa con queso, carne smash 110gr, cheddar, y aderezos.</p>
+              <p class="fw-bold">$300</p>
+              <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100 product-card" data-id="H5" data-name="Vegetariana" data-precio="300">
+            <img src="./imagenes/" class="card-img-top" alt="Vegetariana">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Vegetariana</h5>
+              <p class="card-text flex-grow-1">Pan de papa con queso, rodajas de zuccini a la plancha, salteado de
+                verduras (morrón, zanahoria y cebolla), cheddar, salsa "Mestiza", cebollitas y pepinillos encurtidos.
               </p>
-              <p class="fw-bold">$12.00</p>
-              <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100 product-card" data-id="H2" data-name="Hamburguesa BBQ" data-precio="15.50">
-            <img src="./imagenes/hamburguesa.jpg" class="card-img-top" alt="Hamburguesa BBQ">
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">BBQ Ahumada</h5>
-              <p class="card-text flex-grow-1">Carne, tocino crujiente, aros de cebolla y la mejor salsa BBQ casera.</p>
-              <p class="fw-bold">$15.50</p>
-              <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100 product-card" data-id="H3" data-name="Hamburguesa Vegana" data-precio="14.00">
-            <img src="./imagenes/" class="card-img-top" alt="Hamburguesa Vegana">
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">Veggie Power</h5>
-              <p class="card-text flex-grow-1">Medallón de lentejas y vegetales, aguacate y pan integral.</p>
-              <p class="fw-bold">$14.00</p>
-              <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100 product-card" data-id="H4" data-name="Hamburguesa Doble" data-precio="18.00">
-            <img src="./imagenes/hamburguesa-doble.jpg" class="card-img-top" alt="Hamburguesa Doble">
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">Doble Tentación</h5>
-              <p class="card-text flex-grow-1">Dos carnes, triple queso, cebolla caramelizada y salsa tártara.</p>
-              <p class="fw-bold">$18.00</p>
+              <p class="fw-bold">$300</p>
               <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
             </div>
           </div>
@@ -92,69 +112,82 @@
     </section>
 
     <section class="mb-5">
-      <h2 class="mb-4 border-bottom pb-2">Tacos</h2>
+      <h2 class="mb-4 border-bottom pb-2">Tacos x 2</h2>
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         <div class="col">
-          <div class="card h-100 product-card" data-id="T1" data-name="Tacos de Cochinita" data-precio="9.50">
-            <img src="./imagenes/taco.jpg" class="card-img-top" alt="Tacos de Cochinita">
+          <div class="card h-100 product-card" data-id="T1" data-name="Tacos de Cochinita" data-precio="400">
+            <img src="./imagenes/taco carne.heic" class="card-img-top" alt="Tacos de Cochinita">
             <div class="card-body d-flex flex-column">
-              <h5 class="card-title">Cochinita Pibil</h5>
-              <p class="card-text flex-grow-1">Carne de cerdo marinada en achiote, con cebolla morada encurtida.</p>
-              <p class="fw-bold">$9.50</p>
+              <h5 class="card-title">Taco de Carne</h5>
+              <p class="card-text flex-grow-1">Tortilla artesanal, base cremosa de queso, carne cortada a cuchillo,
+                salteado de vegetales (cebolla, morrón, zanahoria) + Toppings</p>
+              <p class="fw-bold">$400</p>
               <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
             </div>
           </div>
         </div>
         <div class="col">
-          <div class="card h-100 product-card" data-id="T2" data-name="Tacos al Pastor" data-precio="10.00">
-            <img src="./imagenes/tacos-pastor.jpg" class="card-img-top" alt="Tacos al Pastor">
+          <div class="card h-100 product-card" data-id="T2" data-name="Tacos al Pastor" data-precio="400">
+            <img src="./imagenes/taco vegetariano.png" class="card-img-top" alt="Tacos al Pastor">
             <div class="card-body d-flex flex-column">
-              <h5 class="card-title">Al Pastor</h5>
-              <p class="card-text flex-grow-1">Carne de cerdo adobada, piña, cilantro y un toque de salsa picante.</p>
-              <p class="fw-bold">$10.00</p>
+              <h5 class="card-title">Vegetariano</h5>
+              <p class="card-text flex-grow-1">Tortilla artesanal, base cremosa de queso, zucchini, salteado de
+                vegetales (cebolla, morrón, zanahoria) + Toppings</p>
+              <p class="fw-bold">$400</p>
               <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
             </div>
           </div>
         </div>
         <div class="col">
-          <div class="card h-100 product-card" data-id="T3" data-name="Tacos de Pescado" data-precio="11.50">
-            <img src="./imagenes/tacos-pescado.jpg" class="card-img-top" alt="Tacos de Pescado">
+          <div class="card h-100 product-card" data-id="T3" data-name="Vegano" data-precio="400">
+            <img src="./imagenes/" class="card-img-top" alt="Vegano">
             <div class="card-body d-flex flex-column">
-              <h5 class="card-title">De Pescado</h5>
-              <p class="card-text flex-grow-1">Pescado empanizado, repollo rallado, crema ácida y salsa chipotle.</p>
-              <p class="fw-bold">$11.50</p>
+              <h5 class="card-title">Vegano</h5>
+              <p class="card-text flex-grow-1">Tortilla artesanal, zucchini, salteado de vegetales (vebolla, morrón,
+                zanahoria) + Toppings</p>
+              <p class="fw-bold">$400</p>
               <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
             </div>
           </div>
         </div>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="mb-4 border-bottom pb-2">Papas Fritas</h2>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         <div class="col">
-          <div class="card h-100 product-card" data-id="T4" data-name="Tacos de Camarón" data-precio="13.00">
-            <img src="./imagenes/tacos-camaron.jpg" class="card-img-top" alt="Tacos de Camarón">
+          <div class="card h-100 product-card" data-id="H1" data-name="Papas Fritas" data-precio="120">
+            <img src="./imagenes/" class="card-img-top" alt="Papas Fritas">
             <div class="card-body d-flex flex-column">
-              <h5 class="card-title">De Camarón</h5>
-              <p class="card-text flex-grow-1">Camarones salteados con verduras, crema de aguacate y toque de lima.</p>
-              <p class="fw-bold">$13.00</p>
+              <h5 class="card-title">Papas Fritas</h5>
+              <p class="card-text flex-grow-1">Porción individual.</p>
               <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
+            </div>
+          </div>
+        </div>
+
+    </section>
+
+    <section class="mb-5">
+      <h2 class="mb-4 border-bottom pb-2">Toppings</h2>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        <div class="col">
+          <div class="card h-100 product-card" data-id="T3" data-name="Salsa Picante">
+            <img src="./imagenes/salsa_picante.jpg" class="card-img-top" alt="Salsa Picante">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Salsa Picante</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100 product-card" data-id="T4" data-name="Guacamole">
+            <img src="./imagenes/guacamole.jpg" class="card-img-top" alt="Guacamole">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Guacamole</h5>
             </div>
           </div>
         </div>
       </div>
-    </section>
-
-    <section class="mb-5">
-      <h2 class="mb-4 border-bottom pb-2">Guarniciones</h2>
-      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-        <div class="col-lg-3 col-md-4 col-sm-6">
-          <div class="card h-100 product-card" data-id="G1" data-name="Papas Fritas Clásicas" data-precio="4.00">
-            <img src="./imagenes/papas-clasicas.jpg" class="card-img-top" alt="Papas Fritas Clásicas">
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">Papas Fritas Clásicas</h5>
-              <p class="card-text flex-grow-1">Papas fritas</p>
-              <p class="fw-bold">$4.00</p>
-              <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -173,32 +206,95 @@
       </a>
     </div>
   </footer>
-<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="cartOffcanvasLabel">Tu Pedido</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
-  </div>
-  <div class="offcanvas-body d-flex flex-column">
-    <div id="cart-items-list" class="flex-grow-1 overflow-auto mb-3">
-      <p class="text-muted text-center">El carrito está vacío. ¡Añade algo delicioso!</p>
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="cartOffcanvasLabel">Tu Pedido</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
     </div>
-
-    <div class="mt-auto border-top pt-3">
-      <div class="d-flex justify-content-between fw-bold mb-2">
-        <span>Total:</span>
-        <span id="cart-total">$0.00</span>
+    <div class="offcanvas-body d-flex flex-column">
+      <div id="cart-items-list" class="flex-grow-1 overflow-auto mb-3">
+        <p class="text-muted text-center">El carrito está vacío. ¡Añade algo delicioso!</p>
       </div>
-      <div class="d-grid gap-2">
-        <button class="btn btn-success btn-lg">Continuar Pedido</button>
-        <button class="btn btn-outline-secondary">Ver Opciones de Pago</button>
-        <button class="btn btn-outline-danger" id="clear-cart-btn">Vaciar Carrito</button>
+
+      <div class="mt-auto border-top pt-3">
+        <div class="d-flex justify-content-between fw-bold mb-2">
+          <span>Total:</span>
+          <span id="cart-total">$0.00</span>
+        </div>
+        <div class="d-grid gap-2">
+          <button id="checkout-btn" class="btn btn-success w-100">Continuar Pedido</button>
+          <button class="btn btn-outline-danger" id="clear-cart-btn">Vaciar Carrito</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="./js/menu.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./js/menu.js"></script>
+
+  <div class="modal fade" id="customizationModal" tabindex="-1" aria-labelledby="customizationModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title" id="customizationModalLabel">Personalizar <span id="product-name-modal"></span></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="product-id-modal">
+
+          <h6 class="fw-bold text-success border-bottom pb-2">Tamaño / Cantidad (Precio Base)</h6>
+          <div class="mb-3" id="size-options">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="burgerSize" id="sizeSimple" value="300"
+                data-name="Simple" checked>
+              <label class="form-check-label" for="sizeSimple">Simple ($300)</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="burgerSize" id="sizeDoble" value="400"
+                data-name="Doble">
+              <label class="form-check-label" for="sizeDoble">Doble ($400)</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="burgerSize" id="sizeTriple" value="500"
+                data-name="Triple">
+              <label class="form-check-label" for="sizeTriple">Triple ($500)</label>
+            </div>
+          </div>
+
+          <h6 class="fw-bold text-success border-bottom pb-2 mt-4">Adicionales (Incluidos)</h6>
+          <div class="mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="Cebollitas Brunoise" id="toppingCebollitasB">
+              <label class="form-check-label" for="toppingCebollitasB">Cebollitas Brunoise</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="Cebollitas" id="toppingCebollitas">
+              <label class="form-check-label" for="toppingCebollitas">Cebollitas</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="toppingPepinillos" value="Pepinillos Encurtidos"
+                checked>
+              <label class="form-check-label" for="toppingPepinillos">Pepinillos Encurtidos</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="toppingCheddar" value="Cheddar" checked>
+              <label class="form-check-label" for="toppingCheddar">Cheddar</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="toppingSalsa" value="Salsa Mestiza" checked>
+              <label class="form-check-label" for="toppingSalsa">Salsa Mestiza</label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <span class="h5 m-0">Total: <span id="final-price-display">$300.00</span></span>
+          <button type="button" class="btn btn-success" id="btn-add-to-cart-modal">Añadir al carrito <span
+              id="btn-price-display">($300.00)</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

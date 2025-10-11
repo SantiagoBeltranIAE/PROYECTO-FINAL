@@ -18,7 +18,52 @@ body {
 body.pagina-blanca {
   background: #fff;
 }
+/* ****************************************************** */
+/* NUEVO ESTILO: TÍTULOS CON DEGRADADO DORADO/AMARILLO */
+/* ****************************************************** */
+.titulo-degrade {
+    /* Define el degradado de colores (Dorado, Naranja, Dorado) */
+    background: linear-gradient(
+        45deg,
+        #FFD700, /* Amarillo Oro */
+        #FF8C00, /* Naranja Brillante */
+        #FFD700  /* Vuelve al Amarillo Oro */
+    );
+    
+    /* Recorta el degradado solo donde hay texto */
+    -webkit-background-clip: text;
+    background-clip: text;
+    
+    /* Hace el texto transparente para que se vea el degradado de fondo */
+    -webkit-text-fill-color: transparent;
+    color: transparent; /* Fallback para otros navegadores */
+    
+    /* Asegura que la fuente sea gruesa para que el efecto se note */
+    font-weight: 700 !important; /* Añadimos !important para anular Bootstrap's fw-bold si fuera necesario */
+}
+/* ****************************************************** */
+/* NUEVO ESTILO: MAPA GRIS Y CON COLOR AL HOVER */
+/* ****************************************************** */
+.mapa-ubicacion iframe {
+    /* 1. Por defecto, aplica un filtro de escala de grises al 100% */
+    filter: grayscale(100%);
+    
+    /* 2. Añade una transición suave para el efecto de color */
+    transition: filter 0.5s ease-in-out; 
+}
 
+.mapa-ubicacion iframe:hover {
+    /* 3. Cuando el mouse está encima, quita el filtro (vuelve a color) */
+    filter: grayscale(0%);
+}
+/* ****************************************************** */
+/* NUEVO ESTILO: IMAGENES DE HISTORIA (TAMAÑO FIJO) */
+/* ****************************************************** */
+.img-historia {
+    width: 100%; /* Ocupa todo el ancho de la columna */
+    height: 350px; /* Altura fija para todas las imágenes */
+    object-fit: cover; /* Asegura que la imagen cubra el área sin deformarse, cortando si es necesario */
+}
 /* Estilo para la barra de navegación */
 .navbar {
   display: flex;
@@ -361,17 +406,21 @@ main {
     object-fit: contain;
 }
 
-/* 4. Estilo de las tarjetas de producto */
-.product-card {
-    transition: transform 0.2s, box-shadow 0.2s;
+/* ****************************************************** */
+/* NUEVO ESTILO: IMAGENES DE PRODUCTO (TAMAÑO UNIFICADO) */
+/* ****************************************************** */
+
+.product-card .card-img-top {
+    width: 100%;
+    height: 200px; /* Altura fija para todas las imágenes del menú (ajusta este valor si 200px es muy grande o pequeño) */
+    object-fit: cover; /* Asegura que la imagen cubra todo el espacio sin estirarse (recortará los bordes si es necesario) */
 }
-.product-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-.card-img-top {
-    height: 180px; /* Altura fija para todas las imágenes */
-    object-fit: cover; 
+
+/* Opcional: Asegurar que el cuerpo de la tarjeta tenga altura flexible */
+.product-card .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribuye el contenido para que el botón Añadir quede siempre abajo */
 }
 
 /* 5. Estilos de Notificaciones (Bootstrap modificados) */

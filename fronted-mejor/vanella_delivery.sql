@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-09-2025 a las 21:21:45
+-- Tiempo de generación: 11-10-2025 a las 19:36:42
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -89,20 +89,6 @@ CREATE TABLE `opiniones` (
   `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
   `puntuacion` int(11) NOT NULL DEFAULT 5
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `opiniones`
---
-
-INSERT INTO `opiniones` (`id`, `nombre`, `opinion`, `fecha`, `puntuacion`) VALUES
-(1, 'Santino', 'si buenisimo', '2025-09-15 19:05:36', 3),
-(2, 'Felipe', 'Una mierda', '2025-09-15 19:05:51', 5),
-(3, 'Willyrex', 'hay sopa en mi mosca', '2025-09-15 19:06:04', 1),
-(4, 'qw', 'uu', '2025-09-15 19:07:07', 4),
-(5, 'Willyrex', 'nose4\r\n', '2025-09-15 19:07:15', 2),
-(6, 'Renzo', 'No me parece', '2025-09-15 19:08:04', 2),
-(7, 'Willyrex', 'www.pornhub.com', '2025-09-15 19:09:00', 5),
-(8, 'dsf', 'esgrhkeyrliher', '2025-09-15 19:09:20', 3);
 
 -- --------------------------------------------------------
 
@@ -217,7 +203,7 @@ ALTER TABLE `detalle_pedido`
 -- AUTO_INCREMENT de la tabla `opiniones`
 --
 ALTER TABLE `opiniones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido`
