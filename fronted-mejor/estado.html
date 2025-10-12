@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado del Pedido - Mestiza Street Food</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="./style/style_estado.css">
+
+</head>
+
+<body class="bg-light min-vh-100 d-flex flex-column">
+
+    <div class="container my-5 flex-grow-1 d-flex justify-content-center align-items-center">
+        
+        <div class="tracking-card shadow-lg p-4 p-md-5 bg-white rounded-4">
+            <h1 class="text-center mb-4">Estado de tu Pedido</h1>
+            <p class="text-center text-muted mb-5">N° de Pedido: **#CARQUEJA-12345** - Estimado de entrega: **30-45 seg**</p>
+
+            <div class="tracking-container">
+
+                <div class="tracking-line">
+                    <div id="tracking-line-progress"></div> 
+                </div>
+
+                <div class="tracking-step" id="step-1" data-step="1">
+                    <div class="tracking-icon">
+                        <i class="bi bi-file-earmark-check-fill"></i>
+                    </div>
+                    <div class="tracking-content">
+                        <p class="step-title">Pedido Confirmado</p>
+                        <p class="step-time text-muted">Pendiente</p>
+                    </div>
+                </div>
+
+                <div class="tracking-step" id="step-2" data-step="2">
+                    <div class="tracking-icon">
+                        <i class="bi bi-fire"></i>
+                    </div>
+                    <div class="tracking-content">
+                        <p class="step-title">Preparando Pedido</p>
+                        <p class="step-time text-muted">Pendiente</p>
+                    </div>
+                </div>
+
+                <div class="tracking-step" id="step-3" data-step="3">
+                    <div class="tracking-icon">
+                        <i class="bi bi-scooter"></i>
+                    </div>
+                    <div class="tracking-content">
+                        <p class="step-title">Pedido En Camino</p>
+                        <p class="step-time text-muted">Pendiente</p>
+                    </div>
+                </div>
+
+                <div class="tracking-step" id="step-4" data-step="4">
+                    <div class="tracking-icon">
+                        <i class="bi bi-house-door-fill"></i>
+                    </div>
+                    <div class="tracking-content">
+                        <p class="step-title">Pedido Entregado</p>
+                        <p class="step-time text-muted">Pendiente</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="text-center mt-5">
+                <a href="menu.html" class="btn btn-success btn-lg shadow-sm">Volver al Menú</a>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/estado.js"></script> 
+</body>
+
+</html>

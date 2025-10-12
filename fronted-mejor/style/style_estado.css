@@ -1,0 +1,144 @@
+/* Estilos Generales del Contenedor */
+.tracking-card {
+    max-width: 700px;
+    width: 100%;
+    /* Estilos del contenedor principal */
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    padding: 30px;
+}
+
+/* Contenedor del Diagrama de Pasos */
+.tracking-container {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+
+/* La Línea de Conexión y Progreso */
+.tracking-line {
+    position: absolute;
+    top: 50px; /* Ajusta para centrar con los íconos */
+    left: 20px;
+    right: 20px;
+    height: 4px;
+    background-color: #dee2e6; /* Gris claro para el fondo de la línea */
+    z-index: 0;
+}
+
+/* ... (Todo tu CSS anterior hasta el .tracking-line) ... */
+
+/* La Línea de Conexión y Progreso */
+.tracking-line {
+    position: absolute;
+    top: 50px; /* Ajusta para centrar con los íconos */
+    left: 20px;
+    right: 20px;
+    height: 4px;
+    background-color: #dee2e6; /* Gris claro para el fondo de la línea */
+    z-index: 0;
+}
+
+/* NUEVO: El div de progreso (relleno) */
+#tracking-line-progress {
+    height: 100%;
+    width: 0%; /* Inicia en 0, JavaScript lo cambiará */
+    background-color: #198754; /* Verde de progreso */
+    transition: width 0.8s ease-in-out; /* Animación de avance */
+}
+/* ---- Estilos de los Pasos Individuales ---- */
+
+.tracking-step {
+    flex-grow: 1; /* Permite que los pasos se extiendan uniformemente */
+    text-align: center;
+    position: relative;
+    z-index: 1; /* Asegura que el ícono esté sobre la línea */
+}
+
+/* Posición del contenido (título y hora) */
+.tracking-content {
+    margin-top: 25px;
+}
+
+.step-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #495057; /* Texto gris oscuro por defecto */
+    margin-bottom: 0;
+}
+
+.step-time {
+    font-size: 0.8rem;
+}
+
+/* ---- Estilos de los Íconos (Círculos) ---- */
+
+.tracking-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #dee2e6; /* Fondo gris por defecto */
+    color: #6c757d; /* Ícono gris por defecto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto; /* Centrar el círculo */
+    font-size: 1.5rem;
+    border: 3px solid #f8f9fa; /* Borde blanco para separarlo de la línea */
+    transition: all 0.3s ease;
+}
+
+/* ---- Estilos para los estados ---- */
+
+/* 1. Estado Completado (Clase .completed) */
+.tracking-step.completed .tracking-icon {
+    background-color: #198754; /* Verde (Success) */
+    color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.3); /* Anillo de sombra verde */
+}
+
+.tracking-step.completed .step-title {
+    color: #198754;
+    font-weight: 700;
+}
+
+/* 2. Estado Actual (Clase .active) */
+/* El ícono activo es el más prominente */
+.tracking-step.active .tracking-icon {
+    background-color: #ffc107; /* Amarillo/Naranja (Warning/Primary) */
+    color: #212529; 
+    box-shadow: 0 0 0 6px rgba(255, 193, 7, 0.5); /* Anillo de sombra más grande */
+    transform: scale(1.1); /* Efecto de resalte */
+}
+
+.tracking-step.active .step-title {
+    color: #ffc107;
+    font-weight: 700;
+}
+
+/* Relleno de la línea de progreso (Simulación en CSS) */
+/* Aquí se puede añadir una línea de progreso más avanzada con JavaScript */
+.tracking-container::before {
+    content: '';
+    position: absolute;
+    top: 50px; 
+    left: 20px;
+    height: 4px;
+    background-color: #198754; /* Verde de progreso */
+    z-index: 0;
+    /* Ajusta el width manualmente o con JS. 
+       Para el ejemplo, el progreso va hasta el 3er paso (66.6%) */
+    width: calc((100% - 40px) * 0.666); 
+    transition: width 0.5s ease;
+}
+
+/* Ajuste para el primer y último paso para que la línea no sobresalga */
+.tracking-step:first-child .tracking-icon {
+    margin-left: 0;
+}
+
+.tracking-step:last-child .tracking-icon {
+    margin-right: 0;
+}

@@ -34,6 +34,11 @@
           class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
       </a>
     </div>
+    <div class="nav-icons d-flex align-items-center">
+
+    <a href="estado.html" id="tracking-icon-link" class="nav-icon me-3 p-2" style="display:none; color: #ffc107;">
+        <i class="bi bi-basket3-fill" style="font-size: 1.5rem;"></i>
+    </a>
   </header>
 
   <main class="container my-5">
@@ -222,8 +227,9 @@
           <span id="cart-total">$0.00</span>
         </div>
         <div class="d-grid gap-2">
-          <button id="checkout-btn" class="btn btn-success w-100">Continuar Pedido</button>
-          <button class="btn btn-outline-danger" id="clear-cart-btn">Vaciar Carrito</button>
+          <button type="button" class="btn btn-primary w-100" id="checkout-btn">
+            Continuar Pedido
+          </button> <button class="btn btn-outline-danger" id="clear-cart-btn">Vaciar Carrito</button>
         </div>
       </div>
     </div>
