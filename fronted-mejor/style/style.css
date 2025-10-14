@@ -98,6 +98,12 @@ footer p {
   color: #222 !important;
 }
 
+.nav-logo img {
+    /* Puedes borrar el estilo inline en el HTML si usas esta regla */
+    height: 60px; /* Tamaño más grande para el logo */
+    width: auto; /* Mantiene la proporción */
+    margin-right: 15px;
+}
 /* Logo centrado en el medio de la pantalla */
 .logo-container {
   display: flex;
