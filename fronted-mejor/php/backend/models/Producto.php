@@ -7,12 +7,27 @@ class Producto {
     public function __construct($pdo) {
         $this->pdo = $pdo;  
     }
+    
+    // ******************************************************
+    // CÓDIGO ACTUALIZADO PARA RESOLVER LOS VALORES 'UNDEFINED'
+    // ******************************************************
     public function obtenerTodos() {
-        $query = "SELECT * FROM products";
+
+        $query = "SELECT 
+                    id_producto AS id,
+                    nombre,
+                    descripcion,
+                    precio,
+                    categoria,
+                    imagen_url,
+                    personalizable,
+                    tamanos_precios
+                  FROM producto
+                  ORDER BY categoria, id_producto";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);       
-    }       
+    }   
     public function agregar($name, $description, $price) {
         $stmt = $this->pdo->prepare("INSERT INTO products (name, description, price) VALUES (?, ?, ?)");
         return $stmt->execute([
