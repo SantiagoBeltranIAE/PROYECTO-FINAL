@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('mestizaCartTotal', totalText);
 
                 // 2. Redirigir a la página de pago
-                window.location.href = 'metodo_de_pago.html';
+                window.location.href = 'direccion.html';
             }
         });
     }
@@ -370,5 +370,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateCartCounter();
     checkTrackingStatus();
-
 });
