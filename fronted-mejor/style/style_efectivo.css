@@ -1,0 +1,63 @@
+/* style_efectivo.css */
+
+/* 1. Body: Mantiene el fondo blanco limpio */
+body {
+    background: #fff; 
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+    color: #333;
+}
+
+/* 2. Contenedor: Centrado y con sombra sutil */
+.container {
+    text-align: center;
+    padding: 50px 40px; 
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); 
+    max-width: 500px; 
+    width: 90%;
+    border: 1px solid #eee; 
+}
+
+/* 3. Título Impactante (el mismo estilo "cheto" negro) */
+.titulo-impactante {
+    font-size: 2.8rem; 
+    margin-bottom: 50px;
+    color: #000; 
+    font-weight: 900; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1); 
+    border-bottom: 3px solid #000; 
+    padding-bottom: 10px;
+}
+
+/* 4. Estilos específicos de la página de efectivo */
+.texto-confirmacion {
+    font-size: 1.2rem;
+    margin-top: 20px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.boton-finalizar {
+    margin-top: 40px;
+    padding: 12px 30px;
+    background-color: #000; /* Botón negro y elegante */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+}
+.boton-finalizar:hover {
+    background-color: #333; /* Gris oscuro al hacer hover */
+    transform: translateY(-2px);
+}

@@ -1,145 +1,6 @@
 // ******************************************************
 // LÓGICA DE CARRITO, NOTIFICACIONES Y OFFCANVAS (menu.js) - CÓDIGO FINAL FUSIONADO Y ACTUALIZADO
 // ******************************************************
-
-// =======================================================
-// NUEVAS FUNCIONES PARA CARGAR PRODUCTOS DESDE EL BACKEND
-// =======================================================
-
-/**
- * Agrupa un array de objetos por una clave específica (ej: 'categoria').
- */
-function agruparPorCategoria(array, key) {
-    return array.reduce((acc, item) => {
-        const categoria = item[key];
-        if (!acc[categoria]) {
-            acc[categoria] = [];
-        }
-        acc[categoria].push(item);
-        return acc;
-    }, {});
-}
-
-/**
- * Genera el HTML de una tarjeta de producto.
- */
-function generarTarjetaProducto(producto) {
-    const id = producto.id;
-    const nombre = producto.nombre;
-    const descripcion = producto.descripcion;
-    const imagen_url = producto.imagen_url;
-    const precio = producto.precio;
-    const personalizable = producto.personalizable;
-    const tamanos_precios = producto.tamanos_precios; // JSON con precios de Simple/Doble/Triple
-
-    let dataAttrs = `data-id="${id}" data-name="${nombre}"`;
-    let precioDisplay = '';
-
-    // Añadir atributos de Toppings para que el modal los filtre (usando valores por defecto si no vienen de la DB)
-    // NOTA: Si usas la DB, debes modificar tu backend para obtener y devolver estos campos si son dinámicos.
-    // Por ahora, usaremos los valores predeterminados (hardcodeados) que estaban en tu HTML original
-    // para los productos que son personalizables (H1, H2, H3).
-    if (nombre === "Burger Mestiza") {
-        dataAttrs += ` data-toppings-default="Cheddar,Salsa Mestiza,Cebollitas,Pepinillos Encurtidos" data-toppings-allowed="Cheddar,Salsa Mestiza,Cebollitas,Pepinillos Encurtidos,Tomate,Lechuga,Mostaza,Ketchup"`;
-    } else if (nombre === "Cheeseburger Dani") {
-        dataAttrs += ` data-toppings-default="Cheddar,Mostaza,Ketchup,Cebollitas Brunoise" data-toppings-allowed="Cheddar,Mostaza,Ketchup,Cebollitas Brunoise"`;
-    } else if (nombre === "Cheeseburger Javito") {
-        dataAttrs += ` data-toppings-default="Cheddar" data-toppings-allowed="Cheddar"`;
-    }
-
-
-    if (personalizable == 1) {
-        // Producto personalizable (ej. Simple, Doble, Triple)
-        dataAttrs += ` data-size-custom="true"`;
-        precioDisplay = '<p class="fw-bold">Precio variable</p>'; 
-    } else if (precio && precio > 0) {
-        // Producto con precio fijo
-        dataAttrs += ` data-precio="${precio}"`;
-        precioDisplay = `<p class="fw-bold">$${new Intl.NumberFormat('es-AR').format(precio)}</p>`;
-    }
-    
-    // Si no tiene precio (Toppings), el precioDisplay queda vacío.
-
-    return `
-        <div class="col">
-            <div class="card h-100 product-card" ${dataAttrs}>
-                <img src="${imagen_url}" class="card-img-top" alt="${nombre}">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">${nombre}</h5>
-                    <p class="card-text flex-grow-1">${descripcion}</p>
-                    ${precioDisplay}
-                    <button class="btn btn-success mt-auto btn-add-to-cart">Añadir al carrito</button>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-/**
- * Genera todas las secciones del menú a partir de los datos.
- */
-function generarSeccionesMenu(productosAgrupados) {
-    let html = '';
-    const ordenCategorias = ['Hamburguesas', 'Tacos x 2', 'Papas Fritas', 'Toppings']; 
-
-    const categoriasExistentes = Object.keys(productosAgrupados);
-    categoriasExistentes.sort((a, b) => {
-        const indexA = ordenCategorias.indexOf(a);
-        const indexB = ordenCategorias.indexOf(b);
-        if (indexA > -1 && indexB > -1) return indexA - indexB;
-        if (indexA > -1) return -1;
-        if (indexB > -1) return 1;
-        return a.localeCompare(b);
-    });
-    
-    categoriasExistentes.forEach(categoria => {
-        html += `<section class="mb-5">`;
-        html += `<h2 class="mb-4 border-bottom pb-2">${categoria}</h2>`;
-        html += `<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" id="categoria-${categoria.replace(/\s/g, '-')}">`;
-
-        productosAgrupados[categoria].forEach(producto => {
-            html += generarTarjetaProducto(producto);
-        });
-
-        html += `</div>`;
-        html += `</section>`;
-    });
-
-    return html;
-}
-
-/**
- * Llama al backend y devuelve los productos.
- * @returns {Promise<Array|Object>} Array de productos o un objeto de error.
- */
-async function cargarProductos() {
-    const url = "/PROYECTO-FINAL-2/fronted-mejor/php/mostrar_productos.php"; 
-
-    try {
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-            // Este error puede ser un 404, 500, etc.
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
-        
-        const data = await response.json(); 
-        
-        if (data.error) {
-            // Si el JSON contiene un campo 'error' (como definimos en el PHP)
-            return { error: data.error };
-        }
-
-        return data; // Devuelve el array de productos
-        
-    } catch (error) {
-        console.error("Fallo al obtener los productos:", error);
-        // Devuelve una promesa rechazada para que el .catch() lo atrape en el DOMContentLoaded
-        return Promise.reject(new Error(`Error de red o formato: ${error.message}`));
-    }
-}
-
-
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializar el carrito desde localStorage
     let cart = JSON.parse(localStorage.getItem('mestizaCart')) || [];
@@ -147,9 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Referencias a elementos del DOM (Carrito/Offcanvas)
     const cartCounter = document.getElementById('cart-counter');
     const notificationContainer = document.getElementById('notification-container');
-    
-    // ELIMINADO: const productButtons = document.querySelectorAll('.btn-add-to-cart'); 
-    // Ahora usaremos delegación de eventos en 'document' o en un contenedor superior.
+    const productButtons = document.querySelectorAll('.btn-add-to-cart');
     const cartItemsList = document.getElementById('cart-items-list');
     const cartTotal = document.getElementById('cart-total');
     const clearCartBtn = document.getElementById('clear-cart-btn');
@@ -174,10 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnAddToCartModal = document.getElementById('btn-add-to-cart-modal');
     // Seleccionamos los inputs, pero necesitamos trabajar con sus contenedores (div.form-check)
     const toppingCheckboxes = document.querySelectorAll('#customizationModal .form-check-input[type="checkbox"]');
-    
-    // Nuevo contenedor donde se cargarán los productos
-    const productosContainer = document.getElementById('productos-container');
-
 
     let currentBasePrice = 300;
     let currentSizeName = 'Simple';
@@ -189,9 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1.1 FUNCIÓN PRINCIPAL: ACTUALIZA EL CONTADOR Y VUELVE A DIBUJAR EL CARRITO
     const updateCartCounter = () => {
         const totalItems = cart.length;
-        cartCounter.textContent = totalItems;
-        // Muestra el contador solo si hay items
-        cartCounter.style.display = totalItems > 0 ? 'block' : 'none';
+        if (cartCounter) {
+            cartCounter.textContent = totalItems;
+            cartCounter.style.display = totalItems > 0 ? 'block' : 'none';
+        }
         localStorage.setItem('mestizaCart', JSON.stringify(cart));
 
         // Renderiza el contenido del Offcanvas (lo que el usuario ve)
@@ -200,11 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1.2 FUNCIÓN PARA DIBUJAR LOS PRODUCTOS EN EL OFFCANVAS
     const renderCart = () => {
+        if (!cartItemsList || !cartTotal) return;
         cartItemsList.innerHTML = ''; // Limpiar lista
         let total = 0;
 
         if (cart.length === 0) {
-            cartItemsList.innerHTML = `<p class="text-muted text-center">El carrito está vacío. ¡Añade algo delicioso!</p>`;
+            cartItemsList.innerHTML = '<p class="text-muted text-center">El carrito está vacío. ¡Añade algo delicioso!</p>';
             cartTotal.textContent = '$0.00';
             return;
         }
@@ -212,14 +69,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // Muestra cada item personalizado como una línea separada.
         cart.forEach((item, index) => {
 
-            // Si el producto tiene 'size' y 'toppings', es personalizado (hamburguesa)
+            // Si el producto tiene 'size' y 'toppings', es personalizado (hamburguesa/taco)
             const isCustom = item.size && item.toppings;
 
             // Construir detalles para mostrar en la lista
             let details = '';
             if (isCustom) {
-                details += ` <small class="text-secondary">(${item.size})</small>`;
-                if (item.toppings.length > 0) {
+                // Modificación aquí: Si el tamaño no es "Clásico", lo mostramos.
+                if (item.size !== 'Clásico') {
+                    details += ` <small class="text-secondary">(${item.size})</small>`;
+                }
+
+                if (item.toppings && item.toppings.length > 0) {
                     // Muestra los toppings seleccionados
                     details += `<br><small class="text-muted fst-italic">Toppings: ${item.toppings.join(', ')}</small>`;
                 } else {
@@ -230,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 details += ` <small class="text-secondary">(Clásico)</small>`;
             }
 
-            total += item.precio; // Sumar al total global
+            total += Number(item.precio) || 0; // Sumar al total global
 
             const cartItem = document.createElement('div');
             cartItem.className = 'd-flex justify-content-between align-items-center mb-2 pb-2 border-bottom';
@@ -240,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${details}
                 </div>
                 <div class="d-flex align-items-center flex-shrink-0">
-                    <span class="me-3 fw-bold">$${item.precio.toFixed(2)}</span>
+                    <span class="me-3 fw-bold">$${(Number(item.precio) || 0).toFixed(2)}</span>
                     <button class="btn btn-sm btn-outline-danger p-1 btn-remove-unique" data-index="${index}">
                         &minus;
                     </button>
@@ -258,9 +119,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const uniqueProduct = { ...product, uniqueId: product.id + '-' + Date.now() };
         cart.push(uniqueProduct);
         updateCartCounter();
-        // Si tiene tamaño, la notificación es más detallada
-        const sizeDetail = product.size ? ` (${product.size})` : '';
-        showNotification(`✅ ¡${product.name}${sizeDetail} añadido por $${product.precio.toFixed(2)}!`, 'success');
+        // Si tiene tamaño y no es 'Clásico', la notificación es más detallada
+        const sizeDetail = product.size && product.size !== 'Clásico' ? ` (${product.size})` : '';
+        showNotification(`✅ ¡${product.name}${sizeDetail} añadido por $${(product.precio || 0).toFixed(2)}!`, 'success');
     };
 
     // 1.4 FUNCIÓN PARA ELIMINAR UNA UNIDAD (Al hacer clic en el botón - del Offcanvas)
@@ -278,12 +139,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cartLength > 0) {
             cart = [];
             updateCartCounter();
-            showNotification(`🗑️ Carrito vaciado (Se quitaron ${cartLength} items).`, 'danger');
+            showNotification(`🗑 Carrito vaciado (Se quitaron ${cartLength} items).`, 'danger');
         }
     };
 
     // 1.6 FUNCIÓN PARA MOSTRAR NOTIFICACIÓN (simplificada)
     const showNotification = (message, type) => {
+        if (!notificationContainer) return;
         notificationContainer.innerHTML = '';
         const notification = document.createElement('div');
         notification.className = `alert fade show mb-2 p-3 text-start alert-${type}`;
@@ -304,26 +166,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const updatePrice = () => {
         const selectedRadio = document.querySelector('input[name="burgerSize"]:checked');
         if (selectedRadio) {
-            currentBasePrice = parseFloat(selectedRadio.value);
-            currentSizeName = selectedRadio.dataset.name;
+            // Lógica para productos con tamaños (Hamburguesas)
+            currentBasePrice = parseFloat(selectedRadio.value) || 0;
+            currentSizeName = selectedRadio.dataset.name || currentSizeName;
         } else {
-            // Valor de respaldo
-            currentBasePrice = 300;
-            currentSizeName = 'Simple';
+            // Lógica para productos sin tamaños (Tacos). El precio y nombre base se fija en el click listener.
+            if (currentSizeName === 'Simple') { 
+                currentBasePrice = 300;
+                currentSizeName = 'Simple';
+            }
         }
 
         // Actualizar el display del precio
-        finalPriceDisplay.textContent = `$${currentBasePrice.toFixed(2)}`;
-        btnPriceDisplay.textContent = `($${currentBasePrice.toFixed(2)})`;
+        if (finalPriceDisplay) finalPriceDisplay.textContent = `$${currentBasePrice.toFixed(2)}`;
+        if (btnPriceDisplay) btnPriceDisplay.textContent = `($${currentBasePrice.toFixed(2)})`;
     };
 
     // 2.2 FUNCIÓN PARA RECOGER LOS TOPPINGS SELECCIONADOS
     const getSelectedToppings = () => {
         // Solo recogemos los que están marcados Y visibles (no ocultos por el CSS 'd-none')
-        return Array.from(toppingCheckboxes)
+        return Array.from(toppingCheckboxes || [])
             .filter(checkbox => checkbox.checked)
             // Asegurarse de que el contenedor del checkbox no tenga la clase d-none
-            .filter(checkbox => !checkbox.closest('.form-check').classList.contains('d-none'))
+            .filter(checkbox => {
+                const formCheck = checkbox.closest('.form-check');
+                return formCheck ? !formCheck.classList.contains('d-none') : true;
+            })
             .map(checkbox => checkbox.value);
     };
 
@@ -331,35 +199,37 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. EVENT LISTENERS
     // ******************************************************
 
-    /**
-     * FUNCIÓN CLAVE: Configura los listeners en los botones cargados dinámicamente.
-     * Se llama después de que cargarProductos finaliza.
-     */
-    function setupProductListeners() {
-        // 3.1 ESCUCHA CLICKS en el contenedor principal y DELEGA el evento a .btn-add-to-cart
-        document.body.addEventListener('click', (e) => {
-            if (e.target.classList.contains('btn-add-to-cart')) {
-                const card = e.target.closest('.product-card');
-                
-                // Lógica para productos simples (no personalizables)
-                if (!card.hasAttribute('data-size-custom')) {
-                    const product = {
-                        id: card.dataset.id,
-                        name: card.dataset.name,
-                        // Usar 0 si no hay precio (ej. Toppings), aunque lo ideal es que la DB devuelva 0.00
-                        precio: parseFloat(card.dataset.precio || 0) 
-                    };
-                    addProduct(product);
-                    return;
-                }
+    // 3.1 ESCUCHA CLICKS en los botones "Añadir al carrito" de la lista de productos
+    productButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const card = e.target.closest('.product-card');
+            if (!card) return;
 
-                // --- Lógica para productos PERSONALIZABLES (Hamburguesas) ---
+            // Lógica para productos simples (no personalizables)
+            if (!card.hasAttribute('data-size-custom')) {
+                const product = {
+                    id: card.dataset.id,
+                    name: card.dataset.name,
+                    precio: parseFloat(card.dataset.precio || 300)
+                };
+                addProduct(product);
+                return;
+            }
 
-                // 1. Cargar datos del producto base en el modal
-                productNameModal.textContent = card.dataset.name;
-                productIdModal.value = card.dataset.id;
+            // --- Lógica para productos PERSONALIZABLES (Hamburguesas/Tacos) ---
 
-                // 2. Resetear a tamaño simple (precio base)
+            // 1. Cargar datos del producto base en el modal
+            if (productNameModal) productNameModal.textContent = card.dataset.name || '';
+            if (productIdModal) productIdModal.value = card.dataset.id || '';
+
+            // *****************************************************************
+            // LÓGICA DE DETECCIÓN DE PRODUCTO (Hamburguesas vs Tacos)
+            // *****************************************************************
+            const isBurger = String(card.dataset.id || '').startsWith('H');
+            const sizeOptionsContainer = sizeOptions ? sizeOptions.closest('div.mb-3') : null; // Contenedor de las opciones de tamaño
+
+            if (isBurger) {
+                // Hamburguesas (Con tamaño: Simple, Doble, Triple)
                 const simpleRadio = document.getElementById('sizeSimple');
                 if (simpleRadio) {
                     simpleRadio.checked = true;
@@ -367,42 +237,59 @@ document.addEventListener('DOMContentLoaded', () => {
                     const firstRadio = document.querySelector('input[name="burgerSize"]');
                     if (firstRadio) firstRadio.checked = true;
                 }
+                // Mostrar opciones de tamaño
+                if (sizeOptionsContainer) sizeOptionsContainer.style.display = 'block';
+                currentBasePrice = 300; // Se actualiza correctamente en updatePrice si hay radio seleccionado
+                currentSizeName = 'Simple';
+            } else {
+                // Tacos y otros personalizables (Sin tamaño)
+                // Ocultar opciones de tamaño
+                if (sizeOptionsContainer) sizeOptionsContainer.style.display = 'none';
+                // Usar el precio de la tarjeta como precio base
+                currentBasePrice = parseFloat(card.dataset.precio || 300);
+                currentSizeName = 'Clásico'; // Etiqueta por defecto para Tacos
 
-                // 3. *** LÓGICA CLAVE: GESTIONAR TOPPINGS PERMITIDOS Y MARCAR DEFAULTS ***
-                const defaultToppingsString = card.dataset.toppingsDefault || "";
-                const allowedToppingsString = card.dataset.toppingsAllowed || "";
-
-                const defaultToppingsArray = defaultToppingsString.split(',').map(t => t.trim()).filter(t => t);
-                const allowedToppingsArray = allowedToppingsString.split(',').map(t => t.trim()).filter(t => t);
-
-                toppingCheckboxes.forEach(cb => {
-                    const toppingValue = cb.value;
-                    const formCheckDiv = cb.closest('.form-check'); // El contenedor que queremos ocultar/mostrar
-
-                    // a) Desmarcar por si acaso (limpieza)
-                    cb.checked = false;
-
-                    // b) Mostrar/Ocultar el checkbox (Filtrado de opciones)
-                    if (allowedToppingsArray.includes(toppingValue)) {
-                        // Si está permitido, lo mostramos
-                        formCheckDiv.classList.remove('d-none');
-                        // c) Marcar si es un topping por defecto
-                        if (defaultToppingsArray.includes(toppingValue)) {
-                            cb.checked = true;
-                        }
-                    } else {
-                        // Si NO está permitido (ej: Salsa Mestiza en la Javito), lo ocultamos
-                        formCheckDiv.classList.add('d-none');
-                    }
-                });
-                // *******************************************************************
-
-                // 4. Mostrar el modal y actualizar precio
-                updatePrice();
-                if (customizationModal) customizationModal.show();
+                // Asegurar que no hay radio button chequeado para evitar conflictos en updatePrice
+                const allRadios = document.querySelectorAll('input[name="burgerSize"]');
+                allRadios.forEach(radio => radio.checked = false);
             }
+            // *****************************************************************
+
+
+            // 3. *** LÓGICA CLAVE: GESTIONAR TOPPINGS PERMITIDOS Y MARCAR DEFAULTS ***
+            const defaultToppingsString = card.dataset.toppingsDefault || "";
+            const allowedToppingsString = card.dataset.toppingsAllowed || "";
+
+            const defaultToppingsArray = defaultToppingsString.split(',').map(t => t.trim()).filter(t => t);
+            const allowedToppingsArray = allowedToppingsString.split(',').map(t => t.trim()).filter(t => t);
+
+            (toppingCheckboxes || []).forEach(cb => {
+                const toppingValue = cb.value;
+                const formCheckDiv = cb.closest('.form-check'); // El contenedor que queremos ocultar/mostrar
+
+                // a) Desmarcar por si acaso (limpieza)
+                cb.checked = false;
+
+                // b) Mostrar/Ocultar el checkbox (Filtrado de opciones)
+                if (allowedToppingsArray.includes(toppingValue)) {
+                    // Si está permitido, lo mostramos
+                    if (formCheckDiv) formCheckDiv.classList.remove('d-none');
+                    // c) Marcar si es un topping por defecto
+                    if (defaultToppingsArray.includes(toppingValue)) {
+                        cb.checked = true;
+                    }
+                } else {
+                    // Si NO está permitido, lo ocultamos
+                    if (formCheckDiv) formCheckDiv.classList.add('d-none');
+                }
+            });
+            // *******************************************************************
+
+            // 4. Mostrar el modal y actualizar precio
+            updatePrice();
+            if (customizationModal) customizationModal.show();
         });
-    } // Fin setupProductListeners
+    });
 
     // 3.2 ESCUCHA CAMBIOS en los radio buttons de tamaño para actualizar el precio del Modal
     if (sizeOptions) sizeOptions.addEventListener('change', updatePrice);
@@ -410,8 +297,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3.3 ESCUCHA CLICKS en el botón FINAL "Añadir al carrito" DENTRO del modal
     if (btnAddToCartModal) btnAddToCartModal.addEventListener('click', () => {
         const finalProduct = {
-            id: productIdModal.value,
-            name: productNameModal.textContent,
+            id: productIdModal ? productIdModal.value : '',
+            name: productNameModal ? productNameModal.textContent : '',
             precio: currentBasePrice,
             size: currentSizeName,
             toppings: getSelectedToppings(), // Esta función ahora solo toma los visibles
@@ -425,6 +312,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (customizationModalElement) customizationModalElement.addEventListener('hidden.bs.modal', () => {
         currentBasePrice = 300;
         currentSizeName = 'Simple';
+        // Asegurar que las opciones de tamaño se muestren por defecto para el próximo producto (asumiendo Burger)
+        const sizeOptionsContainer = sizeOptions ? sizeOptions.closest('div.mb-3') : null;
+        if (sizeOptionsContainer) sizeOptionsContainer.style.display = 'block';
     });
 
     // 3.5 EVENTOS PARA EL OFFCANVAS Y BOTONES
@@ -432,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // a) Botón "Vaciar Carrito"
     if (clearCartBtn) clearCartBtn.addEventListener('click', clearCart);
 
-    // b) Botón de remover UN item individual (botón -) - Usa delegación
+    // b) Botón de remover UN item individual (botón -)
     if (cartItemsList) cartItemsList.addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-remove-unique')) {
             const index = parseInt(e.target.dataset.index);
@@ -451,11 +341,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 showNotification('🛒 Tu carrito está vacío. ¡Añade productos antes de continuar!', 'warning');
             } else {
                 // 1. Guardar el total (asegúrate de que cartTotal esté actualizado)
-                const totalText = cartTotal.textContent.replace('$', '').trim();
+                const totalText = cartTotal ? cartTotal.textContent.replace('$', '').trim() : '0.00';
                 localStorage.setItem('mestizaCartTotal', totalText);
 
                 // 2. Redirigir a la página de pago
-                window.location.href = 'pago.html';
+                window.location.href = 'metodo_de_pago.html';
             }
         });
     }
@@ -464,59 +354,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkTrackingStatus() {
         const status = localStorage.getItem('deliveryStatus');
-        
+
         if (trackingIcon) {
             if (status === 'active') {
-                // Si hay un pedido activo, lo mostramos
-                // Usar 'flex' o 'block' depende de cómo lo quieres alinear con otros iconos. 'flex' es común en navbars.
-                trackingIcon.style.display = 'flex'; 
+                trackingIcon.style.display = 'flex';
                 console.log("Icono de tracking: MOSTRADO. Estado: ACTIVO.");
-                
             } else {
-                // Si no hay estado o está vacío, lo ocultamos
                 trackingIcon.style.display = 'none';
                 console.log("Icono de tracking: OCULTO. Estado: INACTIVO/COMPLETADO.");
             }
         } else {
-             // Este error indica un problema en el HTML
-             console.error("❌ Error en menu.js: No se encontró el elemento con ID 'tracking-icon-link'.");
+            console.error("❌ Error en menu.js: No se encontró el elemento con ID 'tracking-icon-link'.");
         }
     }
-
-    // ******************************************************
-    // INICIALIZACIÓN FINAL Y CARGA DINÁMICA (CORREGIDA)
-    // ******************************************************
-    
-    if (productosContainer) {
-        // 1. Mostrar mensaje de carga
-        productosContainer.innerHTML = '<p class="text-center text-muted">Cargando menú...</p>';
-
-        // 2. Cargar los datos y renderizar
-        cargarProductos()
-            .then(data => {
-                if (data.error || !Array.isArray(data)) {
-                    // Manejar error devuelto por PHP o si el formato no es el esperado
-                    productosContainer.innerHTML = `<p class="text-center text-danger">${data.error || 'Fallo al obtener los productos en formato JSON.'}</p>`;
-                    return;
-                }
-                
-                // 3. Generar y inyectar HTML
-                const productosAgrupados = agruparPorCategoria(data, 'categoria');
-                productosContainer.innerHTML = generarSeccionesMenu(productosAgrupados);
-
-                // 4. Configurar listeners (AHORA SÍ FUNCIONA porque tiene acceso a todas las variables)
-                setupProductListeners(); 
-
-            })
-            .catch(error => {
-                // Manejar errores de red o errores retornados por la función asíncrona
-                console.error("Fallo inesperado durante la carga y renderizado:", error);
-                productosContainer.innerHTML = '<p class="text-center text-danger">Error al cargar el menú. Inténtalo más tarde.</p>';
-            });
-    } else {
-        console.error("❌ Error en menu.js: No se encontró el elemento con ID 'productos-container'.");
-    }
-
 
     updateCartCounter();
     checkTrackingStatus();

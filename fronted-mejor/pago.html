@@ -25,25 +25,13 @@
     </div>
 
     <div class="card-modal p-4 shadow-lg position-relative">
-        
-        <a href="menu.html" class="btn-volver position-absolute top-0 start-0 p-3" title="Volver al Menú">
+
+        <a href="metodo_de_pago.html" class="btn-volver position-absolute top-0 start-0 p-3" title="Volver al Menú">
             <i class="bi bi-arrow-left-circle-fill fs-4 text-secondary"></i>
         </a>
 
         <h3 class="mb-4 text-center">Finalizar Compra</h3>
-
-        <div class="payment--options mb-4">
-            <button class="btn btn-light payment-btn" id="apple-pay-btn">
-                <img src="./imagenes/apple.png" alt="Apple Pay" class="logo-pago-img">
-            </button>
-            <button class="btn btn-light payment-btn" id="paypal-btn">
-                <img src="./imagenes/paypal.png" alt="PayPal" class="logo-pago-img">
-            </button>
-            <button class="btn btn-light payment-btn" id="google-pay-btn">
-                <img src="./imagenes/google.png" alt="Google Pay" class="logo-pago-img">
-            </button>
-        </div>
-
+        
         <div class="separator mb-4">
             <hr class="line">
             <p>o pagar con tarjeta de crédito</p>
@@ -54,22 +42,31 @@
 
             <div class="input_container mb-3">
                 <label for="card-number" class="input_label">Número de Tarjeta</label>
-                <input id="card-number" class="form-control input_field" type="text" placeholder="XXXX XXXX XXXX XXXX" required maxlength="19">
+                <div class="position-relative">
+                    <input id="card-number" class="form-control input_field pe-5" type="text"
+                        placeholder="XXXX XXXX XXXX XXXX" required maxlength="19">
+                    <span id="card-logo" class="position-absolute top-50 translate-middle-y me-3 end-0"></span>
+                    <div class="invalid-feedback" id="card-number-feedback" style="display: none; color: red; font-size: 0.875em;"></div>
+                </div>
             </div>
 
             <div class="input_container mb-3">
                 <label for="card-holder-name" class="input_label">Nombre Completo del Titular</label>
-                <input id="card-holder-name" class="form-control input_field" type="text" placeholder="Ingrese su nombre completo" required>
+                <input id="card-holder-name" class="form-control input_field" type="text"
+                    placeholder="Ingrese su nombre completo" required>
             </div>
 
             <div class="split d-flex gap-3 mb-4">
                 <div class="input_container flex-grow-1">
                     <label for="expiry-date" class="input_label">Fecha de Vencimiento</label>
-                    <input id="expiry-date" class="form-control input_field" type="text" placeholder="MM/AA" required maxlength="5">
+                    <input id="expiry-date" class="form-control input_field" type="text" placeholder="MM/AA" required
+                        maxlength="5">
+                    <div class="invalid-feedback" id="expiry-date-feedback" style="display: none; color: red; font-size: 0.875em;"></div>
                 </div>
                 <div class="input_container" style="width: 100px;">
                     <label for="cvv" class="input_label">CVV/CVC</label>
-                    <input id="cvv" class="form-control input_field" type="text" placeholder="123" required maxlength="3">
+                    <input id="cvv" class="form-control input_field" type="text" placeholder="123" required
+                        maxlength="3">
                 </div>
             </div>
 
@@ -78,44 +75,39 @@
             </button>
 
         </form>
-</div>
+    </div>
     <div class="notifications-container" id="payment-success-notification">
-      <div class="success">
-        <div class="flex">
-          <div class="flex-shrink-0">
-            <svg
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              class="success-svg"
-            >
-              <path
-                clip-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                fill-rule="evenodd"
-              ></path>
-            </svg>
-          </div>
-          <div class="success-prompt-wrap">
-            <p class="success-prompt-heading">
-              Orden completada
-              <span class="checkmark">✓</span>
-            </p>
-            <div class="success-prompt-prompt">
-              <p>
-                Tu pago fue procesado con éxito. Tu pedido está siendo preparado y pronto estará listo para ser entregado.
-              </p>
+        <div class="success">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                        class="success-svg">
+                        <path clip-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            fill-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="success-prompt-wrap">
+                    <p class="success-prompt-heading">
+                        Orden completada
+                        <span class="checkmark">✓</span>
+                    </p>
+                    <div class="success-prompt-prompt">
+                        <p>
+                            Tu pago fue procesado con éxito. Tu pedido está siendo preparado y pronto estará listo para
+                            ser entregado.
+                        </p>
+                    </div>
+                    <div class="success-button-container">
+                        <button class="success-button-main" type="button"
+                            onclick="window.location.href='estado.html'">Ver Estado</button>
+                        <button class="success-button-secondary" type="button" id="dismiss-success-notification">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="success-button-container">
-              <button class="success-button-main" type="button" onclick="window.location.href='estado.html'">Ver Estado</button>
-              <button class="success-button-secondary" type="button" id="dismiss-success-notification">
-                Cerrar
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/pago.js"></script>

@@ -1,0 +1,99 @@
+/* 1. Body: Fondo totalmente blanco */
+body {
+    background: #fff; /* Fondo blanco liso */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    /* Usamos una fuente genérica Sans-serif impactante como base */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+    color: #333;
+}
+
+/* 2. Contenedor: Sigue centrado, con sombra y borde sutil */
+.container {
+    text-align: center;
+    padding: 50px 40px; /* Más espacio */
+    background: #fff;
+    border-radius: 12px;
+    /* Sombra más suave para un look elegante */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); 
+    max-width: 500px; 
+    width: 90%;
+    border: 1px solid #eee; /* Borde muy sutil */
+}
+
+/* 3. Título "Cheto": Negro, impactante y elegante */
+.titulo-impactante {
+    font-size: 2.8rem; /* Tamaño grande */
+    margin-bottom: 50px;
+    color: #000; /* Color negro liso */
+    font-weight: 900; /* Extra-negrita para impacto */
+    text-transform: uppercase; /* Mayúsculas, estilo "Marginal" */
+    letter-spacing: 2px; /* Separación de letras para ese toque dramático */
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1); /* Sombra de texto muy ligera */
+    border-bottom: 3px solid #000; /* Línea separadora simple y elegante */
+    padding-bottom: 10px;
+}
+
+/* 4. Contenedor de los botones */
+.payment-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px; /* Más espacio para que respiren */
+}
+
+/* 5. Botones de pago */
+.payment-button {
+    position: relative;
+    width: 140px; 
+    height: 140px;
+    border: 1px solid #ccc; /* Borde simple */
+    background-color: #f8f8f8; /* Fondo claro */
+    border-radius: 10px; 
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transición más fluida */
+}
+
+.payment-button img {
+    width: 70%; 
+    height: 70%;
+    object-fit: contain;
+    padding: 10px;
+    filter: grayscale(100%); 
+    opacity: 0.7; /* Opacidad baja por defecto */
+    transition: all 0.3s ease;
+}
+
+/* 6. Efecto de HOVER (El toque elegante) */
+.payment-button:hover {
+    transform: translateY(-8px) scale(1.05); /* Se levanta más y se agranda sutilmente */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25); /* Sombra elegante y grande */
+    border-color: #000; /* Borde negro definido */
+    background-color: #fff; /* Fondo blanco puro al hacer hover */
+}
+
+.payment-button:hover img {
+    filter: grayscale(0%); /* El ícono vuelve a color */
+    opacity: 1; /* Máxima opacidad */
+}
+
+/* 7. Tooltip (Texto de ayuda) al pasar el ratón */
+.payment-button:hover::after {
+    content: attr(data-method);
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #000; /* Fondo negro */
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+}

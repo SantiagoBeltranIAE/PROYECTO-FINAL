@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Método de Pago</title>
+    <link rel="stylesheet" href="style/style_metodo_de_pago.css"> 
+</head>
+<body>
+    <div class="container">
+        <h1 class="titulo-impactante">SELECCIONA TU MÉTODO DE PAGO</h1>
+        
+        <div class="payment-container">
+            
+            <button class="payment-button" data-method="Efectivo" onclick="goToPage('efectivo.html')">
+                <img src="imagenes/efectivo.png" alt="Pagar con Efectivo">
+            </button>
+
+            <button class="payment-button" data-method="Tarjeta" onclick="goToPage('pago.html')">
+                <img src="imagenes/tarjeta.png" alt="Pagar con Tarjeta">
+            </button>
+
+        </div>
+    </div>
+    
+    <script src="js/metodo_de_pago.js"></script>
+</body>
+</html>
