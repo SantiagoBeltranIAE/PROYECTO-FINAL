@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-10-2025 a las 19:36:42
+-- Tiempo de generación: 16-10-2025 a las 05:15:27
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -90,6 +90,13 @@ CREATE TABLE `opiniones` (
   `puntuacion` int(11) NOT NULL DEFAULT 5
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `opiniones`
+--
+
+INSERT INTO `opiniones` (`id`, `nombre`, `opinion`, `fecha`, `puntuacion`) VALUES
+(12, 'Pan', 'rico', '2025-10-15 00:07:58', 5);
+
 -- --------------------------------------------------------
 
 --
@@ -114,9 +121,53 @@ CREATE TABLE `producto` (
   `id_producto` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `descripcion` text DEFAULT NULL,
+  `categoria` varchar(100) NOT NULL,
   `precio` decimal(10,2) NOT NULL,
-  `imagen_url` varchar(255) DEFAULT NULL
+  `imagen_url` varchar(255) DEFAULT NULL,
+  `personalizable` tinyint(1) DEFAULT 0,
+  `tamanos_precios` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`tamanos_precios`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `producto`
+--
+
+INSERT INTO `producto` (`id_producto`, `nombre`, `descripcion`, `categoria`, `precio`, `imagen_url`, `personalizable`, `tamanos_precios`) VALUES
+(1, 'Burger Mestiza', 'Pan de papa con queso, carne smash 110gr, cheddar, salsa \"Mestiza\", cebollitas y pepinillos encurtidos.', 'Hamburguesas', 0.00, './imagenes/hamburguesa_mestiza.heic', 1, '{\"Simple\": 300.00, \"Doble\": 400.00, \"Triple\": 500.00}'),
+(2, 'Cheeseburger Dani', 'Pan de papa con queso, carne smash 110gr, cheddar, mostaza, ketchup y cebollitas brunoise.', 'Hamburguesas', 0.00, './imagenes/hamburguesa dani.png', 1, '{\"Simple\": 300.00, \"Doble\": 400.00, \"Triple\": 500.00}'),
+(3, 'Cheeseburger Javito', 'Pan de papa con queso, carne smash 110gr, cheddar.', 'Hamburguesas', 0.00, './imagenes/', 1, '{\"Simple\": 300.00, \"Doble\": 400.00, \"Triple\": 500.00}'),
+(4, 'Cheeseburger Kids', 'Pan de papa con queso, carne smash 110gr, cheddar, y aderezos.', 'Hamburguesas', 300.00, './imagenes/', 0, NULL),
+(5, 'Vegetariana (Burger)', 'Pan de papa con queso, rodajas de zuccini a la plancha, salteado de verduras (morrón, zanahoria y cebolla), cheddar, salsa \"Mestiza\", cebollitas y pepinillos encurtidos.', 'Hamburguesas', 300.00, './imagenes/', 0, NULL),
+(6, 'Taco de Carne', 'Tortilla artesanal, base cremosa de queso, carne cortada a cuchillo, salteado de vegetales (cebolla, morrón, zanahoria) + Toppings', 'Tacos x 2', 400.00, './imagenes/taco carne.heic', 0, NULL),
+(7, 'Vegetariano (Taco)', 'Tortilla artesanal, base cremosa de queso, zucchini, salteado de vegetales (cebolla, morrón, zanahoria) + Toppings', 'Tacos x 2', 400.00, './imagenes/taco vegetariano.png', 0, NULL),
+(8, 'Vegano', 'Tortilla artesanal, zucchini, salteado de vegetales (vebolla, morrón, zanahoria) + Toppings', 'Tacos x 2', 400.00, './imagenes/', 0, NULL),
+(9, 'Papas Fritas', 'Porción individual.', 'Papas Fritas', 120.00, './imagenes/', 0, NULL),
+(10, 'Salsa Picante', '', 'Toppings', 0.00, './imagenes/salsa_picante.jpg', 0, NULL),
+(11, 'Guacamole', '', 'Toppings', 0.00, './imagenes/guacamole.jpg', 0, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `sobre_nosotros`
+--
+
+CREATE TABLE `sobre_nosotros` (
+  `id` int(11) NOT NULL,
+  `titulo` varchar(255) NOT NULL,
+  `historia_parte1` text NOT NULL,
+  `historia_parte2` text NOT NULL,
+  `imagen1_url` varchar(255) DEFAULT NULL,
+  `imagen2_url` varchar(255) DEFAULT NULL,
+  `mapa_iframe_url` text DEFAULT NULL,
+  `fecha_actualizacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `sobre_nosotros`
+--
+
+INSERT INTO `sobre_nosotros` (`id`, `titulo`, `historia_parte1`, `historia_parte2`, `imagen1_url`, `imagen2_url`, `mapa_iframe_url`, `fecha_actualizacion`) VALUES
+(1, 'Un Sueño Nacido en 2020', 'Mestiza Sabores Caseros nació en Colonia del Sacramento en plena pandemia de 2020, cuando Daniel Abbona y su familia decidieron transformar la incertidumbre en oportunidad. Lo que comenzó con una simple mesita en la feria de los domingos, hoy es un emprendimiento gastronómico que se ha convertido en infaltable en ferias, eventos y encuentros locales. Nuestro diferencial está en la artesanía y el corazón familiar que ponemos en cada plato. Elaboramos todo nosotros mismos: desde las tortillas y encurtidos hasta las salsas picantes y aderezos que acompañan nuestros tacos, smash burgers, bocatas y opciones vegetarianas y veganas. Cada bocado busca mantener un sabor único, constante y reconocible, que represente quiénes somos.', 'De la feria y la rambla pasamos a tener nuestro propio food truck, el primero en Colonia, que nos permitió ampliar la propuesta con hamburguesas de estilo americano y seguir creciendo junto a la comunidad que nos apoya. Hoy seguimos recorriendo ferias gastronómicas y cerveceras, ofreciendo delivery cuando no estamos en eventos, y acompañando también a familias, amigos y empresas en celebraciones privadas. Mestiza es eso: comida rápida hecha con cariño, tradición y el sabor casero de Uruguay, que creció desde lo simple para convertirse en un lugar de encuentro y disfrute.', './imagenes/inicio.heic', './imagenes/puesto.webp', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d157.07!2d-57.84275!3d-34.47169!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9508933b28b61c77%3A0xc4f4474320e6f30d!2sBazzurro%201747%2C%2070000%20Colonia%20del%20Sacramento%2C%20Departamento%20de%20Colonia%2C%20Uruguay!5e0!3m2!1ses-419!2suy!4v1705886915152!5m2!1ses-419!2suy', '2025-10-15 00:42:48');
 
 --
 -- Índices para tablas volcadas
@@ -172,6 +223,12 @@ ALTER TABLE `producto`
   ADD PRIMARY KEY (`id_producto`);
 
 --
+-- Indices de la tabla `sobre_nosotros`
+--
+ALTER TABLE `sobre_nosotros`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -203,7 +260,7 @@ ALTER TABLE `detalle_pedido`
 -- AUTO_INCREMENT de la tabla `opiniones`
 --
 ALTER TABLE `opiniones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido`
@@ -215,7 +272,13 @@ ALTER TABLE `pedido`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT de la tabla `sobre_nosotros`
+--
+ALTER TABLE `sobre_nosotros`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
