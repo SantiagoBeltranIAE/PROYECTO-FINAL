@@ -154,6 +154,13 @@ PROYECTO-FINAL/
 
 - pedido_old, compra, carga, meta, sobre_nosotros
 
+
+- `cliente` → realiza → `pedido`
+- `producto` → asociado a → `detalle_pedido`
+- `detalle_pedido` → pertenece a → `pedido`
+
+![Mer.drawio](Mer.drawio.png)
+
 ---
 
 ## 👥 Autores
