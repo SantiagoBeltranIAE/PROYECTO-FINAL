@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Estadísticas - Admin</title>
+  <link rel="stylesheet" href="../style/admin.css">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import { me, nav, logout } from '../js/admin-common.js';
+    window._logout = logout;
+
+    const root = document.getElementById('root');
+    const u = await me();
+    if (!u.ok) location.href = 'login.html';
+
+    let desde = new Date(); desde.setDate(1);
+    let hasta = new Date();
+
+    function fmt(d){ return d.toISOString().slice(0,10); }
+
+    async function load() {
+      const url = `../../backend/estadisticas/resumen.php?desde=${fmt(desde)}&hasta=${fmt(hasta)}`;
+      const r = await fetch(url); const data = await r.json();
+      render(data);
+    }
+
+    function render(x) {
+      root.innerHTML = nav('estadisticas') + `
+        <main>
+          <div class="card">
+            <h2>Resumen</h2>
+            <div class="flex">
+              <input type="date" id="d1" value="${fmt(desde)}">
+              <input type="date" id="d2" value="${fmt(hasta)}">
+              <button class="primary" id="aplicar">Aplicar</button>
+            </div>
+            <p><b>Ventas:</b> $ ${Number(x.ventas.total_ventas).toFixed(2)} — <b>Pedidos:</b> ${x.ventas.cant_pedidos}</p>
+
+            <h3>Top productos</h3>
+            <table class="table">
+              <thead><tr><th>Producto</th><th>Unidades</th><th>Ingreso</th></tr></thead>
+              <tbody>
+                ${x.top_productos.map(t=>`
+                  <tr><td>${t.nombre}</td><td>${t.unidades}</td><td>$ ${Number(t.ingreso).toFixed(2)}</td></tr>
+                `).join('')}
+              </tbody>
+            </table>
+
+            <h3>Ventas por día</h3>
+            <table class="table">
+              <thead><tr><th>Día</th><th>Total</th></tr></thead>
+              <tbody>
+                ${x.ventas_por_dia.map(d=>`
+                  <tr><td>${d.dia}</td><td>$ ${Number(d.total).toFixed(2)}</td></tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      `;
+      d1.onchange = () => desde = new Date(d1.value+'T00:00:00');
+      d2.onchange = () => hasta = new Date(d2.value+'T00:00:00');
+      aplicar.onclick = load;
+    }
+
+    load();
+  </script>
+  <script type="module">
+    // --- Theme toggle: light / dark (persistir en localStorage) ---
+    (function(){
+      const KEY = 'admin_theme';
+      const html = document.documentElement;
+
+      // aplicar preferencia guardada / prefers-color-scheme
+      const applySaved = () => {
+        const saved = localStorage.getItem(KEY);
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'light') html.setAttribute('data-theme','light');
+        else if (saved === 'dark') html.removeAttribute('data-theme');
+        else {
+          if (!prefersDark) html.setAttribute('data-theme','light');
+          else html.removeAttribute('data-theme');
+        }
+      };
+      applySaved();
+
+      // crear botón
+      const createBtn = () => {
+        const btn = document.createElement('button');
+        btn.id = 'theme-toggle';
+        btn.title = 'Cambiar modo claro/oscuro';
+        btn.className = 'btn';
+        btn.style.marginLeft = '8px';
+        btn.style.minWidth = '40px';
+        btn.style.display = 'inline-flex';
+        btn.style.alignItems = 'center';
+        btn.style.justifyContent = 'center';
+        const updateIcon = () => {
+          const isLight = html.getAttribute('data-theme') === 'light';
+          btn.textContent = isLight ? '☀️' : '🌙';
+        };
+        btn.addEventListener('click', () => {
+          const isLight = html.getAttribute('data-theme') === 'light';
+          if (isLight) {
+            html.removeAttribute('data-theme');
+            localStorage.setItem(KEY, 'dark');
+          } else {
+            html.setAttribute('data-theme','light');
+            localStorage.setItem(KEY, 'light');
+          }
+          updateIcon();
+        });
+        updateIcon();
+        return btn;
+      };
+
+      // intentar adjuntar al header; si no existe, observar cambios en DOM
+      const attachToHeader = () => {
+        const header = document.querySelector('header');
+        if (!header) return false;
+        if (!document.getElementById('theme-toggle')) header.appendChild(createBtn());
+        return true;
+      };
+
+      if (!attachToHeader()) {
+        const target = document.getElementById('root') || document.body;
+        const obs = new MutationObserver((mutations, observer) => {
+          if (attachToHeader()) observer.disconnect();
+        });
+        obs.observe(target, { childList: true, subtree: true });
+      }
+    })();
+    // --- fin tema ---
+  </script>
+</body>
+</html>

@@ -1,83 +1,109 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estado del Pedido - Mestiza Street Food</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="./style/style_estado.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Estado del Pedido - Mestiza Street Food</title>
 
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Tu estilo -->
+  <link rel="stylesheet" href="./style/style_estado.css">
+  <style>
+    /* micro-acentos por si tu CSS no los tiene */
+    .tracking-card { max-width: 980px; width: 100%; }
+    .tracking-container { position: relative; padding: 16px 8px; }
+    .tracking-line {
+      position: absolute; left: 12%; right: 12%; top: 52px;
+      height: 6px; background: #e9eef5; border-radius: 6px;
+    }
+    #tracking-line-progress {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg,#22c55e,#f59e0b);
+      border-radius: 6px; transition: width .35s ease;
+    }
+    .tracking-step {
+      position: relative; width: 25%;
+      display: inline-flex; flex-direction: column; align-items: center;
+      gap: .25rem; text-align: center;
+    }
+    .tracking-icon {
+      z-index: 2; width: 56px; height: 56px;
+      display: grid; place-items: center; border-radius: 999px;
+      background: #f3f6fb; border: 3px solid #d7e0ee; color: #6b7280;
+      transition: all .2s;
+    }
+    .tracking-step.hecho  .tracking-icon { background: #e6f7ed; border-color:#34d399; color:#065f46; }
+    .tracking-step.activo .tracking-icon { background: #fff7ed; border-color:#f59e0b; color:#9a3412; transform: scale(1.05); }
+    .step-title { font-weight: 600; margin: .25rem 0 0; }
+    .step-time  { font-size: .9rem; margin: 0; }
+    @media (max-width: 768px) {
+      .tracking-line { left: 8%; right: 8%; top: 50px; }
+      .tracking-icon { width: 48px; height: 48px; }
+    }
+  </style>
 </head>
 
 <body class="bg-light min-vh-100 d-flex flex-column">
+  <div class="container my-5 flex-grow-1 d-flex justify-content-center align-items-center">
+    <div class="tracking-card shadow-lg p-4 p-md-5 bg-white rounded-4">
+      <h1 class="text-center mb-3">Estado de tu Pedido</h1>
 
-    <div class="container my-5 flex-grow-1 d-flex justify-content-center align-items-center">
+      <!-- ⚠️ el JS escribe aquí: número de pedido y estado actual -->
+      <p id="meta_pedido" class="text-center text-muted mb-4">Cargando…</p>
 
-        <div class="tracking-card shadow-lg p-4 p-md-5 bg-white rounded-4">
-            <h1 class="text-center mb-4">Estado de tu Pedido</h1>
-            <p class="text-center text-muted mb-5">N° de Pedido: **#CARQUEJA-12345** - Estimado de entrega: **30-45
-                seg**</p>
+      <div class="tracking-container d-flex justify-content-between align-items-start">
+        <!-- línea y progreso -->
+        <div class="tracking-line"><div id="tracking-line-progress"></div></div>
 
-            <div class="tracking-container">
-
-                <div class="tracking-line">
-                    <div id="tracking-line-progress"></div>
-                </div>
-
-                <div class="tracking-step" id="step-1" data-step="1">
-                    <div class="tracking-icon">
-                        <i class="bi bi-file-earmark-check-fill"></i>
-                    </div>
-                    <div class="tracking-content">
-                        <p class="step-title">Pedido Confirmado</p>
-                        <p class="step-time text-muted">Pendiente</p>
-                    </div>
-                </div>
-
-                <div class="tracking-step" id="step-2" data-step="2">
-                    <div class="tracking-icon">
-                        <i class="bi bi-fire"></i>
-                    </div>
-                    <div class="tracking-content">
-                        <p class="step-title">Preparando Pedido</p>
-                        <p class="step-time text-muted">Pendiente</p>
-                    </div>
-                </div>
-
-                <div class="tracking-step" id="step-3" data-step="3">
-                    <div class="tracking-icon">
-                        <i class="bi bi-scooter"></i>
-                    </div>
-                    <div class="tracking-content">
-                        <p class="step-title">Pedido En Camino</p>
-                        <p class="step-time text-muted">Pendiente</p>
-                    </div>
-                </div>
-
-                <div class="tracking-step" id="step-4" data-step="4">
-                    <div class="tracking-icon">
-                        <i class="bi bi-house-door-fill"></i>
-                    </div>
-                    <div class="tracking-content">
-                        <p class="step-title">Pedido Entregado</p>
-                        <p class="step-time text-muted">Pendiente</p>
-                    </div>
-                </div>
-
-            </div>
-            <div class="text-center mt-5">
-                <a href="menu.html" class="btn btn-success btn-lg shadow-sm">Volver</a>
-                <a href="opiniones.html" class="btn btn-success btn-lg shadow-sm">Dejar una opinión</a>
-
-            </div>
-
+        <!-- Paso 1: Confirmado -->
+        <div class="tracking-step" id="paso_confirmado" data-step="1">
+          <div class="tracking-icon"><i class="bi bi-file-earmark-check-fill"></i></div>
+          <div class="tracking-content">
+            <p class="step-title">Pedido Confirmado</p>
+            <p class="step-time text-muted" id="hora_confirmado">Pendiente</p>
+          </div>
         </div>
+
+        <!-- Paso 2: Preparando -->
+        <div class="tracking-step" id="paso_preparacion" data-step="2">
+          <div class="tracking-icon"><i class="bi bi-fire"></i></div>
+          <div class="tracking-content">
+            <p class="step-title">Preparando Pedido</p>
+            <p class="step-time text-muted" id="hora_preparacion">Pendiente</p>
+          </div>
+        </div>
+
+        <!-- Paso 3: En camino -->
+        <div class="tracking-step" id="paso_camino" data-step="3">
+          <div class="tracking-icon"><i class="bi bi-scooter"></i></div>
+          <div class="tracking-content">
+            <p class="step-title">Pedido En Camino</p>
+            <p class="step-time text-muted" id="hora_camino">Pendiente</p>
+          </div>
+        </div>
+
+        <!-- Paso 4: Entregado -->
+        <div class="tracking-step" id="paso_entregado" data-step="4">
+          <div class="tracking-icon"><i class="bi bi-house-door-fill"></i></div>
+          <div class="tracking-content">
+            <p class="step-title">Pedido Entregado</p>
+            <p class="step-time text-muted" id="hora_entregado">Pendiente</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-5">
+        <a href="menu.html" class="btn btn-success btn-lg shadow-sm">Volver</a>
+        <a href="opiniones.html" class="btn btn-success btn-lg shadow-sm">Dejar una opinión</a>
+      </div>
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./js/estado.js"></script>
+  <!-- scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./js/estado.js"></script>
 </body>
-
 </html>

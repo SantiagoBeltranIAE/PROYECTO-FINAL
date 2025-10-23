@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>General - Admin</title>
+  <link rel="stylesheet" href="../style/admin.css">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import { me, nav, logout } from '../js/admin-common.js';
+    window._logout = logout;
+
+    const root = document.getElementById('root');
+    const u = await me();
+    if (!u.ok) location.href = 'login.html';
+
+    root.innerHTML = nav('general') + `
+      <main>
+        <div class="card">
+          <h2>¡Hola, ${u.nombre}!</h2>
+          <p>Usá el menú superior para gestionar <b>Productos</b>, controlar <b>Pedidos</b> en vivo y ver <b>Estadísticas</b>.</p>
+          <div class="flex">
+            <span class="badge">Sugerencia</span>
+            <span>El módulo de <b>Pedidos</b> refresca cada 5 segundos y suena cuando entra uno nuevo.</span>
+          </div>
+        </div>
+      </main>
+    `;
+
+    // --- Theme toggle: light / dark (persistir en localStorage) ---
+    (function(){
+      const KEY = 'admin_theme';
+      const html = document.documentElement;
+
+      // inicializar según preferencia guardada o prefers-color-scheme
+      const saved = localStorage.getItem(KEY);
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'light') html.setAttribute('data-theme','light');
+      else if (saved === 'dark') html.removeAttribute('data-theme');
+      else {
+        // si no hay guardado, usar prefers-color-scheme
+        if (!prefersDark) html.setAttribute('data-theme','light');
+        else html.removeAttribute('data-theme');
+      }
+
+      // crear botón y añadir al header
+      const header = document.querySelector('header');
+      if (header) {
+        const btn = document.createElement('button');
+        btn.id = 'theme-toggle';
+        btn.title = 'Cambiar modo claro/oscuro';
+        btn.style.marginLeft = '8px';
+        btn.style.minWidth = '40px';
+        btn.style.display = 'inline-flex';
+        btn.style.alignItems = 'center';
+        btn.style.justifyContent = 'center';
+        btn.style.gap = '6px';
+        btn.className = 'btn';
+        // actualizar icono según tema actual
+        const updateIcon = () => {
+          const isLight = html.getAttribute('data-theme') === 'light';
+          btn.textContent = isLight ? '☀️' : '🌙';
+        };
+        btn.addEventListener('click', () => {
+          const isLight = html.getAttribute('data-theme') === 'light';
+          if (isLight) {
+            html.removeAttribute('data-theme'); // vuelve a dark (default)
+            localStorage.setItem(KEY, 'dark');
+          } else {
+            html.setAttribute('data-theme','light');
+            localStorage.setItem(KEY, 'light');
+          }
+          updateIcon();
+        });
+        updateIcon();
+        // insertar al final del header (ajusta si quieres dentro de nav)
+        header.appendChild(btn);
+      }
+    })();
+    // --- fin tema ---
+  </script>
+</body>
+</html>

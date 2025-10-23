@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Productos - Admin</title>
+  <link rel="stylesheet" href="../style/admin.css">
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Tema claro/oscuro (igual que antes) -->
+  <script type="module">
+    (function(){
+      const KEY = 'admin_theme';
+      const html = document.documentElement;
+      const applySaved = () => {
+        const saved = localStorage.getItem(KEY);
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'light') html.setAttribute('data-theme','light');
+        else if (saved === 'dark') html.removeAttribute('data-theme');
+        else { if (!prefersDark) html.setAttribute('data-theme','light'); else html.removeAttribute('data-theme'); }
+      };
+      applySaved();
+      const createBtn = () => {
+        const btn = document.createElement('button');
+        btn.id = 'theme-toggle'; btn.title = 'Cambiar modo claro/oscuro'; btn.className = 'btn';
+        btn.style.marginLeft = '8px'; btn.style.minWidth = '40px';
+        btn.style.display = 'inline-flex'; btn.style.alignItems = 'center'; btn.style.justifyContent = 'center';
+        const updateIcon = () => { const isLight = html.getAttribute('data-theme') === 'light'; btn.textContent = isLight ? '☀️' : '🌙'; };
+        btn.addEventListener('click', () => {
+          const isLight = html.getAttribute('data-theme') === 'light';
+          if (isLight) { html.removeAttribute('data-theme'); localStorage.setItem(KEY, 'dark'); }
+          else { html.setAttribute('data-theme','light'); localStorage.setItem(KEY, 'light'); }
+          updateIcon();
+        });
+        updateIcon(); return btn;
+      };
+      const attachToHeader = () => {
+        const header = document.querySelector('header'); if (!header) return false;
+        if (!document.getElementById('theme-toggle')) header.appendChild(createBtn()); return true;
+      };
+      if (!attachToHeader()) {
+        const target = document.getElementById('root') || document.body;
+        const obs = new MutationObserver((mut, o) => { if (attachToHeader()) o.disconnect(); });
+        obs.observe(target, { childList: true, subtree: true });
+      }
+    })();
+  </script>
+
+  <!-- Módulo principal (form + tabla + acciones) -->
+  <script type="module">
+    import { me, nav, logout } from '../js/admin-common.js';
+    window._logout = logout;
+
+    const ENDPOINT = `${location.origin}/PROYECTO-FINAL/fronted-mejor/php/backend/controllers/productos.php`;
+    const root = document.getElementById('root');
+
+    const u = await me();
+    if (!u.ok) location.href = 'login.html';
+
+    async function cargar() {
+      const res = await fetch(`${ENDPOINT}?action=obtenerProductos`, { cache: 'no-store' });
+      const j = await res.json().catch(()=>({}));
+      if (!res.ok || j.ok === false) {
+        console.error(j); alert(j.msg || 'Error cargando productos'); return;
+      }
+      render(j.products || []);
+    }
+
+    function render(items) {
+      root.innerHTML = nav('productos') + `
+        <main>
+          <div class="card">
+            <h2>Productos</h2>
+
+            <form id="product-form" method="post" enctype="multipart/form-data" class="grid gap">
+              <input type="hidden" id="id_producto" name="id_producto">
+
+              <label>Nombre
+                <input id="product-nombre" name="nombre" class="form-control" required>
+              </label>
+
+              <label>Categoría
+                <select id="product-categoria" name="categoria" class="form-select" required>
+                  <option value="">Seleccionar categoría</option>
+                  <option value="Hamburguesas">Hamburguesas</option>
+                  <option value="Papas Fritas">Papas Fritas</option>
+                  <option value="Tacos">Tacos</option>
+                  <option value="Toppings">Toppings</option>
+                </select>
+              </label>
+
+              <label>Precio base
+                <input id="product-precio" name="precio" type="number" step="0.01" min="0" class="form-control" required>
+              </label>
+
+              <label>Tamaños (JSON opcional)
+                <input id="product-tamanos" name="tamanos_precios" class="form-control" placeholder='{"Simple":300,"Doble":400,"Triple":500}'>
+              </label>
+
+              <label>Imagen
+                <input id="product-imagen" name="imagen" type="file" accept="image/*" class="form-control">
+                <img id="product-preview" alt="Vista previa" style="display:none;max-height:80px;margin-top:6px;border-radius:6px;">
+              </label>
+
+              <div>
+                <button type="submit" class="btn btn-warning">Agregar / Guardar</button>
+                <button type="button" id="btn-cancel-edit" class="btn">Cancelar edición</button>
+              </div>
+            </form>
+
+            <div style="height:10px"></div>
+
+            <table class="table" id="tb">
+              <thead>
+                <tr><th>ID</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Tamaños</th><th>Acciones</th></tr>
+              </thead>
+              <tbody>
+              ${items.map(p => `
+                <tr data-id="${p.id_producto}"
+                    data-nombre="${(p.nombre ?? '').replaceAll('"','&quot;')}"
+
+                    data-categoria="${(p.categoria ?? '').replaceAll('"','&quot;')}"
+
+                    data-precio="${Number(p.precio ?? 0)}"
+
+                    data-tamanos='${p.tamanos_precios ? (typeof p.tamanos_precios === "string" ? p.tamanos_precios.replaceAll("'","&#39;") : JSON.stringify(p.tamanos_precios)) : ""}'
+
+                    data-imagen="${(p.imagen ?? p.imagen_url ?? '').replaceAll('"','&quot;')}">
+                  <td class="prod-id">${p.id_producto}</td>
+                  <td><input class="prod-nombre" value="${(p.nombre ?? '').replaceAll('"','&quot;')}"></td>
+                  <td><input class="prod-categoria" value="${(p.categoria ?? '').replaceAll('"','&quot;')}"></td>
+                  <td><input class="prod-precio" type="number" step="0.01" value="${Number(p.precio ?? 0)}"></td>
+                  <td><input class="prod-tamanos" value='${p.tamanos_precios ? (typeof p.tamanos_precios === "string" ? p.tamanos_precios.replaceAll("'","&#39;") : JSON.stringify(p.tamanos_precios)) : ""}'></td>
+                  <td class="flex gap">
+                    <button data-act="edit" class="btn">Editar</button>
+                    <button data-act="save" class="btn">Guardar</button>
+                    <button data-act="del" class="btn">Eliminar</button>
+                  </td>
+                </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      `;
+
+      // Form listeners
+      const form = document.getElementById('product-form');
+      const ENDPOINT = `${location.origin}/PROYECTO-FINAL/fronted-mejor/php/backend/controllers/productos.php`;
+
+      const imgInput = document.getElementById('product-imagen');
+      const preview  = document.getElementById('product-preview');
+      imgInput.addEventListener('change', () => {
+        const f = imgInput.files?.[0];
+        if (f) { preview.src = URL.createObjectURL(f); preview.style.display = 'inline-block'; }
+      });
+
+      document.getElementById('btn-cancel-edit').addEventListener('click', () => {
+        form.reset();
+        document.getElementById('id_producto').value = '';
+        preview.src = ''; preview.style.display = 'none';
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const id = (document.getElementById('id_producto')?.value || '').trim();
+        fd.set('action', id ? 'editarProducto' : 'agregarProducto');
+
+        const res = await fetch(ENDPOINT, { method: 'POST', body: fd });
+        const j = await res.json().catch(()=>({}));
+        if (!res.ok || j.ok === false) { alert(j.msg || 'Error al guardar'); return; }
+        alert(j.msg || (id ? 'Producto editado' : 'Producto agregado'));
+        form.reset(); document.getElementById('id_producto').value = '';
+        preview.src = ''; preview.style.display = 'none';
+        await cargar();
+      });
+
+      // Tabla listeners
+      const tb = document.getElementById('tb');
+      tb.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button'); if (!btn) return;
+        const tr  = btn.closest('tr'); if (!tr) return;
+        const id  = tr.dataset.id;
+
+        if (btn.dataset.act === 'edit') {
+          // Llenar el formulario con la fila seleccionada (para cambiar también la imagen)
+          document.getElementById('id_producto').value     = id;
+          document.getElementById('product-nombre').value  = tr.dataset.nombre || tr.querySelector('.prod-nombre')?.value || '';
+          document.getElementById('product-categoria').value = tr.dataset.categoria || tr.querySelector('.prod-categoria')?.value || '';
+          document.getElementById('product-precio').value  = tr.dataset.precio || tr.querySelector('.prod-precio')?.value || 0;
+          document.getElementById('product-tamanos').value = tr.dataset.tamanos || tr.querySelector('.prod-tamanos')?.value || '';
+          if (tr.dataset.imagen) { preview.src = tr.dataset.imagen; preview.style.display = 'inline-block'; } else { preview.src=''; preview.style.display='none'; }
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+
+        if (btn.dataset.act === 'save') {
+          // Guardar cambios rápidos de la fila (sin cambiar imagen)
+          const fd = new FormData();
+          fd.set('action', 'editarProducto');
+          fd.set('id_producto', id);
+          fd.set('nombre',     tr.querySelector('.prod-nombre')?.value?.trim() || '');
+          fd.set('categoria',  tr.querySelector('.prod-categoria')?.value?.trim() || '');
+          fd.set('precio',     tr.querySelector('.prod-precio')?.value || 0);
+          fd.set('tamanos_precios', tr.querySelector('.prod-tamanos')?.value || '');
+
+          const res = await fetch(ENDPOINT, { method: 'POST', body: fd });
+          const j = await res.json().catch(()=>({}));
+          if (!res.ok || j.ok === false) { alert(j.msg || 'No se pudo guardar'); return; }
+          alert(j.msg || 'Producto editado');
+          await cargar();
+          return;
+        }
+
+        if (btn.dataset.act === 'del') {
+          if (!confirm(`Eliminar producto #${id}?`)) return;
+          const fd = new FormData(); fd.set('action','eliminarProducto'); fd.set('id_producto', id);
+          const res = await fetch(ENDPOINT, { method: 'POST', body: fd });
+          const j = await res.json().catch(()=>({}));
+          if (!res.ok || j.ok === false) { alert(j.msg || 'No se pudo eliminar'); return; }
+          alert(j.msg || 'Eliminado'); await cargar();
+        }
+      });
+    }
+
+    cargar();
+  </script>
+
+  <!-- IMPORTANTE: quita el script externo para evitar conflictos -->
+  <!-- (elimina esta línea si la tenías) -->
+  <!-- <script src="./js/productos-admin.js" defer></script> -->
+</body>
+</html>

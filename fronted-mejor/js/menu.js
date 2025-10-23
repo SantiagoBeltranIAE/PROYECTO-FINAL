@@ -368,6 +368,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // === IMÁGENES DEL MENÚ DESDE BACKEND ===
+    const ENDPOINT_IMG = `${window.location.origin}/PROYECTO-FINAL/fronted-mejor/php/backend/controllers/productos.php?action=obtenerProductos`;
+    const PLACEHOLDER = `${window.location.origin}/PROYECTO-FINAL/imagenes/placeholder.png`;
+
+    const norm = s => String(s || '').toLowerCase().trim();
+
+    async function hydrateMenuImages() {
+        try {
+            const res = await fetch(ENDPOINT_IMG, { cache: 'no-store' });
+            const j = await res.json();
+            if (!res.ok || j.ok === false) {
+                console.error(j.msg || 'No se pudo cargar productos para imágenes');
+                return;
+            }
+            const byName = new Map((j.products || []).map(p => [norm(p.nombre), p]));
+
+            // Para cada card existente, setear <img src=...> por nombre
+            document.querySelectorAll('.product-card').forEach(card => {
+                const name = norm(card.dataset.name || card.querySelector('[data-name]')?.textContent);
+                const p = byName.get(name);
+                const imgEl = card.querySelector('img');
+                if (imgEl) imgEl.src = (p?.imagen || p?.imagen_url || PLACEHOLDER);
+                // opcional: actualizar data-precio si falta
+                if (p && !card.dataset.precio) card.dataset.precio = p.precio;
+            });
+        } catch (e) {
+            console.error('Error hidratando imágenes del menú:', e);
+        }
+    }
+
+    hydrateMenuImages();
+
     updateCartCounter();
     checkTrackingStatus();
 });
