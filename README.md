@@ -153,7 +153,6 @@ PROYECTO-FINAL/
   - Almacena reseñas de clientes
 
 - pedido_old, compra, carga, meta, sobre_nosotros
-  - Tablas auxiliares/legacy y metadatos (versiones, carga, información estática sobre el negocio)
 
 ---
 
