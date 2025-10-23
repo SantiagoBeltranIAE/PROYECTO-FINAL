@@ -9,106 +9,151 @@ Este proyecto es una aplicación web para el restaurante *Mestiza*, desarrollada
 - Ver productos del restaurante (menú)
 - Visualización de eventos próximos en un calendario
 - Backend con salida JSON para integración con frontend (en desarrollo)
++ Panel de administración para gestionar productos y pedidos (CRUD básico)
++ Endpoints para administración: creación, listado, actualización y cambio de estado de pedidos
++ APIs públicas para listado de productos consumidas por el frontend
 
 ---
 
 ## 🛠️ Tecnologías utilizadas
 
-- **Frontend:** HTML5, CSS3
-- **Backend:** PHP (con XAMPP)
-- **Base de datos:** MySQL
+- **Frontend:** HTML5, CSS, JavaScript (scripts estáticos y manejo de carrito/reservas)
+- **Plataforma de desarrollo:** Visual Studio Code
+- **Backend:** PHP (estructuras tipo MVC simples)
+- **Base de datos:** MySQL (script incluido)
 - **Servidor local:** Apache (XAMPP)
 
 ---
 
-## 🧱 Estructura del Proyecto
+## 🧱 Estructura del Proyecto (actualizada y real)
 
 ```
-PROYECTO-FINAL-main/
-├── backend/                    # Backend en PHP (estructura tipo MVC)
-│   ├── config/                # Conexión a base de datos
-│   ├── controllers/          # Controladores API
-│   ├── models/               # Lógica de acceso a datos
-│   └── routes/               # Punto de entrada para las rutas (API)
-├── frontend/
-│   └── calendario.html       # Página de eventos futuros
-├── MER.jpg                   # Diagrama entidad-relación
-└── vanella_schema.sql        # Script SQL para crear la base de datos
+PROYECTO-FINAL/
+├── admin/
+│   ├── backend/
+│   │   ├── auth/                   # login/logout/me/seed/reset admin
+│   │   │   ├── login.php
+│   │   │   ├── logout.php
+│   │   │   ├── me.php
+│   │   │   ├── seed_admin.php
+│   │   │   └── reset_admin.php
+│   │   ├── config/
+│   │   │   ├── conexion.php        # configuración DB para admin
+│   │   │   └── session.php         # helpers de sesión
+│   │   ├── estadisticas/           # endpoints de estadísticas
+│   │   │   └── resumen.php
+│   │   ├── pedidos/                # endpoints para pedidos
+│   │   │   ├── list.php
+│   │   │   ├── create.php
+│   │   │   ├── change_state.php
+│   │   │   ├── update_estado.php
+│   │   │   ├── estado_publico.php
+│   │   │   └── status.php
+│   │   └── productos/              # endpoints para productos (CRUD)
+│   │       ├── list.php
+│   │       ├── create.php
+│   │       ├── update.php
+│   │       └── delete.php
+│   └── frontend/
+│       ├── login.html
+│       ├── productos.html
+│       ├── pedidos.html
+│       ├── estadisticas.html
+│       ├── js/
+│       │   ├── admin-common.js
+│       │   ├── productos-admin.js
+│       │   └── pedidos-admin.js
+│       └── style/
+│           └── admin.css
+├── fronted-mejor/                   # frontend público mejorado
+│   ├── index.html
+│   ├── menu.html
+│   ├── reservas.html
+│   ├── calendario.html
+│   ├── pago.html
+│   ├── opiniones.html
+│   ├── imagenes/
+│   ├── js/
+│   │   ├── menu.js
+│   │   ├── producto.js
+│   │   ├── cart.js
+│   │   ├── pago.js
+│   │   ├── reserva.js
+│   │   ├── calendario.js
+│   │   └── opiniones.js
+│   └── php/
+│       ├── guardar_opinion.php
+│       ├── mostrar_opiniones.php
+│       └── backend/
+│           ├── config/
+│           │   └── database.php   # configuración DB del backend público
+│           ├── controllers/
+│           │   └── productos.php
+│           ├── models/
+│           │   └── Producto.php
+│           └── routes/
+│               └── api.php        # endpoint público: lista de productos (JSON)
+├── uploads/
+│   └── products/                    # imágenes subidas por admin (vacía por ahora)
+├── vanella_schema.sql               # Script SQL para crear la base de datos
+└── MER.jpg / Mer.drawio.png         # Diagrama entidad-relación (si está presente)
 ```
-
-> ⚠️ Las carpetas `Página/` y `ThiagoBackend/vanella-delivery/` **no se utilizan actualmente** en el proyecto.
 
 ---
 
-## ⚙️ Configuración y ejecución
+## 🔁 Endpoints y rutas útiles (ejemplos)
 
-1. Clonar el repositorio:
-```bash
-git clone https://github.com/usuario/PROYECTO-FINAL.git
-```
+- Frontend público (páginas):
+  - http://localhost/PROYECTO-FINAL/fronted-mejor/index.html
+  - http://localhost/PROYECTO-FINAL/fronted-mejor/menu.html
 
-2. Importar la base de datos:
-   - Abrí **phpMyAdmin** desde XAMPP
-   - Creá una base de datos nueva (ej: `vanella`)
-   - Importá el archivo `vanella_schema.sql`
+- API público de productos (JSON):
+  - http://localhost/PROYECTO-FINAL/fronted-mejor/php/backend/routes/api.php
+  - curl http://localhost/PROYECTO-FINAL/fronted-mejor/php/backend/routes/api.php
 
-3. Configurar conexión:
-   - Editá `backend/config/database.php` con los datos de tu entorno local
+- Admin (frontend):
+  - http://localhost/PROYECTO-FINAL/admin/frontend/login.html
 
-4. Servir los archivos:
-   - Colocá la carpeta `PROYECTO-FINAL-main` en `htdocs` de XAMPP
-   - Iniciá Apache y MySQL desde el panel de XAMPP
-
-5. Probar el backend:
-   - Accedé a `http://localhost/PROYECTO-FINAL-main/backend/routes/api.php`  
-     para recibir la respuesta en formato JSON.
-
----
-
-## 🔁 API REST (en desarrollo)
-
-El backend devuelve datos de productos en formato **JSON**, permitiendo integrarlo con interfaces modernas (JavaScript, frameworks, apps móviles, etc.).
-
-Ejemplo de respuesta:
-```json
-[
-  {
-    "id": 1,
-    "nombre": "Pizza Margarita",
-    "descripcion": "Tomate, muzzarella, albahaca",
-    "precio": 450
-  },
-  ...
-]
-```
+- Admin (endpoints PHP):
+  - Listar productos: admin/backend/productos/list.php
+  - Crear producto: admin/backend/productos/create.php
+  - Actualizar producto: admin/backend/productos/update.php
+  - Eliminar producto: admin/backend/productos/delete.php
+  - Listar pedidos: admin/backend/pedidos/list.php
+  - Cambiar estado de pedido: admin/backend/pedidos/change_state.php
+  - Login admin: admin/backend/auth/login.php
+  - Seed/reset admin: admin/backend/auth/seed_admin.php, admin/backend/auth/reset_admin.php
 
 ---
 
 ## 🗃️ Base de datos
 
-La estructura del sistema está basada en las siguientes entidades:
+- producto
+  - id_producto, nombre, descripcion, categoria, precio, imagen_url, personalizable
+  - tamanos_precios (JSON) — precios por tamaño/variante
+  - Contiene filas de ejemplo (Burger Mestiza, Cheeseburger, tacos, papas, etc.)
 
-- `cliente` → realiza → `pedido`
-- `producto` → asociado a → `detalle_pedido`
-- `detalle_pedido` → pertenece a → `pedido`
+- pedidos
+  - id_pedido, fecha_hora, cliente_nombre, telefono, direccion, referencia, metodo_pago, total, estado
+  - Registra pedidos y su estado (pendiente, aceptado, cancelado, ...)
 
-![Mer.drawio](Mer.drawio.png)
+- pedido_detalle
+  - id, id_pedido, producto_nombre, cantidad, precio_unitario
+  - Guarda los ítems asociados a cada pedido
 
----
+- pedido_historial
+  - id, id_pedido, estado, fecha_hora
+  - Historial de cambios de estado de pedidos
 
-## 🧑‍💼 Futuras mejoras
+- cliente
+  - id_cliente, direccion (info básica de clientes)
 
-- Sistema de autenticación de administradores
-- ABM de productos, eventos y reservas
-- Integración completa con frontend dinámico
-- Carrito de compras y pedidos online
-- Gestión de reservas con confirmación automática
+- opiniones
+  - id, nombre, opinion, fecha, puntuacion
+  - Almacena reseñas de clientes
 
----
-
-## 📌 Estado del proyecto
-
-> 🔧 En desarrollo — Módulos funcionales: API de productos y calendario de eventos.
+- pedido_old, compra, carga, meta, sobre_nosotros
+  - Tablas auxiliares/legacy y metadatos (versiones, carga, información estática sobre el negocio)
 
 ---
 
