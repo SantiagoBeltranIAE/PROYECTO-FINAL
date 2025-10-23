@@ -25,7 +25,7 @@ Este proyecto es una aplicación web para el restaurante *Mestiza*, desarrollada
 
 ---
 
-## 🧱 Estructura del Proyecto (actualizada y real)
+## 🧱 Estructura del Proyecto
 
 ```
 PROYECTO-FINAL/
@@ -101,7 +101,7 @@ PROYECTO-FINAL/
 
 ---
 
-## 🔁 Endpoints y rutas útiles (ejemplos)
+## 🔁 Endpoints y rutas
 
 - Frontend público (páginas):
   - http://localhost/PROYECTO-FINAL/fronted-mejor/index.html
