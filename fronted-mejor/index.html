@@ -1,139 +1,168 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Inicio - Restaurante Mestiza</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-  <link rel="stylesheet" href="./style/style.css" data-global="true">
-
+  <!-- Iconos para el botón -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./style/style.css" data-global="true" />
 </head>
+<body class="pagina-negra">
 
-<body class="pagina-negra"></body>
-<header>
-  <nav class="navbar">
-    <div class="nav-left">
-      <a href="index.html" title="Volver al Menú" class="js-link nav-logo">
-        <img 
-          src="./imagenes/FOTO_2.png" 
-          alt="Logo" 
-          style="height: 140px; margin-right: 15px;" 
-        >
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="./imagenes/FOTO_2.png" alt="Mestiza" class="brand-logo" />
       </a>
-      
-      <a href="index.html" title="Inicio" class="js-link nav-text">
-        Inicio
-      </a>
-      
-      <a href="sobre_nosotros.html" title="Sobre Nosotros" class="js-link nav-text">
-        Sobre Nosotros
-      </a>
-      <a href="opiniones.html" title="Opiniones" class="js-link nav-text">
-        Opiniones
-      </a>
-      <a href="menu.html" title="Menú" class="js-link nav-text">
-        Menú
-      </a>
-    </div>
-    <div class="nav-right">
-      <a href="reservas.html" title="Reservas" class="js-link nav-text">
-        Reservas
-      </a>
-      <a href="calendario.html" title="Calendario" class="js-link nav-text">
-        Calendario
-      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="sobre_nosotros.html">Sobre Nosotros</a></li>
+          <li class="nav-item"><a class="nav-link" href="opiniones.html">Opiniones</a></li>
+          <li class="nav-item"><a class="nav-link" href="menu.html">Menú</a></li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="reservas.html">Reservas</a></li>
+          <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
+        </ul>
+      </div>
     </div>
   </nav>
-</header>
 
-<main>
-  <div class="logo-container">
-    <img src="imagenes/FOTO.png" alt="Logo Mestiza" class="logo-mestiza">
-  </div>
-  <p class="horarios">
-    ABIERTO<br>
-    <!-- En un futuro debe ser dinamico -->
-    Lunes a Viernes: 17:00 a 19:00<br>
-    Sábados y Domingos: 13:00 a 23:00
-  </p>
-  <div class="contenido-blanco">
-
-    <div class="container pt-5">
-      <h2 class="text-center mb-4">Nuestras Especialidades</h2>
-
-      <div class="d-flex justify-content-center align-items-start gap-3 mb-5">
-
-        <div class="w-50">
-          <div id="carouselExample1" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              <div class="carousel-item active" data-bs-interval="4500">
-                <img src="./imagenes/as.jpg" class="d-block" alt="Plato 1">
-              </div>
-              <div class="carousel-item" data-bs-interval="4500">
-                <img src="./imagenes/taco.jpg" class="d-block" alt="Plato 2">
-              </div>
-              <div class="carousel-item" data-bs-interval="4500">
-                <img src="./imagenes/hamburguesa.jpg" class="d-block" alt="Plato 3">
-              </div>
+  <main>
+    <!-- HERO centrado en área negra (solo FOTO_2.png) -->
+    <section class="hero">
+      <div id="heroCarousel" class="carousel slide carousel-fade hero-carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="hero-bg bg-black"></div>
+            <div class="hero-overlay"></div>
+            <div class="hero-center">
+              <img src="./imagenes/FOTO.png" class="hero-photo" alt="Mestiza" />
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample1" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample1" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="w-50">
-          <div id="carouselExample2" class="carousel slide" data-bs-ride="carousel">
-
-            <div class="carousel-inner">
-              <div class="carousel-item active" data-bs-interval="4500">
-                <img src="./imagenes/as.jpg" class="d-block w-100" alt="Plato 4">
-              </div>
-              <div class="carousel-item" data-bs-interval="4500">
-                <img src="./imagenes/taco.jpg" class="d-block w-100" alt="Plato 5">
-              </div>
-              <div class="carousel-item" data-bs-interval="4500">
-                <img src="./imagenes/hamburguesa.jpg" class="d-block w-100" alt="Plato 6">
-              </div>
+            <div class="hero-caption text-center">
+              <p class="horarios lead mt-2 mb-3">
+                ABIERTO<br />
+                Lunes a Viernes: 17:00 a 19:00<br />
+                Sábados y Domingos: 13:00 a 23:00
+              </p>
+              <a href="menu.html" class="btn btn-cta btn-lg on-dark">Ver menú y hacer pedido</a>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample2" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample2" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</main>
-<footer class="bg-light py-4 mt-5">
-  <div class="container text-center">
-    <p class="mb-1">Bazzurro 1747 esq. B. Manton, Colonia Del Sacramento, Colonia, Uruguay 70000</p>
-    <p class="mb-1">Tel: +598 98 107 643</p>
-    <p class="mb-0 small text-muted">&copy; 2025 Mestiza Street Food</p>
-    <div class="mt-3">
-      <a href="https://www.instagram.com/mestiza_street_food/" target="_blank" rel="noopener" class="me-2">
-        <img src="./imagenes/instagram.png" alt="Instagram" style="height:28px;">
-      </a>
-      <a href="https://www.facebook.com/p/mestiza_sabores_caseros-100036866965455/?_rdr" target="_blank" rel="noopener">
-        <img src="./imagenes/facebook.png" alt="Facebook" style="height:28px;">
-      </a>
-    </div>
-  </div>
-</footer>
+    </section>
 
-<!-- scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <section class="contenido-blanco">
+      <div class="container py-5">
+        <h2 class="text-center mb-4">Nuestras Especialidades</h2>
+        <div class="row g-4">
+          <!-- Carrusel 1 -->
+          <div class="col-12 col-md-6">
+            <div id="carouselExample1" class="carousel carousel-fade carousel-hero slide" data-bs-ride="carousel">
+              <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExample1" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Foto 1"></button>
+                <button type="button" data-bs-target="#carouselExample1" data-bs-slide-to="1" aria-label="Foto 2"></button>
+              </div>
+
+              <div class="carousel-inner rounded-4 overflow-hidden shadow-lg">
+                <div class="carousel-item active" data-bs-interval="5000">
+                  <img src="./imagenes/1.png" class="d-block w-100" alt="Foto 1" loading="lazy" />
+                  <div class="carousel-caption text-start">
+                    <h5 class="mb-1">Sabores de Autor</h5>
+                    <p class="mb-0 small opacity-75">Ingredientes frescos y salsas caseras</p>
+                  </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="5000">
+                  <img src="./imagenes/2.png" class="d-block w-100" alt="Foto 2" loading="lazy" />
+                  <div class="carousel-caption text-start">
+                    <h5 class="mb-1">Técnica y Pasión</h5>
+                    <p class="mb-0 small opacity-75">Smash burgers y clásicos de feria</p>
+                  </div>
+                </div>
+              </div>
+
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample1" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExample1" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Carrusel 2 -->
+          <div class="col-12 col-md-6">
+            <div id="carouselExample2" class="carousel carousel-fade carousel-hero slide" data-bs-ride="carousel">
+              <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExample2" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Foto 3"></button>
+                <button type="button" data-bs-target="#carouselExample2" data-bs-slide-to="1" aria-label="Foto 4"></button>
+              </div>
+
+              <div class="carousel-inner rounded-4 overflow-hidden shadow-lg">
+                <div class="carousel-item active" data-bs-interval="5000">
+                  <img src="./imagenes/3.png" class="d-block w-100" alt="Foto 3" loading="lazy" />
+                  <div class="carousel-caption text-start">
+                    <h5 class="mb-1">Texturas que Enamoran</h5>
+                    <p class="mb-0 small opacity-75">Crujiente por fuera, jugoso por dentro</p>
+                  </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="5000">
+                  <img src="./imagenes/4.png" class="d-block w-100" alt="Foto 4" loading="lazy" />
+                  <div class="carousel-caption text-start">
+                    <h5 class="mb-1">Para Compartir</h5>
+                    <p class="mb-0 small opacity-75">Tacos, burgers y mucho más</p>
+                  </div>
+                </div>
+              </div>
+
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample2" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExample2" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón CTA al menú (eliminado de aquí) -->
+        <!--
+        <div class="text-center mt-5">
+          <a href="menu.html" class="btn btn-cta btn-lg">
+            <i class="bi bi-egg-fried me-2"></i> Ver menú y hacer pedido
+          </a>
+        </div>
+        -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-light py-4 mt-5">
+    <div class="container text-center">
+      <p class="mb-1">Bazzurro 1747 esq. B. Manton, Colonia Del Sacramento, Colonia, Uruguay 70000</p>
+      <p class="mb-1">Tel: +598 98 107 643</p>
+      <p class="mb-0 small text-muted">&copy; 2025 Mestiza Street Food</p>
+      <div class="mt-3">
+        <a href="https://www.instagram.com/mestiza_street_food/" target="_blank" rel="noopener" class="me-2">
+          <img src="./imagenes/instagram.png" alt="Instagram" style="height:28px" />
+        </a>
+        <a href="https://www.facebook.com/p/mestiza_sabores_caseros-100036866965455/?_rdr" target="_blank" rel="noopener">
+          <img src="./imagenes/facebook.png" alt="Facebook" style="height:28px" />
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

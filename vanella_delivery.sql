@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-10-2025 a las 17:24:00
+-- Tiempo de generación: 23-10-2025 a las 05:37:53
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -64,21 +64,6 @@ CREATE TABLE `compra` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `detalle_pedido`
---
-
-CREATE TABLE `detalle_pedido` (
-  `id_detalle` int(11) NOT NULL,
-  `id_pedido` int(11) DEFAULT NULL,
-  `id_producto` int(11) DEFAULT NULL,
-  `cantidad` int(11) NOT NULL,
-  `subtotal` decimal(10,2) DEFAULT NULL,
-  `modificaciones` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `meta`
 --
 
@@ -92,7 +77,7 @@ CREATE TABLE `meta` (
 --
 
 INSERT INTO `meta` (`name`, `value`) VALUES
-('pedidos_version', '2025-10-21 12:20:26'),
+('pedidos_version', '2025-10-22 14:03:04'),
 ('productos_version', '2025-10-21 00:02:25');
 
 -- --------------------------------------------------------
@@ -119,24 +104,49 @@ INSERT INTO `opiniones` (`id`, `nombre`, `opinion`, `fecha`, `puntuacion`) VALUE
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pedido`
+-- Estructura de tabla para la tabla `pedidos`
 --
 
-CREATE TABLE `pedido` (
+CREATE TABLE `pedidos` (
   `id_pedido` int(11) NOT NULL,
-  `id_cliente` int(11) DEFAULT NULL,
-  `fecha_hora` datetime DEFAULT current_timestamp(),
-  `estado` varchar(50) DEFAULT NULL,
-  `total` decimal(10,2) DEFAULT NULL,
-  `tracking_code` varchar(20) DEFAULT NULL
+  `fecha_hora` datetime NOT NULL DEFAULT current_timestamp(),
+  `cliente_nombre` varchar(120) NOT NULL,
+  `telefono` varchar(30) NOT NULL,
+  `direccion` varchar(255) NOT NULL,
+  `referencia` varchar(255) DEFAULT NULL,
+  `metodo_pago` varchar(30) NOT NULL,
+  `total` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `estado` varchar(30) NOT NULL DEFAULT 'pendiente'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `pedido`
+-- Volcado de datos para la tabla `pedidos`
 --
 
-INSERT INTO `pedido` (`id_pedido`, `id_cliente`, `fecha_hora`, `estado`, `total`, `tracking_code`) VALUES
-(6, NULL, '2025-10-21 10:08:09', 'aceptado', 600.00, NULL);
+INSERT INTO `pedidos` (`id_pedido`, `fecha_hora`, `cliente_nombre`, `telefono`, `direccion`, `referencia`, `metodo_pago`, `total`, `estado`) VALUES
+(13, '2025-10-22 23:06:17', 'Thiago Paulo', '099756927', 'Ing. Milton Gonnet 2287', 'Complejo de vivienda', '', 0.00, 'cancelado');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pedido_detalle`
+--
+
+CREATE TABLE `pedido_detalle` (
+  `id` int(11) NOT NULL,
+  `id_pedido` int(11) NOT NULL,
+  `producto_nombre` varchar(200) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `precio_unitario` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `pedido_detalle`
+--
+
+INSERT INTO `pedido_detalle` (`id`, `id_pedido`, `producto_nombre`, `cantidad`, `precio_unitario`) VALUES
+(16, 13, 'Burger Mestiza', 1, 0.00),
+(17, 13, 'Cheeseburger Dani', 1, 0.00);
 
 -- --------------------------------------------------------
 
@@ -156,11 +166,36 @@ CREATE TABLE `pedido_historial` (
 --
 
 INSERT INTO `pedido_historial` (`id`, `id_pedido`, `estado`, `fecha_hora`) VALUES
-(57, 6, 'aceptado', '2025-10-21 13:08:20'),
-(58, 6, 'en_preparacion', '2025-10-21 13:08:31'),
-(59, 6, 'en_camino', '2025-10-21 13:08:37'),
-(60, 6, 'entregado', '2025-10-21 13:08:45'),
-(61, 6, 'aceptado', '2025-10-21 15:20:25');
+(70, 9, 'aceptado', '2025-10-21 18:39:51'),
+(71, 9, 'en_preparacion', '2025-10-21 18:39:57'),
+(72, 9, 'aceptado', '2025-10-21 19:11:10'),
+(73, 13, 'aceptado', '2025-10-22 17:03:03');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pedido_old`
+--
+
+CREATE TABLE `pedido_old` (
+  `id_pedido` int(11) NOT NULL,
+  `id_cliente` int(11) DEFAULT NULL,
+  `fecha_hora` datetime DEFAULT current_timestamp(),
+  `estado` varchar(50) DEFAULT NULL,
+  `total` decimal(10,2) DEFAULT NULL,
+  `tracking_code` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `pedido_old`
+--
+
+INSERT INTO `pedido_old` (`id_pedido`, `id_cliente`, `fecha_hora`, `estado`, `total`, `tracking_code`) VALUES
+(9, NULL, '2025-10-21 15:39:44', 'aceptado', 0.00, NULL),
+(10, NULL, '2025-10-21 20:42:43', 'pendiente', 0.00, NULL),
+(11, NULL, '2025-10-22 00:00:01', 'pendiente', 600.00, NULL),
+(12, NULL, '2025-10-22 13:34:05', 'pendiente', 300.00, NULL),
+(13, NULL, '2025-10-22 13:34:58', 'aceptado', 300.00, NULL);
 
 -- --------------------------------------------------------
 
@@ -184,18 +219,18 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`id_producto`, `nombre`, `descripcion`, `categoria`, `precio`, `imagen_url`, `personalizable`, `tamanos_precios`) VALUES
-(1, 'Burger Mestiza', NULL, 'Hamburguesas', 0.00, NULL, 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
-(2, 'Cheeseburger Dani', NULL, 'Hamburguesas', 0.00, '/PROYECTO-FINAL/uploads/products/1761060062_hamburguesa-sencilla.jpg', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
+(1, 'Burger Mestiza', NULL, 'Hamburguesas', 0.00, '/PROYECTO-FINAL/uploads/products/1761180627_hamburguesa_dani.png', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
+(2, 'Cheeseburger Dani', NULL, 'Hamburguesas', 0.00, '/PROYECTO-FINAL/uploads/products/1761180236_hamburguesa_dani.png', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
 (3, 'Cheeseburger Javito', NULL, 'Hamburguesas', 0.00, NULL, 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
 (4, 'Cheeseburger Kids', 'Pan de papa con queso, carne smash 110gr, cheddar, y aderezos.', 'Hamburguesas', 300.00, './imagenes/', 0, NULL),
 (5, 'Vegetariana (Burger)', 'Pan de papa con queso, rodajas de zuccini a la plancha, salteado de verduras (morrón, zanahoria y cebolla), cheddar, salsa \"Mestiza\", cebollitas y pepinillos encurtidos.', 'Hamburguesas', 300.00, './imagenes/', 0, NULL),
-(6, 'Taco de Carne', 'Tortilla artesanal, base cremosa de queso, carne cortada a cuchillo, salteado de vegetales (cebolla, morrón, zanahoria) + Toppings', 'Tacos x 2', 400.00, './imagenes/taco carne.heic', 0, NULL),
-(7, 'Vegetariano (Taco)', 'Tortilla artesanal, base cremosa de queso, zucchini, salteado de vegetales (cebolla, morrón, zanahoria) + Toppings', 'Tacos x 2', 400.00, './imagenes/taco vegetariano.png', 0, NULL),
-(8, 'Vegano', 'Tortilla artesanal, zucchini, salteado de vegetales (vebolla, morrón, zanahoria) + Toppings', 'Tacos x 2', 400.00, './imagenes/', 0, NULL),
+(6, 'Taco de Carne', 'Tortilla artesanal, base cremosa de queso, carne cortada a cuchillo, salteado de vegetales (cebolla, morrón, zanahoria) + Toppings', 'Tacos', 400.00, '/PROYECTO-FINAL/uploads/products/1761180268_taco_carne.heic', 0, NULL),
+(7, 'Vegetariano (Taco)', 'Tortilla artesanal, base cremosa de queso, zucchini, salteado de vegetales (cebolla, morrón, zanahoria) + Toppings', 'Tacos', 400.00, '/PROYECTO-FINAL/uploads/products/1761180257_taco_vegetariano.png', 0, NULL),
+(8, 'Vegano', 'Tortilla artesanal, zucchini, salteado de vegetales (vebolla, morrón, zanahoria) + Toppings', 'Tacos', 400.00, './imagenes/', 0, NULL),
 (9, 'Papas Fritas', 'Porción individual.', 'Papas Fritas', 120.00, './imagenes/', 0, NULL),
 (10, 'Salsa Picante', '', 'Toppings', 0.00, './imagenes/salsa_picante.jpg', 0, NULL),
 (11, 'Guacamole', '', 'Toppings', 0.00, './imagenes/guacamole.jpg', 0, NULL),
-(27, 'sasdasdas', '', 'Hamburguesas', 99999999.99, '/PROYECTO-FINAL/uploads/products/1761060090_hamburguesa-sencilla.jpg', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}');
+(31, 'asdasdsa', '', 'Papas Fritas', 1231233.00, '', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -249,16 +284,6 @@ INSERT INTO `usuario_admin` (`id`, `nombre`, `email`, `pass_hash`, `creado_en`) 
 -- (Véase abajo para la vista actual)
 --
 CREATE TABLE `vista_detalle_pedido` (
-`id_detalle` int(11)
-,`id_pedido` int(11)
-,`id_producto` int(11)
-,`cantidad` int(11)
-,`subtotal` decimal(10,2)
-,`modificaciones` text
-,`producto_nombre` varchar(100)
-,`categoria` varchar(100)
-,`precio` decimal(10,2)
-,`imagen_url` varchar(255)
 );
 
 -- --------------------------------------------------------
@@ -268,14 +293,6 @@ CREATE TABLE `vista_detalle_pedido` (
 -- (Véase abajo para la vista actual)
 --
 CREATE TABLE `vista_pedidos` (
-`id_pedido` int(11)
-,`fecha_hora` datetime
-,`estado` varchar(50)
-,`total` decimal(10,2)
-,`id_cliente` int(11)
-,`cliente_nombre` varchar(100)
-,`telefono` varchar(20)
-,`direccion` varchar(255)
 );
 
 -- --------------------------------------------------------
@@ -323,14 +340,6 @@ ALTER TABLE `compra`
   ADD KEY `id_producto` (`id_producto`);
 
 --
--- Indices de la tabla `detalle_pedido`
---
-ALTER TABLE `detalle_pedido`
-  ADD PRIMARY KEY (`id_detalle`),
-  ADD KEY `id_pedido` (`id_pedido`),
-  ADD KEY `id_producto` (`id_producto`);
-
---
 -- Indices de la tabla `meta`
 --
 ALTER TABLE `meta`
@@ -343,19 +352,34 @@ ALTER TABLE `opiniones`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `pedido`
+-- Indices de la tabla `pedidos`
 --
-ALTER TABLE `pedido`
-  ADD PRIMARY KEY (`id_pedido`),
-  ADD UNIQUE KEY `tracking_code` (`tracking_code`),
-  ADD KEY `id_cliente` (`id_cliente`);
+ALTER TABLE `pedidos`
+  ADD PRIMARY KEY (`id_pedido`);
+
+--
+-- Indices de la tabla `pedido_detalle`
+--
+ALTER TABLE `pedido_detalle`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_ped_det_pedido` (`id_pedido`);
 
 --
 -- Indices de la tabla `pedido_historial`
 --
 ALTER TABLE `pedido_historial`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_pedido` (`id_pedido`);
+  ADD KEY `id_pedido` (`id_pedido`),
+  ADD KEY `idx_hist_pedido` (`id_pedido`),
+  ADD KEY `idx_hist_fecha` (`fecha_hora`);
+
+--
+-- Indices de la tabla `pedido_old`
+--
+ALTER TABLE `pedido_old`
+  ADD PRIMARY KEY (`id_pedido`),
+  ADD UNIQUE KEY `tracking_code` (`tracking_code`),
+  ADD KEY `id_cliente` (`id_cliente`);
 
 --
 -- Indices de la tabla `producto`
@@ -399,34 +423,40 @@ ALTER TABLE `compra`
   MODIFY `id_compra` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `detalle_pedido`
---
-ALTER TABLE `detalle_pedido`
-  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `opiniones`
 --
 ALTER TABLE `opiniones`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT de la tabla `pedido`
+-- AUTO_INCREMENT de la tabla `pedidos`
 --
-ALTER TABLE `pedido`
-  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+ALTER TABLE `pedidos`
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT de la tabla `pedido_detalle`
+--
+ALTER TABLE `pedido_detalle`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido_historial`
 --
 ALTER TABLE `pedido_historial`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+
+--
+-- AUTO_INCREMENT de la tabla `pedido_old`
+--
+ALTER TABLE `pedido_old`
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT de la tabla `sobre_nosotros`
@@ -449,7 +479,7 @@ ALTER TABLE `usuario_admin`
 --
 ALTER TABLE `carga`
   ADD CONSTRAINT `carga_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`),
-  ADD CONSTRAINT `carga_ibfk_2` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id_pedido`);
+  ADD CONSTRAINT `carga_ibfk_2` FOREIGN KEY (`id_pedido`) REFERENCES `pedido_old` (`id_pedido`);
 
 --
 -- Filtros para la tabla `compra`
@@ -459,23 +489,22 @@ ALTER TABLE `compra`
   ADD CONSTRAINT `compra_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`);
 
 --
--- Filtros para la tabla `detalle_pedido`
+-- Filtros para la tabla `pedido_detalle`
 --
-ALTER TABLE `detalle_pedido`
-  ADD CONSTRAINT `detalle_pedido_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id_pedido`),
-  ADD CONSTRAINT `detalle_pedido_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`);
-
---
--- Filtros para la tabla `pedido`
---
-ALTER TABLE `pedido`
-  ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`);
+ALTER TABLE `pedido_detalle`
+  ADD CONSTRAINT `pedido_detalle_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id_pedido`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `pedido_historial`
 --
 ALTER TABLE `pedido_historial`
-  ADD CONSTRAINT `pedido_historial_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id_pedido`) ON DELETE CASCADE;
+  ADD CONSTRAINT `pedido_historial_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido_old` (`id_pedido`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `pedido_old`
+--
+ALTER TABLE `pedido_old`
+  ADD CONSTRAINT `pedido_old_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

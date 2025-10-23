@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pedidos - Admin</title>
+  <link rel="stylesheet" href="./style/admin.css">
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="module">
+    import { me, nav, logout, api } from './js/admin-common.js';
+    window._logout = logout;
+
+    const root = document.getElementById('root');
+    const u = await me();
+    if (!u.ok) location.href = 'login.html';
+
+    let estadoFiltro = '';
+    let timer = null;
+    let cacheIds = new Set();
+
+    function selectEstado(id, actual) {
+      const opts = [
+        {v:'pendiente', t:'Pendiente'},
+        {v:'aceptado', t:'Aceptado'},
+        {v:'en_preparacion', t:'En preparación'},
+        {v:'en_camino', t:'En camino'},
+        {v:'entregado', t:'Entregado'},
+        {v:'cancelado', t:'Cancelado'}
+      ];
+      return `<select class="estado-select" data-id="${id}">
+        ${opts.map(o=>`<option value="${o.v}" ${String(actual||'').toLowerCase()===o.v?'selected':''}>${o.t}</option>`).join('')}
+      </select>`;
+    }
+
+    function render(pedidos) {
+      root.innerHTML = nav('pedidos') + `
+        <main>
+          <div class="card">
+            <h2>Pedidos</h2>
+            <div class="flex">
+              <select id="filtro">
+                <option value="">Todos</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="aceptado">Aceptado</option>
+                <option value="en_preparacion">En preparación</option>
+                <option value="en_camino">En camino</option>
+                <option value="entregado">Entregado</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+              <button id="ref" class="primary">Refrescar</button>
+            </div>
+
+            <table class="table" id="tb">
+              <thead><tr>
+                <th>ID</th>
+                <th>Producto</th>
+                <th>Cliente</th>
+                <th>Tel</th>
+                <th>Dirección</th>
+                <th>Referencia</th>
+                <th>Estado</th>
+                <th>Total</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+              </tr></thead>
+              <tbody>
+                ${pedidos.map(p=>`
+                  <tr>
+                    <td>${p.id_pedido}</td>
+                    <td>${
+                      Array.isArray(p.detalle) && p.detalle.length
+                        ? p.detalle.map(d=>`${d.cantidad}x ${d.producto_nombre}`).join('<br>')
+                        : '-'
+                    }</td>
+                    <td>${p.cliente_nombre ?? '-'}</td>
+                    <td>${p.telefono ?? '-'}</td>
+                    <td>${p.direccion ?? '-'}</td>
+                    <td>${p.referencia ?? '-'}</td>
+                    <td><span class="badge">${p.estado ?? '-'}</span></td>
+                    <td>$ ${Number(p.total||0).toFixed(2)}</td>
+                    <td>${p.fecha_hora ?? '-'}</td>
+                    <td class="row">
+                      ${selectEstado(p.id_pedido, p.estado)}
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      `;
+
+      const filtro = document.getElementById('filtro');
+      filtro.value = estadoFiltro;
+      filtro.onchange = () => { estadoFiltro = filtro.value; load(); };
+      document.getElementById('ref').onclick = load;
+
+      // Cambio de estado
+      document.querySelector('#tb').onchange = async (e) => {
+        const sel = e.target.closest('select.estado-select'); if (!sel) return;
+        const id = +sel.dataset.id;
+        const estado = sel.value;
+        sel.disabled = true;
+        try {
+          await fetch(api('pedidos/update_estado.php'), {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({id_pedido:id, estado})
+          });
+          load(true);
+        } finally {
+          sel.disabled = false;
+        }
+      };
+    }
+
+    async function load(skipSound=false) {
+      const q = estadoFiltro ? `?estado=${encodeURIComponent(estadoFiltro)}` : '';
+      const r = await fetch(api('pedidos/list.php') + q, { cache:'no-store' });
+      const txt = await r.text();
+      let data = [];
+      try { data = JSON.parse(txt); } catch { console.error('Respuesta no JSON:', txt); }
+
+      // Filtro en cliente (fallback si el backend ignora ?estado)
+      if (estadoFiltro) data = data.filter(p => (p.estado || '') === estadoFiltro);
+
+      const nuevos = data.filter(p=>!cacheIds.has(p.id_pedido)).map(p=>p.id_pedido);
+      data.forEach(p=>cacheIds.add(p.id_pedido));
+      if (nuevos.length && !skipSound) {
+        new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=').play().catch(()=>{});
+      }
+      render(data);
+    }
+
+    await load(true);
+    timer = setInterval(load, 5000);
+    window.onbeforeunload = ()=> clearInterval(timer);
+  </script>
+
+  <!-- Elimina el script auxiliar que movía columnas para evitar conflictos -->
+  <!-- <script src="./js/pedidos-admin.js" defer></script> -->
+
+  <!-- Auto-wrap tables en .table-responsive y añadir data-label para vista móvil -->
+  <script>
+    (function(){
+      function makeTablesResponsive(root=document){
+        const tables = Array.from(root.querySelectorAll('table'));
+        tables.forEach(table=>{
+          if (table.parentElement?.classList?.contains('table-responsive')) return;
+          const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
+          const rows = table.querySelectorAll('tbody tr');
+          rows.forEach(tr=>{
+            Array.from(tr.children).forEach((td, i)=>{
+              if (!td.hasAttribute('data-label')) td.setAttribute('data-label', headers[i] || '');
+            });
+          });
+          const wrapper = document.createElement('div');
+          wrapper.className = 'table-responsive';
+          table.parentNode.insertBefore(wrapper, table);
+          wrapper.appendChild(table);
+          table.classList.add('table');
+        });
+      }
+      document.addEventListener('DOMContentLoaded', ()=> makeTablesResponsive());
+      const root = document.getElementById('root') || document.body;
+      const mo = new MutationObserver(muts=>{
+        muts.forEach(m=>{
+          m.addedNodes.forEach(node=>{
+            if (node.nodeType !== 1) return;
+            if (node.querySelector && node.querySelector('table')) makeTablesResponsive(node);
+            if (node.matches && node.matches('table')) makeTablesResponsive(node.parentNode);
+          });
+        });
+      });
+      mo.observe(root, { childList:true, subtree:true });
+    })();
+  </script>
+
+  <!-- tema -->
+  <script type="module">
+    (function(){
+      const KEY='admin_theme', html=document.documentElement;
+      const apply=()=>{const s=localStorage.getItem(KEY);const prefers=matchMedia('(prefers-color-scheme: dark)').matches;
+        if(s==='light') html.setAttribute('data-theme','light');
+        else if(s==='dark') html.removeAttribute('data-theme');
+        else { if(!prefers) html.setAttribute('data-theme','light'); else html.removeAttribute('data-theme'); }
+      };
+      apply();
+      const attach=()=>{const h=document.querySelector('header'); if(!h) return false;
+        if(!document.getElementById('theme-toggle')){const b=document.createElement('button'); b.id='theme-toggle'; b.className='btn';
+          const upd=()=>{b.textContent=html.getAttribute('data-theme')==='light'?'☀️':'🌙';};
+          b.onclick=()=>{const isLight=html.getAttribute('data-theme')==='light'; if(isLight){html.removeAttribute('data-theme');localStorage.setItem(KEY,'dark');} else {html.setAttribute('data-theme','light');localStorage.setItem(KEY,'light');} upd();};
+          upd(); h.appendChild(b);
+        } return true;
+      };
+      if(!attach()){const t=document.getElementById('root')||document.body; new MutationObserver((m,o)=>{if(attach()) o.disconnect();}).observe(t,{childList:true,subtree:true});}
+    })();
+  </script>
+</body>
+</html>

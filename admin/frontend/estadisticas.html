@@ -4,12 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Estadísticas - Admin</title>
-  <link rel="stylesheet" href="../style/admin.css">
+  <link rel="stylesheet" href="./style/admin.css">
 </head>
 <body>
   <div id="root"></div>
   <script type="module">
-    import { me, nav, logout } from '../js/admin-common.js';
+    import { me, nav, logout, api } from './js/admin-common.js';  // + api
     window._logout = logout;
 
     const root = document.getElementById('root');
@@ -22,8 +22,9 @@
     function fmt(d){ return d.toISOString().slice(0,10); }
 
     async function load() {
-      const url = `../../backend/estadisticas/resumen.php?desde=${fmt(desde)}&hasta=${fmt(hasta)}`;
-      const r = await fetch(url); const data = await r.json();
+      const q = `?desde=${fmt(desde)}&hasta=${fmt(hasta)}`;
+      const r = await fetch(api('estadisticas/resumen.php') + q, { cache:'no-store' }); // ruta corregida
+      const data = await r.json().catch(()=>({ ventas:{total_ventas:0,cant_pedidos:0}, top_productos:[], ventas_por_dia:[] }));
       render(data);
     }
 
@@ -37,13 +38,13 @@
               <input type="date" id="d2" value="${fmt(hasta)}">
               <button class="primary" id="aplicar">Aplicar</button>
             </div>
-            <p><b>Ventas:</b> $ ${Number(x.ventas.total_ventas).toFixed(2)} — <b>Pedidos:</b> ${x.ventas.cant_pedidos}</p>
+            <p><b>Ventas:</b> $ ${Number(x.ventas?.total_ventas||0).toFixed(2)} — <b>Pedidos:</b> ${x.ventas?.cant_pedidos||0}</p>
 
             <h3>Top productos</h3>
             <table class="table">
               <thead><tr><th>Producto</th><th>Unidades</th><th>Ingreso</th></tr></thead>
               <tbody>
-                ${x.top_productos.map(t=>`
+                ${(x.top_productos||[]).map(t=>`
                   <tr><td>${t.nombre}</td><td>${t.unidades}</td><td>$ ${Number(t.ingreso).toFixed(2)}</td></tr>
                 `).join('')}
               </tbody>
@@ -53,7 +54,7 @@
             <table class="table">
               <thead><tr><th>Día</th><th>Total</th></tr></thead>
               <tbody>
-                ${x.ventas_por_dia.map(d=>`
+                ${(x.ventas_por_dia||[]).map(d=>`
                   <tr><td>${d.dia}</td><td>$ ${Number(d.total).toFixed(2)}</td></tr>
                 `).join('')}
               </tbody>

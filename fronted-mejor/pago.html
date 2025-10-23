@@ -10,6 +10,16 @@
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="style/style_pago.css">
 
+    <script>
+  (function(){
+    try {
+      var s = localStorage.getItem('shippingInfo');
+      var m = localStorage.getItem('paymentMethod');
+      if (!s) return location.replace('direccion.html');
+      if (!m) return location.replace('metodo_de_pago.html');
+    } catch(_) {}
+  })();
+</script>
 </head>
 
 <body class="pagina-blanca d-flex justify-content-center align-items-center min-vh-100">

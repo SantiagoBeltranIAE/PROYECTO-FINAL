@@ -1,444 +1,288 @@
-/* Reset global */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Fondo general de la página */
+/* ===== Reset y base ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
 body {
-  background: #000;
   min-height: 100vh;
-  flex-direction: column;
   display: flex;
+  flex-direction: column;
+  background: #000; /* home oscura */
   overflow-x: hidden;
 }
+body.pagina-blanca { background: #fff; }
 
-/* Fondo blanco para páginas con la clase pagina-blanca */
-body.pagina-blanca {
-  background: #fff;
-}
-/* ****************************************************** */
-/* NUEVO ESTILO: TÍTULOS CON DEGRADADO DORADO/AMARILLO */
-/* ****************************************************** */
-.titulo-degrade {
-    /* Define el degradado de colores (Dorado, Naranja, Dorado) */
-    background: linear-gradient(
-        45deg,
-        #FFD700, /* Amarillo Oro */
-        #FF8C00, /* Naranja Brillante */
-        #FFD700  /* Vuelve al Amarillo Oro */
-    );
-    
-    /* Recorta el degradado solo donde hay texto */
-    -webkit-background-clip: text;
-    background-clip: text;
-    
-    /* Hace el texto transparente para que se vea el degradado de fondo */
-    -webkit-text-fill-color: transparent;
-    color: transparent; /* Fallback para otros navegadores */
-    
-    /* Asegura que la fuente sea gruesa para que el efecto se note */
-    font-weight: 700 !important; /* Añadimos !important para anular Bootstrap's fw-bold si fuera necesario */
-}
-/* ****************************************************** */
-/* NUEVO ESTILO: MAPA GRIS Y CON COLOR AL HOVER */
-/* ****************************************************** */
-.mapa-ubicacion iframe {
-    /* 1. Por defecto, aplica un filtro de escala de grises al 100% */
-    filter: grayscale(100%);
-    
-    /* 2. Añade una transición suave para el efecto de color */
-    transition: filter 0.5s ease-in-out; 
+/* ===== Navbar full‑width + logo ===== */
+.navbar { background: #fff !important; border-bottom: 1.5px solid #111; }
+.navbar .nav-link { padding: .5rem .75rem; color: #222 !important; }
+.navbar .nav-link.active { color: #198754 !important; }
+
+/* Forzar container de navbar a ocupar todo el ancho en desktop */
+.navbar .container,
+.navbar .container-sm,
+.navbar .container-md,
+.navbar .container-lg,
+.navbar .container-xl,
+.navbar .container-xxl {
+  max-width: 100% !important;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
-.mapa-ubicacion iframe:hover {
-    /* 3. Cuando el mouse está encima, quita el filtro (vuelve a color) */
-    filter: grayscale(0%);
+/* Logo responsive (navbar) - un poco más grande */
+:root{
+  --brand-h-sm: 56px;   /* antes 48px */
+  --brand-h-md: 64px;   /* antes 56px */
+  --brand-h-lg: 88px;   /* antes 72px */
 }
-/* ****************************************************** */
-/* NUEVO ESTILO: IMAGENES DE HISTORIA (TAMAÑO FIJO) */
-/* ****************************************************** */
-.img-historia {
-    width: 100%; /* Ocupa todo el ancho de la columna */
-    height: 350px; /* Altura fija para todas las imágenes */
-    object-fit: cover; /* Asegura que la imagen cubra el área sin deformarse, cortando si es necesario */
+.brand-logo,
+.navbar .nav-logo img{
+  height: var(--brand-h-sm);
+  width: auto;
+  max-width: 100%;
 }
-/* Estilo para la barra de navegación */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #fff !important;
-  /* Fondo blanco */
-  color: #222 !important;
-  /* Texto oscuro */
-  padding: 10px 20px;
-  width: 100%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+@media (min-width: 576px){
+  .brand-logo, .navbar .nav-logo img{ height: var(--brand-h-md); }
+}
+@media (min-width: 992px){
+  .brand-logo, .navbar .nav-logo img{ height: var(--brand-h-lg); }
 }
 
-/* Borde negro inferior en la barra superior */
-.navbar {
-  border-bottom: 1.5px solid #111;
+/* Separadores en el navbar (desktop) */
+@media (min-width: 992px){
+  .navbar .navbar-nav > .nav-item {
+    position: relative;
+  }
+  /* Borde entre items dentro de cada grupo */
+  .navbar .navbar-nav > .nav-item:not(:first-child){
+    border-left: 1px solid rgba(0,0,0,.2);
+    margin-left: .75rem;
+    padding-left: .75rem;
+  }
+  /* Borde al inicio del grupo derecho (ms-auto) para separar grupos */
+  .navbar .navbar-nav.ms-auto > .nav-item:first-child{
+    border-left: 1px solid rgba(0,0,0,.2);
+    margin-left: .75rem;
+    padding-left: .75rem;
+  }
+
+  /* Si usas navbar oscura, cambia el color del separador */
+  .navbar.bg-dark .navbar-nav > .nav-item:not(:first-child),
+  .navbar.bg-dark .navbar-nav.ms-auto > .nav-item:first-child{
+    border-left-color: rgba(255,255,255,.35);
+  }
 }
 
-/* Barras superior e inferior totalmente blancas */
-.navbar,
+/* ===== Footer ===== */
 footer {
-  background: #fff !important;
-  color: #222 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: #fff !important; color: #222 !important;
+  border-top: 1.5px solid #111;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
 }
 
-/* Cambia el color de los textos y enlaces en las barras */
-.navbar a,
-footer,
-footer p {
-  color: #222 !important;
-}
-
-.nav-logo img {
-    /* Puedes borrar el estilo inline en el HTML si usas esta regla */
-    height: 60px; /* Tamaño más grande para el logo */
-    width: auto; /* Mantiene la proporción */
-    margin-right: 15px;
-}
-/* Logo centrado en el medio de la pantalla */
-.logo-container {
+/* Footer: texto centrado y redes a la derecha */
+footer .container { text-align: center; }
+footer .container > div:last-child {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 60vh;
-  background: transparent;
+  gap: 12px;
+  margin-top: .75rem;
 }
 
-.logo-mestiza {
-  max-width: 320px;
-  width: 80vw;
-  height: auto;
-  display: block;
+@media (min-width: 768px){
+  footer .container { position: relative; padding-right: 96px; }
+  /* El último div del container es el de redes sociales en tus páginas */
+  footer .container > div:last-child{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    justify-content: flex-end;
+    margin-top: 0 !important;
+  }
 }
 
-/* Fondo blanco debajo del logo */
-.contenido-blanco {
-  min-height: 100vh;
-  background: #fff;
-  width: 100vw;
-  margin: 0;
+/* Footer: tamaño de iconos de redes (antes 28px inline) */
+footer .container > div:last-child img{
+  height: 36px !important;
+  width: auto;
+}
+@media (min-width: 768px){
+  footer .container > div:last-child img{ height: 42px !important; }
+}
+
+/* opcional: sutil hover */
+footer .container > div:last-child img:hover{
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  transition: transform .15s ease, filter .15s ease;
+}
+
+/* ===== Home: logo central y horarios ===== */
+.logo-mestiza { width: min(70vw, 460px); height: auto; }
+.horarios { color: #fff; text-align: center; margin: 20px 0 40px; font-size: 1.1rem; line-height: 1.5; font-weight: 600; text-shadow: 0 2px 8px #000; }
+
+/* Sección clara en home */
+.contenido-blanco { background: #fff; }
+
+/* ===== Título con degradado ===== */
+.titulo-degrade{
+  background: linear-gradient(45deg,#FFD700,#FF8C00,#FFD700);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  font-weight: 700 !important;
+}
+
+/* ===== Mapa gris > color al hover ===== */
+.mapa-ubicacion iframe{ filter: grayscale(100%); transition: filter .5s ease; border:0; }
+.mapa-ubicacion iframe:hover{ filter: grayscale(0%); }
+
+/* ===== Carrusel “lindo” ===== */
+.carousel-hero .carousel-item{
+  height: clamp(240px, 42vw, 460px);
   position: relative;
-  left: 50%;
-  right: 50%;
-  transform: translateX(-50%);
-  box-shadow: none;
-  border: none;
+}
+.carousel-hero .carousel-item img{
+  width: 100%; height: 100%; object-fit: cover;
+  transform: scale(1.03);
+  transition: transform 6s ease;
+}
+.carousel-hero .carousel-item.active img{ transform: scale(1); }
+
+.carousel-hero .carousel-indicators [data-bs-target]{
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(255,255,255,.75);
+}
+.carousel-hero .carousel-indicators .active{ background: #198754; }
+
+.carousel-hero .carousel-caption{
+  bottom: 1rem; left: 1rem; right: auto;
+  text-align: left;
+  background: rgba(0,0,0,.35);
+  backdrop-filter: saturate(160%) blur(6px);
+  padding: .75rem 1rem;
+  border-radius: .75rem;
 }
 
-/* Texto de bienvenida en blanco */
-.bienvenida {
-  color: #fff;
-  text-align: center;
-  margin-top: 20px;
-  margin-bottom: 40px;
-  font-size: 2rem;
+/* Fallback simple para imágenes recortadas */
+.img-cover{ width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; }
+
+/* ===== Botón CTA (amarillo) ===== */
+.btn-cta{
+  --c1:#FFC107;           /* amarillo */
+  --c2:#FF9800;           /* naranja */
+  background: linear-gradient(135deg,var(--c1),var(--c2));
+  color:#212529;          /* texto oscuro para contraste */
+  border:0;
+  padding:.85rem 1.5rem;
+  border-radius:.75rem;
+  box-shadow:0 0 0 3px rgba(255,255,255,.12), 0 .5rem 1rem rgba(255,152,0,.25);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.btn-cta:hover,
+.btn-cta:focus{
+  color:#212529;
+  transform: translateY(-2px);
+  box-shadow:0 0 0 3px rgba(255,255,255,.2), 0 .8rem 1.6rem rgba(255,152,0,.35);
+  filter: brightness(1.03);
+}
+/* halo extra cuando está sobre fondo oscuro */
+.btn-cta.on-dark{
+  box-shadow:0 0 0 3px rgba(255,255,255,.2), 0 .6rem 1.2rem rgba(255,152,0,.35);
 }
 
-/* NUEVO: Contenedor principal fijo para ambas barras */
-header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000; /* Debe estar por encima del contenido */
-    display: flex; 
-    flex-direction: column; /* Apila la barra de navegación y la barra de acción una encima de la otra */
-}
+/* ===== Menú: cards y carrito ===== */
+.menu-page main{ margin-top: 70px; } /* margen por la navbar sticky */
 
-/* ---- EN style.css ---- */
-
-/* ---- Estilo para los nuevos enlaces de texto ---- */
-.nav-text {
-  /* Color del texto (ajusta si tu fondo de header no es blanco) */
-  color: #222;
-
-  /* Elimina el subrayado del enlace */
-  text-decoration: none;
-
-  /* Asegura que haya un buen espacio para el texto */
-  padding: 0 15px;
-
-  /* Hace que los enlaces se comporten como bloques, permitiendo la línea divisoria */
-  display: flex;
-  align-items: center;
-  height: 100%;
-  /* Ocupa la altura completa de la navbar */
-
-  font-size: 16px;
-  font-weight: bold;
-}
-
-/* Efecto hover (cambia el color del texto) */
-.nav-text:hover {
-  color: #0a5b25;
-  /* Color verde/verde oscuro de tu borde */
-  text-decoration: none;
-}
-
-/* ---- Estilos para el Carrusel de Imagenes ---- */
-
-.carousel-inner {
-  height: 550px;
-  overflow: hidden;
-}
-
-.carousel-item {
-  height: 550px;
-}
-
-.carousel-item img {
-  height: 100%;
+.product-card .card-img-top{
   width: 100%;
+  height: 200px;
   object-fit: cover;
 }
-
-.carousel-indicators {
-  bottom: 10px;
-  margin-bottom: 0;
-  padding-bottom: 0;
-
-}
-
-/* Footer styling */
-footer {
+.product-card .card-body{
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  color: white;
-  font-size: 14px;
-  bottom: 0;
-  width: 100%;
-  z-index: 1000;
+  flex-direction: column;
+  gap: .5rem;
 }
 
-/* Footer: fondo blanco, letras negras y borde superior negro */
-footer {
-  background: #fff !important;
-  color: #222 !important;
-  border-top: 1.5px solid #111;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
+/* Icono carrito en navbar */
+.cart-icon { height: 24px; width: auto; }
 
-/* Color de texto en el footer */
-footer,
-footer p,
-footer a {
-  color: #222 !important;
-}
-
-/* Social media container */
-footer .social-media {
-  display: flex;
-  gap: 15px;
-}
-
-/* Social media icons */
-footer .social-media img {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-footer .social-media img:hover {
-  transform: scale(1.1);
-}
-
-/* Opcional: para que el texto del footer sea blanco y se vea bien */
-footer,
-footer p {
-  color: #fff;
-}
-
-/* Espaciado para el contenido principal */
-main {
-  margin-top: 70px;
-  padding: 20px;
-  flex-grow: 1; 
-  padding-bottom: 20px;
-
-}
-
-section {
-  margin-bottom: 40px;
-}
-
-section h1,
-h1.bienvenida {
-  color: #fff;
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-/* Barra de navegación y footer con imagen de fondo */
-.navbar,
-footer {
-  color: white;
-}
-
-/* Barra superior: íconos alineados y centrados respecto a la línea */
-.nav-left,
-.nav-right {
-  display: flex;
-  align-items: center;
-  height: 48px;
-  gap: 0;
-  /* Usaremos padding en los <a> */
-}
-
-.nav-left a,
-.nav-right a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 0 18px;
-  /* Igual a ambos lados para centrar el ícono */
-  margin: 0;
-  /* Elimina margen lateral */
-  position: relative;
-  background: transparent;
-  box-sizing: border-box;
-}
-
-/* Línea separadora vertical entre íconos (de arriba a abajo) */
-.nav-left a:not(:first-child),
-.nav-right a:not(:first-child) {
-  border-left: 2px solid #0a5b25;
-}
-
-.horarios {
-  color: #fff;
-  text-align: center;
-  margin-top: 20px;
-  margin-bottom: 40px;
-  font-size: 1.3rem;
-  font-weight: bold;
-  letter-spacing: 1px;
-  text-shadow: 0 2px 8px #000;
-}
-
-/* Títulos y textos principales en blanco */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-section,
-main {
-  color: #000000;
-}
-
-/* Estilo para las estrellas de la valoración */
-.star-rating {
-  font-size: 1.7rem;
-  color: #ffc107;
-  cursor: pointer;
-  display: flex;
-  gap: 4px;
-  user-select: none;
-}
-
-.star-rating .fa-star {
-  transition: color 0.2s;
-  color: #ccc;
-}
-
+/* ===== Estrellas de rating ===== */
+.star-rating{ font-size:1.7rem; color:#ffc107; display:flex; gap:4px; user-select:none; }
+.star-rating .fa-star{ color:#ccc; transition: color .2s; }
 .star-rating .fa-star.selected,
-.star-rating .fa-star.hovered {
-  color: #ffc107;
+.star-rating .fa-star.hovered{ color:#ffc107; }
+
+/* ===== HERO (carrusel superior) ===== */
+.hero-carousel .carousel-item{
+  height: clamp(360px, 70vh, 760px);
+  position: relative;
+}
+.hero-carousel .hero-img,
+.hero-carousel .hero-bg{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.hero-carousel .hero-overlay{
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.55) 60%, rgba(0,0,0,.65) 100%);
+}
+.hero-carousel .hero-caption{
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-end;
+  gap: 12px; padding-bottom: clamp(18px, 8vh, 60px);
+  color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,.7);
+}
+.hero-carousel .carousel-indicators [data-bs-target]{
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(255,255,255,.75);
+}
+.hero-carousel .carousel-indicators .active{ background: #FFC107; }
+
+/* HERO centrado con fotos contenidas */
+.hero { background:#000; }
+.hero-carousel .carousel-item{
+  height: clamp(420px, 68vh, 760px);
+  position: relative;
+}
+.hero-carousel .carousel-indicators{ bottom: 12px; }
+.hero-carousel .hero-bg{ position:absolute; inset:0; }
+.hero-carousel .hero-overlay{
+  position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.6));
 }
 
-.menu-page main {
-    margin-top: 120px; /* Margen para compensar el header doble */
+/* Contenedor central para la foto del slide */
+.hero-center{
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  padding: clamp(12px, 4vw, 32px);
+}
+.hero-photo{
+  display:block;
+  width:auto; height:auto;
+  max-width: min(86vw, 980px);
+  max-height: min(56vh, 520px);
+  object-fit: contain;               /* NO cubre, se ve el negro alrededor */
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.45);
+}
+.hero-logo{
+  max-width: min(70vw, 520px);
+  max-height: min(40vh, 280px);
+  border-radius: 0; box-shadow: none;
 }
 
-.menu-action-bar {
-    display: flex;
-    justify-content: flex-end; /* Alinea el carrito a la derecha */
-    align-items: center;
-    width: 100%;
-    padding: 10px 20px;
-    background-color: #f8f9fa;
-    border-top: 1px solid #ddd;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    z-index: 999; 
-}
-/* ==================================== */
-/* CARRITO Y MENÚ - ESTILOS ESPECÍFICOS */
-/* ==================================== */
-
-/* 1. Compensación para el Header Doble */
-/* Hace espacio en el main para que el contenido no quede debajo del header fijo */
-.menu-page main {
-    margin-top: 120px; 
+/* Texto y botón al fondo del hero */
+.hero-carousel .hero-caption{
+  position:absolute; left:0; right:0; bottom:0; top:auto;
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+  gap:12px; padding-bottom: clamp(18px, 7vh, 60px);
+  color:#fff; text-shadow:0 2px 10px rgba(0,0,0,.7);
 }
 
-/* 2. Barra de Acción del Carrito (Posicionamiento Arriba a la Derecha) */
-.menu-action-bar {
-    display: flex;
-    justify-content: flex-end; /* Alinea el contenido (el carrito) a la derecha */
-    align-items: center;
-    width: 100%;
-    padding: 10px 20px;
-    background-color: #f8f9fa; /* Fondo claro para que se distinga */
-    border-top: 1px solid #ddd;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    z-index: 999; 
-}
-
-/* 3. Icono del Carrito y Contador */
-.cart-icon-container {
-    position: relative; 
-    display: flex;
-    align-items: center;
-    padding: 5px;
-}
-
-.cart-icon {
-    width: 35px;
-    height: 35px;
-    object-fit: contain;
-}
-
-/* ****************************************************** */
-/* NUEVO ESTILO: IMAGENES DE PRODUCTO (TAMAÑO UNIFICADO) */
-/* ****************************************************** */
-
-.product-card .card-img-top {
-    width: 100%;
-    height: 200px; /* Altura fija para todas las imágenes del menú (ajusta este valor si 200px es muy grande o pequeño) */
-    object-fit: cover; /* Asegura que la imagen cubra todo el espacio sin estirarse (recortará los bordes si es necesario) */
-}
-
-/* Opcional: Asegurar que el cuerpo de la tarjeta tenga altura flexible */
-.product-card .card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Distribuye el contenido para que el botón Añadir quede siempre abajo */
-}
-
-/* 5. Estilos de Notificaciones (Bootstrap modificados) */
-.alert-success {
-    background-color: #28a745; /* Verde */
-}
-.alert-danger {
-    background-color: #dc3545; /* Rojo */
-}
-.alert-success, .alert-danger {
-    color: white !important;
-}
-.btn-close-white { /* Necesario para que la X se vea en fondo oscuro */
-    filter: invert(1) grayscale(100%) brightness(200%);
+/* Ocultar indicadores del carrusel principal (hero) */
+#heroCarousel .carousel-indicators {
+  display: none !important;
 }

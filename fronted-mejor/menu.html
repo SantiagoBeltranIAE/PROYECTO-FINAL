@@ -1,82 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Menú - Mestiza Street Food</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="./style/style.css">
-
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./style/style.css" />
 </head>
-
 <body class="pagina-blanca menu-page">
 
-  <header>
-  <nav class="navbar">
-    <div class="nav-left">
-      <a href="index.html" title="Volver al Menú" class="js-link nav-logo">
-        <img 
-          src="./imagenes/FOTO_2.png" 
-          alt="Logo" 
-          style="height: 140px; margin-right: 15px;" 
-        >
+  <!-- Navbar igual al resto (full-width) -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+    <div class="container-fluid px-3">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="./imagenes/FOTO_2.png" alt="Mestiza" class="brand-logo" />
       </a>
-      
-      <a href="index.html" title="Inicio" class="js-link nav-text">
-        Inicio
-      </a>
-      
-      <a href="sobre_nosotros.html" title="Sobre Nosotros" class="js-link nav-text">
-        Sobre Nosotros
-      </a>
-      <a href="opiniones.html" title="Opiniones" class="js-link nav-text">
-        Opiniones
-      </a>
-      <a href="menu.html" title="Menú" class="js-link nav-text">
-        Menú
-      </a>
-    </div>
-    <div class="nav-right">
-      <a href="reservas.html" title="Reservas" class="js-link nav-text">
-        Reservas
-      </a>
-      <a href="calendario.html" title="Calendario" class="js-link nav-text">
-        Calendario
-      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="sobre_nosotros.html">Sobre Nosotros</a></li>
+          <li class="nav-item"><a class="nav-link" href="opiniones.html">Opiniones</a></li>
+          <li class="nav-item"><a class="nav-link active" href="menu.html">Menú</a></li>
+        </ul>
+
+        <ul class="navbar-nav ms-auto align-items-center gap-2">
+          <li class="nav-item"><a class="nav-link" href="reservas.html">Reservas</a></li>
+          <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
+          <li class="nav-item">
+            <a href="#" class="nav-link position-relative" title="Ver Carrito"
+               data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas">
+              <img src="./imagenes/carrito-de-compras.png" alt="Carrito" class="cart-icon" style="height:24px;">
+              <span id="cart-counter" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="estado.html" id="tracking-icon-link" class="nav-link p-2" style="display:none; color:#ffc107;">
+              <i class="bi bi-basket3-fill" style="font-size:1.25rem;"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
-
-  <div class="menu-action-bar justify-content-end">
-    <a href="#" class="cart-icon-container position-relative" title="Ver Carrito" data-bs-toggle="offcanvas"
-      data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas">
-      <img src="./imagenes/carrito-de-compras.png" alt="Carrito de Compras" class="cart-icon">
-      <span id="cart-counter"
-        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
-    </a>
-  </div>
-  <div class="nav-icons d-flex align-items-center">
-
-    <a href="estado.html" id="tracking-icon-link" class="nav-icon me-3 p-2" style="display:none; color: #ffc107;">
-      <i class="bi bi-basket3-fill" style="font-size: 1.5rem;"></i>
-    </a>
-  </div>
-</header>
 
   <main class="container my-5">
     <h1 class="text-center mb-5">Nuestro Menú</h1>
 
-    <div id="notification-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050;">
-    </div>
+    <div id="notification-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050;"></div>
 
-    <!-- Contenedor dinámico: los productos vendrán desde la DB y producto.js los renderiza aquí -->
     <section id="catalog" class="mb-5">
       <div id="productos-grid" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         <!-- producto.js llenará este grid con cards -->
       </div>
     </section>
 
-    <!-- (opcional) Mantén el table-wrapper si también quieres ver tabla/admin en esta página -->
     <div class="productos-wrapper d-none">
       <h2>Productos (tabla)</h2>
       <div class="table-wrap">
@@ -90,19 +74,24 @@
     </div>
   </main>
 
-  <footer>
-    <p>Bazzurro 1747 esq. B. Manton, Colonia Del Sacramento, Colonia, Uruguay 70000</p>
-    <p>+598 98 107 643</p>
-    <p>&copy; 2025 Mestiza Street Food</p>
-    <div class="social-media">
-      <a href="https://www.instagram.com/mestiza_street_food/" target="_blank">
-        <img src="./imagenes/instagram.png" alt="Instagram" class="social-icon">
-      </a>
-      <a href="https://www.facebook.com/p/mestiza_sabores_caseros-100036866965455/?_rdr" target="_blank">
-        <img src="./imagenes/facebook.png" alt="Facebook" class="social-icon">
-      </a>
+  <!-- Footer igual al resto -->
+  <footer class="bg-light py-4 mt-5">
+    <div class="container text-center">
+      <p class="mb-1">Bazzurro 1747 esq. B. Manton, Colonia Del Sacramento, Colonia, Uruguay 70000</p>
+      <p class="mb-1">Tel: +598 98 107 643</p>
+      <p class="mb-0 small text-muted">&copy; 2025 Mestiza Street Food</p>
+      <div class="mt-3">
+        <a href="https://www.instagram.com/mestiza_street_food/" target="_blank" rel="noopener" class="me-2">
+          <img src="./imagenes/instagram.png" alt="Instagram" style="height:28px" />
+        </a>
+        <a href="https://www.facebook.com/p/mestiza_sabores_caseros-100036866965455/?_rdr" target="_blank" rel="noopener">
+          <img src="./imagenes/facebook.png" alt="Facebook" style="height:28px" />
+        </a>
+      </div>
     </div>
   </footer>
+
+  <!-- Offcanvas Carrito -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="cartOffcanvasLabel">Tu Pedido</h5>
@@ -112,29 +101,21 @@
       <div id="cart-items-list" class="flex-grow-1 overflow-auto mb-3">
         <p class="text-muted text-center">El carrito está vacío. ¡Añade algo delicioso!</p>
       </div>
-
       <div class="mt-auto border-top pt-3">
         <div class="d-flex justify-content-between fw-bold mb-2">
           <span>Total:</span>
           <span id="cart-total">$0.00</span>
         </div>
         <div class="d-grid gap-2">
-          <button type="button" class="btn btn-primary w-100" id="checkout-btn">
-            Continuar Pedido
-          </button> <button class="btn btn-outline-danger" id="clear-cart-btn">Vaciar Carrito</button>
+          <button type="button" class="btn btn-primary w-100" id="checkout-btn">Continuar Pedido</button>
+          <button class="btn btn-outline-danger" id="clear-cart-btn">Vaciar Carrito</button>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="./js/menu.js" defer></script>
-  <script src="./js/cart.js" defer></script>   <!-- <- nuevo: debe ir antes de producto.js -->
-  <script src="./js/producto.js" defer></script>
-  <script src="./js/pedidos.js" defer></script>
-
-  <div class="modal fade" id="customizationModal" tabindex="-1" aria-labelledby="customizationModalLabel"
-    aria-hidden="true">
+  <!-- Modal de personalización (sin cambios) -->
+  <div class="modal fade" id="customizationModal" tabindex="-1" aria-labelledby="customizationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header bg-success text-white">
@@ -143,67 +124,67 @@
         </div>
         <div class="modal-body">
           <input type="hidden" id="product-id-modal">
-
           <h6 class="fw-bold text-success border-bottom pb-2">Tamaño / Cantidad (Precio Base)</h6>
           <div class="mb-3" id="size-options">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="burgerSize" id="sizeSimple" value="300"
-                data-name="Simple" checked>
+              <input class="form-check-input" type="radio" name="burgerSize" id="sizeSimple" value="300" data-name="Simple" checked>
               <label class="form-check-label" for="sizeSimple">Simple ($300)</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="burgerSize" id="sizeDoble" value="400"
-                data-name="Doble">
+              <input class="form-check-input" type="radio" name="burgerSize" id="sizeDoble" value="400" data-name="Doble">
               <label class="form-check-label" for="sizeDoble">Doble ($400)</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="burgerSize" id="sizeTriple" value="500"
-                data-name="Triple">
+              <input class="form-check-input" type="radio" name="burgerSize" id="sizeTriple" value="500" data-name="Triple">
               <label class="form-check-label" for="sizeTriple">Triple ($500)</label>
             </div>
           </div>
 
           <h6 class="fw-bold text-success border-bottom pb-2 mt-4">Adicionales (Incluidos)</h6>
           <div class="mb-3">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="Cebollitas Brunoise" id="toppingCebollitasB">
-              <label class="form-check-label" for="toppingCebollitasB">Cebollitas Brunoise</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="Cebollitas" id="toppingCebollitas">
-              <label class="form-check-label" for="toppingCebollitas">Cebollitas</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="toppingPepinillos" value="Pepinillos Encurtidos"
-                checked>
-              <label class="form-check-label" for="toppingPepinillos">Pepinillos Encurtidos</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="toppingCheddar" value="Cheddar" checked>
-              <label class="form-check-label" for="toppingCheddar">Cheddar</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="toppingSalsa" value="Salsa Mestiza" checked>
-              <label class="form-check-label" for="toppingSalsa">Salsa Mestiza</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="toppingGuacamole" value="Guacamole">
-              <label class="form-check-label" for="toppingGuacamole">Guacamole</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="toppingSalsaPicante" value="Salsa Picante">
-              <label class="form-check-label" for="toppingSalsaPicante">Salsa Picante</label>
-            </div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" value="Cebollitas Brunoise" id="toppingCebollitasB"><label class="form-check-label" for="toppingCebollitasB">Cebollitas Brunoise</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" value="Cebollitas" id="toppingCebollitas"><label class="form-check-label" for="toppingCebollitas">Cebollitas</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="toppingPepinillos" value="Pepinillos Encurtidos" checked><label class="form-check-label" for="toppingPepinillos">Pepinillos Encurtidos</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="toppingCheddar" value="Cheddar" checked><label class="form-check-label" for="toppingCheddar">Cheddar</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="toppingSalsa" value="Salsa Mestiza" checked><label class="form-check-label" for="toppingSalsa">Salsa Mestiza</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="toppingGuacamole" value="Guacamole"><label class="form-check-label" for="toppingGuacamole">Guacamole</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="toppingSalsaPicante" value="Salsa Picante"><label class="form-check-label" for="toppingSalsaPicante">Salsa Picante</label></div>
           </div>
         </div>
         <div class="modal-footer justify-content-between">
           <span class="h5 m-0">Total: <span id="final-price-display">$300.00</span></span>
-          <button type="button" class="btn btn-success" id="btn-add-to-cart-modal">Añadir al carrito <span
-              id="btn-price-display">($300.00)</span></button>
+          <button type="button" class="btn btn-success" id="btn-add-to-cart-modal">Añadir al carrito <span id="btn-price-display">($300.00)</span></button>
         </div>
       </div>
     </div>
   </div>
-</body>
 
+  <!-- Eliminado: botón "Continuar pedido" (no debe mostrarse en Menú) -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./js/menu.js" defer></script>
+  <script src="./js/cart.js" defer></script>
+  <script src="./js/producto.js" defer></script>
+  <script src="./js/pedidos.js" defer></script>
+
+  <script>
+    // Redirección desde el carrito (checkout) a dirección
+     document.getElementById('checkout-btn')?.addEventListener('click', (e) => {
+       e.preventDefault();
+       e.stopImmediatePropagation();
+       localStorage.removeItem('shippingInfo');
+       localStorage.removeItem('paymentMethod');
+       window.location.href = 'direccion.html';
+     });
+     document.querySelectorAll('a[href$="pago.html"]').forEach(a => {
+       a.addEventListener('click', (e) => {
+         e.preventDefault();
+         e.stopImmediatePropagation();
+         localStorage.removeItem('shippingInfo');
+         localStorage.removeItem('paymentMethod');
+         window.location.href = 'direccion.html';
+       });
+     });
+  </script>
+</body>
 </html>

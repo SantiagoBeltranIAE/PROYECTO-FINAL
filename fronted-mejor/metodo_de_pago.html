@@ -12,17 +12,21 @@
         
         <div class="payment-container">
             
-            <button class="payment-button" data-method="Efectivo" onclick="goToPage('efectivo.html')">
-                <img src="imagenes/efectivo.png" alt="Pagar con Efectivo">
-            </button>
+            <a id="btn-efectivo" href="pago.html" onclick="localStorage.setItem('paymentMethod','efectivo')">
+                <button class="payment-button" data-method="Efectivo">
+                    <img src="imagenes/efectivo.png" alt="Pagar con Efectivo">
+                </button>
+            </a>
 
-            <button class="payment-button" data-method="Tarjeta" onclick="goToPage('pago.html')">
-                <img src="imagenes/tarjeta.png" alt="Pagar con Tarjeta">
-            </button>
+            <a id="btn-tarjeta"  href="pago.html" onclick="localStorage.setItem('paymentMethod','tarjeta')">
+                <button class="payment-button" data-method="Tarjeta">
+                    <img src="imagenes/tarjeta.png" alt="Pagar con Tarjeta">
+                </button>
+            </a>
 
         </div>
     </div>
     
-    <script src="js/metodo_de_pago.js"></script>
+    <script src="./js/metodo_de_pago.js"></script>
 </body>
 </html>

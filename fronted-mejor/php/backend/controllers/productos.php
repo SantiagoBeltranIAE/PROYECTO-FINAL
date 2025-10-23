@@ -27,13 +27,29 @@ function jsonError(string $msg, int $code = 400): void {
 
 /* URL absoluta para imágenes */
 function buildImageUrl(?string $img): ?string {
-    if (!$img) return null;
-    if (preg_match('#^https?://#i', $img)) return $img;
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $host   = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    $proj   = '/PROYECTO-FINAL';
-    if (strpos($img, '/') === 0) return "{$scheme}://{$host}{$img}";
-    return "{$scheme}://{$host}{$proj}/" . ltrim($img, '/');
+  $placeholder = '/PROYECTO-FINAL/imagenes/placeholder.png';
+  if (!$img) return $placeholder;
+
+  // Si es absoluta, devuélvela tal cual
+  if (preg_match('#^https?://#i', $img)) return $img;
+
+  // Quitar prefijos ./ y espacios extra
+  $img = trim($img);
+  $img = preg_replace('#^\.\/#','', $img);
+
+  // Evitar .heic/.heif -> .jpg
+  $img = preg_replace('/\.(heic|heif)$/i', '.jpg', $img);
+
+  // Separar dir y archivo y URL-encode del nombre (maneja espacios)
+  $dir  = str_replace('\\','/', dirname($img));
+  $file = basename($img);
+  $file = rawurlencode($file);
+  $path = ($dir === '.' ? '' : $dir.'/') . $file;
+
+  // Asegurar prefijo de proyecto
+  if ($path[0] !== '/') $path = '/PROYECTO-FINAL/' . $path;
+
+  return $path ?: $placeholder;
 }
 
 /* Subida de archivo (name="imagen") -> ruta relativa pública */
@@ -107,6 +123,30 @@ function agregarProducto(): void {
     }
 
     if ($nombre === '' || $precio === null) jsonError('Faltan datos (nombre/precio).');
+
+    // normalizar/validar tamanos_precios:
+    if (is_string($tamanos_precios)) {
+        $t = trim($tamanos_precios);
+        if ($t === '') {
+            $tamanos_precios = null;
+        } else {
+            $decoded = json_decode($t, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                // si es array vacío, convertir a null (evita violar constraints que exigen non-empty)
+                if (is_array($decoded) && count($decoded) === 0) {
+                    $tamanos_precios = null;
+                } else {
+                    $tamanos_precios = json_encode($decoded, JSON_UNESCAPED_UNICODE);
+                }
+            } else {
+                // no es JSON válido -> evitar enviar valor inválido a la BD
+                $tamanos_precios = null;
+            }
+        }
+    } elseif (is_array($tamanos_precios)) {
+        if (count($tamanos_precios) === 0) $tamanos_precios = null;
+        else $tamanos_precios = json_encode($tamanos_precios, JSON_UNESCAPED_UNICODE);
+    }
 
     try {
         $id = $productoModel->agregar([

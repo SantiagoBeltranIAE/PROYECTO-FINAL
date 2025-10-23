@@ -1,11 +1,14 @@
 // frontend/js/admin-common.js
+const BASE = '../backend';
+export const api = (p) => `${BASE}/${String(p).replace(/^\/+/, '')}`;
+
 export async function me() {
-  const r = await fetch('../../backend/auth/me.php', {cache:'no-store'});
-  return r.ok ? r.json() : { ok:false };
+  const r = await fetch(api('auth/me.php'), { cache: 'no-store' });
+  return r.ok ? r.json() : { ok: false };
 }
 
 export async function logout() {
-  await fetch('../../backend/auth/logout.php');
+  await fetch(api('auth/logout.php'), { cache: 'no-store' });
   location.href = 'login.html';
 }
 
@@ -26,7 +29,7 @@ export function nav(active) {
 </header>`;
 }
 
-// --- ensure persistent theme toggle (se reinserta si el header se reemplaza) ---
+// --- Theme persistente (igual que antes) ---
 (function(){
   const KEY = 'admin_theme';
   const html = document.documentElement;
@@ -54,24 +57,13 @@ export function nav(active) {
     btn.style.alignItems = 'center';
     btn.style.justifyContent = 'center';
     btn.style.gap = '6px';
-
-    const updateIcon = () => {
-      const isLight = html.getAttribute('data-theme') === 'light';
-      btn.textContent = isLight ? '☀️' : '🌙';
-    };
-
+    const updateIcon = () => { btn.textContent = html.getAttribute('data-theme') === 'light' ? '☀️' : '🌙'; };
     btn.addEventListener('click', () => {
       const isLight = html.getAttribute('data-theme') === 'light';
-      if (isLight) {
-        html.removeAttribute('data-theme'); // vuelve a dark (default)
-        localStorage.setItem(KEY, 'dark');
-      } else {
-        html.setAttribute('data-theme','light');
-        localStorage.setItem(KEY, 'light');
-      }
+      if (isLight) { html.removeAttribute('data-theme'); localStorage.setItem(KEY, 'dark'); }
+      else { html.setAttribute('data-theme','light'); localStorage.setItem(KEY, 'light'); }
       updateIcon();
     });
-
     updateIcon();
     return btn;
   };
@@ -79,19 +71,12 @@ export function nav(active) {
   const ensureInserted = () => {
     const header = document.querySelector('header');
     if (!header) return false;
-    // preferir un slot si existe para controles (opcional)
     const slot = header.querySelector('#theme-slot') || header;
     if (!document.getElementById('theme-toggle')) slot.appendChild(createBtn());
     return true;
   };
 
-  // intentar insertar ahora
   ensureInserted();
-
-  // observar cambios en el DOM para re-insertar si header es reemplazado
-  const obs = new MutationObserver(() => {
-    ensureInserted();
-  });
+  const obs = new MutationObserver(() => { ensureInserted(); });
   obs.observe(document.documentElement, { childList: true, subtree: true });
 })();
-// --- fin theme persistente ---

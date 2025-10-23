@@ -1,98 +1,97 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Opiniones - Restaurante Mestiza</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="./style/style.css" data-global="true">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./style/style.css" data-global="true" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body class="pagina-blanca">
 
-<body>
-  <header>
-  <nav class="navbar">
-  <div class="nav-left">
-    <a href="index.html" title="Volver al Menú" class="js-link nav-logo">
-      <img 
-        src="./imagenes/FOTO_2.png" 
-        alt="Logo" 
-        style="height: 140px; margin-right: 15px;" 
-      >
-    </a>
-    
-    <a href="index.html" title="Inicio" class="js-link nav-text">
-      Inicio
-    </a>
-    
-    <a href="sobre_nosotros.html" title="Sobre Nosotros" class="js-link nav-text">
-      Sobre Nosotros
-    </a>
-    <a href="opiniones.html" title="Opiniones" class="js-link nav-text">
-      Opiniones
-    </a>
-    <a href="menu.html" title="Menú" class="js-link nav-text">
-      Menú
-    </a>
-  </div>
-  <div class="nav-right">
-    <a href="reservas.html" title="Reservas" class="js-link nav-text">
-      Reservas
-    </a>
-    <a href="calendario.html" title="Calendario" class="js-link nav-text">
-      Calendario
-    </a>
-  </div>
-</nav>
-</header>
-  <main class="container my-5">
-    <h2 class="mb-3">Dejanos tu Opinión</h2>
-    <form id="form-opinion">
-      <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre:</label>
-        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu nombre" required>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Calificación:</label>
-        <div id="star-rating" class="star-rating">
-          <i class="fa-regular fa-star" data-value="1"></i>
-          <i class="fa-regular fa-star" data-value="2"></i>
-          <i class="fa-regular fa-star" data-value="3"></i>
-          <i class="fa-regular fa-star" data-value="4"></i>
-          <i class="fa-regular fa-star" data-value="5"></i>
-        </div>
-        <input type="hidden" id="rating" name="puntuacion" value="0">
-      </div>
-      <div class="mb-3">
-        <label for="comentario" class="form-label">Comentario:</label>
-        <textarea class="form-control" id="comentario" name="opinion" rows="4" placeholder="Contanos tu experiencia..." required></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary">Enviar Opinión</button>
-    </form>
-    <h1 class="text-center mb-4">Opiniones de Clientes</h1>
-    <div id="opiniones-list" class="mb-5"></div>
-    <hr class="my-5">
+  <!-- Navbar igual a Inicio (full-width) -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+    <div class="container-fluid px-3">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="./imagenes/FOTO_2.png" alt="Mestiza" class="brand-logo" />
+      </a>
 
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="sobre_nosotros.html">Sobre Nosotros</a></li>
+          <li class="nav-item"><a class="nav-link active" href="opiniones.html">Opiniones</a></li>
+          <li class="nav-item"><a class="nav-link" href="menu.html">Menú</a></li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="reservas.html">Reservas</a></li>
+          <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    <section class="mb-5">
+      <h2 class="mb-3">Dejanos tu Opinión</h2>
+      <form id="form-opinion" class="needs-validation" novalidate>
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu nombre" required>
+          <div class="invalid-feedback">Ingresá tu nombre.</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Calificación</label>
+          <div id="star-rating" class="star-rating fs-3 text-warning">
+            <i class="fa-regular fa-star" data-value="1" role="button" aria-label="1 estrella"></i>
+            <i class="fa-regular fa-star" data-value="2" role="button" aria-label="2 estrellas"></i>
+            <i class="fa-regular fa-star" data-value="3" role="button" aria-label="3 estrellas"></i>
+            <i class="fa-regular fa-star" data-value="4" role="button" aria-label="4 estrellas"></i>
+            <i class="fa-regular fa-star" data-value="5" role="button" aria-label="5 estrellas"></i>
+          </div>
+          <input type="hidden" id="rating" name="puntuacion" value="0">
+        </div>
+
+        <div class="mb-3">
+          <label for="comentario" class="form-label">Comentario</label>
+          <textarea class="form-control" id="comentario" name="opinion" rows="4" placeholder="Contanos tu experiencia..." required></textarea>
+          <div class="invalid-feedback">Escribí tu opinión.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enviar Opinión</button>
+      </form>
+    </section>
+
+    <section>
+      <h2 class="mb-4">Opiniones de Clientes</h2>
+      <div id="opiniones-list" class="row gy-3"></div>
+    </section>
   </main>
 
-  <footer>
-    <p>Bazzurro 1747 esq. B. Manton, Colonia Del Sacramento, Colonia, Uruguay 70000</p>
-    <p>+598 98 107 643</p>
-    <p>&copy; 2025 Mestiza Street Food</p>
-    <div class="social-media">
-      <a href="https://www.instagram.com/mestiza_street_food/" target="_blank">
-        <img src="./imagenes/instagram.png" alt="Instagram" class="social-icon">
-        <span>Instagram</span>
-      </a>
-      <a href="https://www.facebook.com/p/mestiza_sabores_caseros-100036866965455/?_rdr" target="_blank">
-        <img src="./imagenes/facebook.png" alt="Facebook" class="social-icon">
-        <span>Facebook</span>
-      </a>
+  <!-- Footer igual a Inicio -->
+  <footer class="bg-light py-4 mt-5">
+    <div class="container text-center">
+      <p class="mb-1">Bazzurro 1747 esq. B. Manton, Colonia Del Sacramento, Colonia, Uruguay 70000</p>
+      <p class="mb-1">Tel: +598 98 107 643</p>
+      <p class="mb-0 small text-muted">&copy; 2025 Mestiza Street Food</p>
+      <div class="mt-3">
+        <a href="https://www.instagram.com/mestiza_street_food/" target="_blank" rel="noopener" class="me-2">
+          <img src="./imagenes/instagram.png" alt="Instagram" style="height:28px">
+        </a>
+        <a href="https://www.facebook.com/p/mestiza_sabores_caseros-100036866965455/?_rdr" target="_blank" rel="noopener">
+          <img src="./imagenes/facebook.png" alt="Facebook" style="height:28px">
+        </a>
+      </div>
     </div>
   </footer>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/opiniones.js"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/opiniones.js"></script>
 </body>
 </html>

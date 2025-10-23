@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - Admin</title>
+  <link rel="stylesheet" href="./style/admin.css">
+</head>
+<body>
+  <main>
+    <div class="card login-card">
+      <h1 class="center">Panel Admin</h1>
+      <p class="center" style="color:#9aa7bd">Acceso restringido</p>
+      <div class="row">
+        <input id="email" placeholder="Email" value="admin@local">
+        <input id="pass" placeholder="Contraseña" type="password" value="admin123">
+        <button id="btn" class="primary">Ingresar</button>
+        <p id="err" class="center" style="color:#fda4af"></p>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { api } from './js/admin-common.js';
+
+    const btn = document.getElementById('btn');
+    const err = document.getElementById('err');
+
+    btn.onclick = async () => {
+      err.textContent = '';
+      const email = document.getElementById('email').value.trim();
+      const pass  = document.getElementById('pass').value;
+
+      try {
+        const r = await fetch(api('auth/login.php'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, pass }),
+          cache: 'no-store'
+        });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok || data.ok === false) {
+          err.textContent = data.msg || 'Credenciales inválidas';
+          return;
+        }
+        location.href = 'general.html';
+      } catch (e) {
+        err.textContent = 'Error de red';
+      }
+    };
+  </script>
+</body>
+</html>
