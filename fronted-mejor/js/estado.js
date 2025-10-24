@@ -1,109 +1,3 @@
-// ===== Estado de pedido (cliente) =====
-
-// Ajustá la ruta si tu backend está en otra carpeta:
-// desde /fronted-mejor/estado.html -> /backend/pedidos/estado_publico.php
-const API_PUBLICA = "../backend/pedidos/estado_publico.php";
-
-// Normaliza los estados del admin a los 4 pasos visuales
-const NORMALIZA = {
-  nuevo: "confirmado",
-  confirmado: "confirmado",
-  aceptado: "confirmado",
-  en_preparacion: "en_preparacion",
-  en_camino: "en_camino",
-  entregado: "entregado",
-  cancelado: "cancelado",
-};
-
-const PASOS = [
-  { key: "confirmado",     el: "#paso_confirmado",  timeEl: "#hora_confirmado" },
-  { key: "en_preparacion", el: "#paso_preparacion", timeEl: "#hora_preparacion" },
-  { key: "en_camino",      el: "#paso_camino",      timeEl: "#hora_camino" },
-  { key: "entregado",      el: "#paso_entregado",   timeEl: "#hora_entregado" },
-];
-
-let timer = null;
-
-function getParams() {
-  const q = new URLSearchParams(location.search);
-  return { code: q.get("code") || null, id: q.get("id") || null };
-}
-
-async function cargarEstado() {
-  const { code, id } = getParams();
-  if (!code && !id) {
-    setMeta("Falta el código (?code=) o el id (?id=)");
-    return;
-  }
-  const url = new URL(API_PUBLICA, location.href);
-  if (code) url.searchParams.set("code", code);
-  if (id)   url.searchParams.set("id_pedido", id);
-
-  try {
-    const r = await fetch(url, { cache: "no-store" });
-    if (!r.ok) { setMeta("No encontramos el pedido"); return; }
-    const data = await r.json();
-    pintar(data);
-  } catch {
-    // silencio, reintenta en el próximo tick
-  }
-}
-
-function setMeta(html) {
-  const el = document.querySelector("#meta_pedido");
-  if (el) el.innerHTML = html;
-}
-
-function pintar(data) {
-  const p = data.pedido;
-  const hist = data.historial || [];
-  const track = p.tracking_code || p.id_pedido;
-
-  setMeta(`N° de Pedido: <b>${track}</b> — Estado: <b>${p.estado}</b>`);
-
-  const actual = NORMALIZA[p.estado] || "confirmado";
-
-  // horitas desde historial
-  const timeByKey = {};
-  for (const h of hist) {
-    const k = NORMALIZA[h.estado] || h.estado;
-    if (!timeByKey[k]) timeByKey[k] = h.fecha_hora; // primera vez que pasó por ese estado
-  }
-
-  // reset clases + escribir horas
-  PASOS.forEach(ps => {
-    const node = document.querySelector(ps.el);
-    const tEl  = document.querySelector(ps.timeEl);
-    if (!node) return;
-    node.classList.remove("hecho","activo");
-    if (tEl) tEl.textContent = timeByKey[ps.key] ? toLocal(timeByKey[ps.key]) : "Pendiente";
-  });
-
-  // marcar hecho/activo
-  const idxActual = PASOS.findIndex(x => x.key === actual);
-  PASOS.forEach((ps, i) => {
-    const node = document.querySelector(ps.el);
-    if (!node) return;
-    if (i < idxActual) node.classList.add("hecho");
-    if (i === idxActual) node.classList.add("activo");
-  });
-
-  // ancho de la barra de progreso (0, 33, 66, 100 %)
-  const w = Math.max(0, Math.min(100, idxActual * 33 + (idxActual === PASOS.length-1 ? 1 : 0)));
-  const bar = document.querySelector("#tracking-line-progress");
-  if (bar) bar.style.width = (idxActual <= 0 ? 0 : idxActual >= 3 ? 100 : idxActual*33) + "%";
-}
-
-function toLocal(str) {
-  const d = new Date(str.replace(" ", "T"));
-  return isNaN(d) ? str : d.toLocaleTimeString();
-}
-
-// primer carga + polling
-cargarEstado();
-timer = setInterval(cargarEstado, 5000);
-window.addEventListener("beforeunload", () => clearInterval(timer));
-
 // ===== Estado de pedido (página pública estado.html) =====
 (() => {
   const qs = new URLSearchParams(location.search);
@@ -172,6 +66,14 @@ window.addEventListener("beforeunload", () => clearInterval(timer));
     });
     const bar = document.getElementById('tracking-line-progress');
     if (bar) bar.style.width = `${(data.step/3)*100}%`;
+
+    // Si el pedido terminó, limpiar el "último pedido" del cliente para que no quede colgado
+    if (data.estado === 'entregado' || data.estado === 'cancelado'){
+      try{ localStorage.removeItem('lastOrder'); localStorage.removeItem('lastOrderId'); }catch{}
+    } else {
+      // refrescar timestamp para extender su vigencia mientras el cliente mira el estado
+      try{ localStorage.setItem('lastOrder', JSON.stringify({ id: data.id, ts: Date.now() })); }catch{}
+    }
   }
 
   async function load(){

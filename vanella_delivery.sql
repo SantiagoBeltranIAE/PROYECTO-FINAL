@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-10-2025 a las 04:12:49
+-- Tiempo de generación: 24-10-2025 a las 17:50:50
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -119,13 +119,6 @@ CREATE TABLE `pedidos` (
   `estado` varchar(30) NOT NULL DEFAULT 'pendiente'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `pedidos`
---
-
-INSERT INTO `pedidos` (`id_pedido`, `fecha_hora`, `cliente_nombre`, `telefono`, `direccion`, `referencia`, `metodo_pago`, `total`, `estado`) VALUES
-(13, '2025-10-22 23:06:17', 'Thiago Paulo', '099756927', 'Ing. Milton Gonnet 2287', 'Complejo de vivienda', '', 0.00, 'cancelado');
-
 -- --------------------------------------------------------
 
 --
@@ -145,8 +138,15 @@ CREATE TABLE `pedido_detalle` (
 --
 
 INSERT INTO `pedido_detalle` (`id`, `id_pedido`, `producto_nombre`, `cantidad`, `precio_unitario`) VALUES
+(1, 14, 'Burger Mestiza', 1, 0.00),
 (16, 13, 'Burger Mestiza', 1, 0.00),
-(17, 13, 'Cheeseburger Dani', 1, 0.00);
+(17, 13, 'Cheeseburger Dani', 1, 0.00),
+(18, 24, 'Burger Mestiza', 1, 0.00),
+(19, 24, 'Vegetariana (Burger)', 1, 300.00),
+(20, 25, 'Cheeseburger Kids', 1, 300.00),
+(21, 25, 'Vegetariana (Burger)', 1, 300.00),
+(22, 26, 'Cheeseburger Kids', 1, 300.00),
+(23, 26, 'Vegetariana (Burger)', 1, 300.00);
 
 -- --------------------------------------------------------
 
@@ -219,17 +219,17 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`id_producto`, `nombre`, `descripcion`, `categoria`, `precio`, `imagen_url`, `personalizable`, `tamanos_precios`) VALUES
-(1, 'Burger Mestiza', 'Pan de papa con queso, carne smash 110gr, cheddar, salsa \"Mestiza\", cebollitas y pepinillos encurtidos.', 'Hamburguesas', 0.00, '/PROYECTO-FINAL/uploads/products/mestiza.png', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
-(2, 'Cheeseburger Dani', 'Pan de papa con queso, carne smash 110gr, cheddar, mostaza, ketchup y cebollitas brunoise.', 'Hamburguesas', 0.00, '/PROYECTO-FINAL/uploads/products/dani.png', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
-(3, 'Cheeseburger Javito', 'Pan de papa con queso, carne smash 110gr, cheddar.', 'Hamburguesas', 0.00, '/PROYECTO-FINAL/uploads/products/javito.png', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
+(1, 'Burger Mestiza', 'Pan de papa con queso, carne smash 110gr, cheddar, salsa \"Mestiza\", cebollitas y pepinillos encurtidos.', 'Hamburguesas', 350.00, '/PROYECTO-FINAL/uploads/products/mestiza.png', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
+(2, 'Cheeseburger Dani', 'Pan de papa con queso, carne smash 110gr, cheddar, mostaza, ketchup y cebollitas brunoise.', 'Hamburguesas', 350.00, '/PROYECTO-FINAL/uploads/products/dani.png', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
+(3, 'Cheeseburger Javito', 'Pan de papa con queso, carne smash 110gr, cheddar.', 'Hamburguesas', 400.00, '/PROYECTO-FINAL/uploads/products/javito.png', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
 (4, 'Cheeseburger Kids', 'Pan de papa con queso, carne smash 110gr, cheddar, y aderezos.', 'Hamburguesas', 300.00, '/PROYECTO-FINAL/uploads/products/kids.png', 0, NULL),
 (5, 'Vegetariana (Burger)', 'Pan de papa con queso, rodajas de zuccini a la plancha, salteado de verduras (morrón, zanahoria y cebolla), cheddar, salsa \"Mestiza\", cebollitas y pepinillos encurtidos.', 'Hamburguesas', 300.00, '/PROYECTO-FINAL/uploads/products/vegetariana.png', 0, NULL),
 (6, 'Taco de Carne', 'Tortilla artesanal, base cremosa de queso, carne cortada a cuchillo, salteado de vegetales (cebolla, morrón, zanahoria) + Toppings', 'Tacos', 400.00, '/PROYECTO-FINAL/uploads/products/taco_carne.png', 0, NULL),
 (7, 'Vegetariano (Taco)', 'Tortilla artesanal, base cremosa de queso, zucchini, salteado de vegetales (cebolla, morrón, zanahoria) + Toppings', 'Tacos', 400.00, '/PROYECTO-FINAL/uploads/products/taco_vegetariano.png', 0, NULL),
 (8, 'Vegano', 'Tortilla artesanal, zucchini, salteado de vegetales (vebolla, morrón, zanahoria) + Toppings', 'Tacos', 400.00, '/PROYECTO-FINAL/uploads/products/taco_vegano.png', 0, NULL),
 (9, 'Papas Fritas', 'Porción individual.', 'Papas Fritas', 120.00, '/PROYECTO-FINAL/uploads/products/fritas.png', 0, NULL),
-(10, 'Salsa Picante', '', 'Toppings', 0.00, '/PROYECTO-FINAL/uploads/products/picante.png', 0, NULL),
-(11, 'Guacamole', '', 'Toppings', 0.00, '/PROYECTO-FINAL/uploads/products/guacamole.png', 0, NULL);
+(10, 'Salsa Picante', '', 'Toppings', 50.00, '/PROYECTO-FINAL/uploads/products/picante.png', 0, NULL),
+(11, 'Guacamole', '', 'Toppings', 50.00, '/PROYECTO-FINAL/uploads/products/guacamole.png', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -395,7 +395,19 @@ ALTER TABLE `opiniones`
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT de la tabla `pedido_detalle`
+--
+ALTER TABLE `pedido_detalle`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT de la tabla `pedido_historial`
+--
+ALTER TABLE `pedido_historial`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

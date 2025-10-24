@@ -185,6 +185,51 @@
          window.location.href = 'direccion.html';
        });
      });
+
+     // Mostrar ícono de tracking sólo si hay un pedido reciente (TTL) y no está entregado/cancelado
+     (function(){
+       const a = document.getElementById('tracking-icon-link');
+       if (!a) return;
+       const TTL_MS = 4 * 60 * 60 * 1000; // 4 horas
+
+       function hide(){ a.style.display='none'; }
+       function show(id){ a.href=`estado.html?id=${id}`; a.style.display='inline-block'; a.title=`Ver estado del pedido #${id}`; }
+
+       try{
+         const raw = localStorage.getItem('lastOrder');
+         const obj = raw ? JSON.parse(raw) : null;
+         const id  = obj?.id || parseInt(localStorage.getItem('lastOrderId')||'0',10);
+         const ts  = obj?.ts || 0;
+         if (!id){ hide(); return; }
+         // expira por tiempo
+         if (ts && (Date.now()-ts) > TTL_MS){
+           hide(); localStorage.removeItem('lastOrder'); localStorage.removeItem('lastOrderId'); return;
+         }
+
+         // Validar estado en backend (si está entregado/cancelado, ocultar)
+         const ENDPOINTS = [
+           '../admin/backend/pedidos/estado_publico.php',
+           '/PROYECTO-FINAL/admin/backend/pedidos/estado_publico.php'
+         ];
+         (async()=>{
+           for (const u of ENDPOINTS){
+             try{
+               const url = new URL(u, location.href); url.searchParams.set('id', id); url.searchParams.set('ts', Date.now());
+               const r = await fetch(url.toString(), { cache:'no-store' });
+               const t = await r.text();
+               const j = JSON.parse(t);
+               const estado = (j?.pedido?.estado || '').toLowerCase();
+               if (estado==='entregado' || estado==='cancelado'){
+                 hide(); localStorage.removeItem('lastOrder'); localStorage.removeItem('lastOrderId'); return;
+               }
+               show(id); return;
+             }catch{ /* probar siguiente */ }
+           }
+           // si no pudimos validar, igualmente mostramos mientras no esté expirado
+           show(id);
+         })();
+       }catch{ hide(); }
+     })();
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

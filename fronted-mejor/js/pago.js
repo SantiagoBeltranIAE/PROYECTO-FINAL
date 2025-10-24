@@ -104,8 +104,17 @@ document.addEventListener('DOMContentLoaded', () => {
           cache: 'no-store'
         });
         const txt = await res.text();
-        const data = txt ? JSON.parse(txt) : null;
-        if (!res.ok || !data?.ok) throw new Error(data?.msg || txt || ('HTTP '+res.status));
+        // Intentar parsear como JSON; si viene HTML (errores PHP), mostrar mensaje claro
+        let data = null;
+        try {
+          data = txt ? JSON.parse(txt) : null;
+        } catch (e) {
+          // Si el servidor devolvió HTML, recortar para el alert y también loguear completo
+          console.error('Respuesta del servidor no-JSON:', txt);
+          const preview = txt.replace(/<[^>]+>/g, ' ').slice(0, 180);
+          throw new Error('Respuesta del servidor no válida: ' + preview);
+        }
+        if (!res.ok || !data?.ok) throw new Error(data?.msg || ('HTTP '+res.status));
         return data; // { ok:true, id_pedido }
       } catch (e) { lastErr = e; }
     }
@@ -117,6 +126,11 @@ document.addEventListener('DOMContentLoaded', () => {
     e?.preventDefault?.();
     try {
       const resp = await crearPedidoEnServidor();
+      // guardar último pedido para acceso rápido desde el menú/ícono de tracking
+      try {
+        localStorage.setItem('lastOrderId', String(resp.id_pedido));
+        localStorage.setItem('lastOrder', JSON.stringify({ id: resp.id_pedido, ts: Date.now() }));
+      } catch {}
       // limpiar estado del checkout y carritos conocidos
       ['shippingInfo','paymentMethod','mestizaCart','carrito','cart','cartItems','shoppingCart'].forEach(k=>localStorage.removeItem(k));
       location.href = `estado.html?id=${resp.id_pedido}`;

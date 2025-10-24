@@ -21,8 +21,11 @@
     }
     #tracking-line-progress {
       height: 100%; width: 0%;
-      background: linear-gradient(90deg,#22c55e,#f59e0b);
-      border-radius: 6px; transition: width .35s ease;
+      /* Barra llamativa con degradado y un leve brillo */
+      background: linear-gradient(90deg, #22c55e, #f59e0b);
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.35);
+      border-radius: 6px;
+      transition: width .35s ease; /* mantiene la animación del avance */
     }
     .tracking-step {
       position: relative; width: 25%;
