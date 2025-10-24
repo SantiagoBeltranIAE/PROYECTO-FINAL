@@ -57,13 +57,7 @@ body.pagina-blanca { background: #fff; }
     margin-left: .75rem;
     padding-left: .75rem;
   }
-  /* Borde al inicio del grupo derecho (ms-auto) para separar grupos */
-  .navbar .navbar-nav.ms-auto > .nav-item:first-child{
-    border-left: 1px solid rgba(0,0,0,.2);
-    margin-left: .75rem;
-    padding-left: .75rem;
-  }
-
+  
   /* Si usas navbar oscura, cambia el color del separador */
   .navbar.bg-dark .navbar-nav > .nav-item:not(:first-child),
   .navbar.bg-dark .navbar-nav.ms-auto > .nav-item:first-child{
@@ -118,8 +112,13 @@ footer .container > div:last-child img:hover{
 
 /* ===== Home: logo central y horarios ===== */
 .logo-mestiza { width: min(70vw, 460px); height: auto; }
-.horarios { color: #fff; text-align: center; margin: 20px 0 40px; font-size: 1.1rem; line-height: 1.5; font-weight: 600; text-shadow: 0 2px 8px #000; }
-
+/* style.css (CORRECCIÓN) */
+.horarios { 
+  color: #fff; text-align: center; margin: 20px 0 40px; 
+  /* CAMBIO CLAVE: Tamaño de fuente más pequeño para el texto de horarios */
+  font-size: 16px; 
+  line-height: 1.5; font-weight: 600; text-shadow: 0 2px 8px #000; 
+}
 /* Sección clara en home */
 .contenido-blanco { background: #fff; }
 
@@ -228,11 +227,14 @@ footer .container > div:last-child img:hover{
   background: linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.55) 60%, rgba(0,0,0,.65) 100%);
 }
 .hero-carousel .hero-caption{
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: flex-end;
-  gap: 12px; padding-bottom: clamp(18px, 8vh, 60px);
-  color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,.7);
+  position:absolute; left:0; right:0; bottom:0; top:auto;
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+  gap:12px; 
+  /* CAMBIO CLAVE: Reducir el padding inferior para achicar el área del texto */
+  padding-bottom: clamp(12px, 5vh, 40px);
+  color:#fff; text-shadow:0 2px 10px rgba(0,0,0,.7);
+  /* Fijar font-size en el caption (afecta al botón) */
+  font-size: 14px; 
 }
 .hero-carousel .carousel-indicators [data-bs-target]{
   width: 10px; height: 10px; border-radius: 50%;
@@ -253,18 +255,24 @@ footer .container > div:last-child img:hover{
   background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.6));
 }
 
+/* style.css (Línea ~220) */
+
 /* Contenedor central para la foto del slide */
 .hero-center{
   position:absolute; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  padding: clamp(12px, 4vw, 32px);
+  display:flex; 
+  align-items: center; /* Centrado vertical */
+  justify-content:center; /* Centrado horizontal */
+  /* CAMBIO: Se elimina el padding top para centrar completamente */
+  padding: 0 clamp(12px, 4vw, 32px); /* Solo padding lateral */
 }
 .hero-photo{
   display:block;
   width:auto; height:auto;
   max-width: min(86vw, 980px);
-  max-height: min(56vh, 520px);
-  object-fit: contain;               /* NO cubre, se ve el negro alrededor */
+  /* CAMBIO: Aumentamos la altura máxima para que la imagen sea más grande */
+  max-height: min(50vh, 450px); /* Antes era 35vh/320px */
+  object-fit: contain;               
   border-radius: 16px;
   box-shadow: 0 8px 30px rgba(0,0,0,.45);
 }
@@ -285,4 +293,55 @@ footer .container > div:last-child img:hover{
 /* Ocultar indicadores del carrusel principal (hero) */
 #heroCarousel .carousel-indicators {
   display: none !important;
+}
+
+.carousel-hero {
+  /* Fija una relación de aspecto para que todas tengan la misma altura */
+  aspect-ratio: 16 / 10; /* Ejemplo: 16:10 para un rectángulo horizontal */
+  position: relative;
+  overflow: hidden;
+  /* Animación: Transición para el efecto de hover */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efecto Hover: Elevar y escalar ligeramente */
+.carousel-hero:hover {
+  transform: translateY(-5px) scale(1.03); /* Cambia 1.01 a 1.03 para más escala */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Asegura que la imagen ocupe el espacio del contenedor */
+.carousel-hero .carousel-inner,
+.carousel-hero .carousel-item,
+.carousel-hero .carousel-item img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+/* Asegurar que el caption sea legible */
+.carousel-hero .carousel-caption {
+    bottom: 1rem;
+    left: 1rem;
+    right: auto;
+    text-align: left;
+    background: rgba(0, 0, 0, 0.45); /* Hacemos el fondo un poco más oscuro */
+    backdrop-filter: blur(4px);
+    padding: .75rem 1rem;
+    border-radius: .75rem;
+}
+.product-title-card {
+  text-align: center;
+  padding: 1rem 0.5rem;
+  background: #ffffff; /* Fondo blanco */
+  color: #212529; /* Texto oscuro */
+  border-bottom-left-radius: 0.75rem; /* Hereda de rounded-4 de la imagen */
+  border-bottom-right-radius: 0.75rem; /* Hereda de rounded-4 de la imagen */
+  border-top: 1px solid rgba(0,0,0,.1); /* Separador sutil */
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+.carousel-hero:hover .carousel-item img {
+    transform: scale(1.05); /* Escala la imagen un 5% */
+    transition: transform 0.3s ease; /* Transición suave para el efecto */
 }

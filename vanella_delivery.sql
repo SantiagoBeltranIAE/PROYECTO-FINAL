@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-10-2025 a las 05:37:53
+-- Tiempo de generación: 24-10-2025 a las 04:12:49
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -219,18 +219,17 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`id_producto`, `nombre`, `descripcion`, `categoria`, `precio`, `imagen_url`, `personalizable`, `tamanos_precios`) VALUES
-(1, 'Burger Mestiza', NULL, 'Hamburguesas', 0.00, '/PROYECTO-FINAL/uploads/products/1761180627_hamburguesa_dani.png', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
-(2, 'Cheeseburger Dani', NULL, 'Hamburguesas', 0.00, '/PROYECTO-FINAL/uploads/products/1761180236_hamburguesa_dani.png', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
-(3, 'Cheeseburger Javito', NULL, 'Hamburguesas', 0.00, NULL, 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
-(4, 'Cheeseburger Kids', 'Pan de papa con queso, carne smash 110gr, cheddar, y aderezos.', 'Hamburguesas', 300.00, './imagenes/', 0, NULL),
-(5, 'Vegetariana (Burger)', 'Pan de papa con queso, rodajas de zuccini a la plancha, salteado de verduras (morrón, zanahoria y cebolla), cheddar, salsa \"Mestiza\", cebollitas y pepinillos encurtidos.', 'Hamburguesas', 300.00, './imagenes/', 0, NULL),
-(6, 'Taco de Carne', 'Tortilla artesanal, base cremosa de queso, carne cortada a cuchillo, salteado de vegetales (cebolla, morrón, zanahoria) + Toppings', 'Tacos', 400.00, '/PROYECTO-FINAL/uploads/products/1761180268_taco_carne.heic', 0, NULL),
-(7, 'Vegetariano (Taco)', 'Tortilla artesanal, base cremosa de queso, zucchini, salteado de vegetales (cebolla, morrón, zanahoria) + Toppings', 'Tacos', 400.00, '/PROYECTO-FINAL/uploads/products/1761180257_taco_vegetariano.png', 0, NULL),
-(8, 'Vegano', 'Tortilla artesanal, zucchini, salteado de vegetales (vebolla, morrón, zanahoria) + Toppings', 'Tacos', 400.00, './imagenes/', 0, NULL),
-(9, 'Papas Fritas', 'Porción individual.', 'Papas Fritas', 120.00, './imagenes/', 0, NULL),
-(10, 'Salsa Picante', '', 'Toppings', 0.00, './imagenes/salsa_picante.jpg', 0, NULL),
-(11, 'Guacamole', '', 'Toppings', 0.00, './imagenes/guacamole.jpg', 0, NULL),
-(31, 'asdasdsa', '', 'Papas Fritas', 1231233.00, '', 0, NULL);
+(1, 'Burger Mestiza', 'Pan de papa con queso, carne smash 110gr, cheddar, salsa \"Mestiza\", cebollitas y pepinillos encurtidos.', 'Hamburguesas', 0.00, '/PROYECTO-FINAL/uploads/products/mestiza.png', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
+(2, 'Cheeseburger Dani', 'Pan de papa con queso, carne smash 110gr, cheddar, mostaza, ketchup y cebollitas brunoise.', 'Hamburguesas', 0.00, '/PROYECTO-FINAL/uploads/products/dani.png', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
+(3, 'Cheeseburger Javito', 'Pan de papa con queso, carne smash 110gr, cheddar.', 'Hamburguesas', 0.00, '/PROYECTO-FINAL/uploads/products/javito.png', 0, '{\"Simple\":300,\"Doble\":400,\"Triple\":500}'),
+(4, 'Cheeseburger Kids', 'Pan de papa con queso, carne smash 110gr, cheddar, y aderezos.', 'Hamburguesas', 300.00, '/PROYECTO-FINAL/uploads/products/kids.png', 0, NULL),
+(5, 'Vegetariana (Burger)', 'Pan de papa con queso, rodajas de zuccini a la plancha, salteado de verduras (morrón, zanahoria y cebolla), cheddar, salsa \"Mestiza\", cebollitas y pepinillos encurtidos.', 'Hamburguesas', 300.00, '/PROYECTO-FINAL/uploads/products/vegetariana.png', 0, NULL),
+(6, 'Taco de Carne', 'Tortilla artesanal, base cremosa de queso, carne cortada a cuchillo, salteado de vegetales (cebolla, morrón, zanahoria) + Toppings', 'Tacos', 400.00, '/PROYECTO-FINAL/uploads/products/taco_carne.png', 0, NULL),
+(7, 'Vegetariano (Taco)', 'Tortilla artesanal, base cremosa de queso, zucchini, salteado de vegetales (cebolla, morrón, zanahoria) + Toppings', 'Tacos', 400.00, '/PROYECTO-FINAL/uploads/products/taco_vegetariano.png', 0, NULL),
+(8, 'Vegano', 'Tortilla artesanal, zucchini, salteado de vegetales (vebolla, morrón, zanahoria) + Toppings', 'Tacos', 400.00, '/PROYECTO-FINAL/uploads/products/taco_vegano.png', 0, NULL),
+(9, 'Papas Fritas', 'Porción individual.', 'Papas Fritas', 120.00, '/PROYECTO-FINAL/uploads/products/fritas.png', 0, NULL),
+(10, 'Salsa Picante', '', 'Toppings', 0.00, '/PROYECTO-FINAL/uploads/products/picante.png', 0, NULL),
+(11, 'Guacamole', '', 'Toppings', 0.00, '/PROYECTO-FINAL/uploads/products/guacamole.png', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -276,42 +275,6 @@ CREATE TABLE `usuario_admin` (
 
 INSERT INTO `usuario_admin` (`id`, `nombre`, `email`, `pass_hash`, `creado_en`) VALUES
 (1, 'Admin', 'admin@local', '$2y$10$Tps85GFmbUqBToXgI/xXGexUfx3/iOJHybZy3MSXtJ1/innJLM5tK', '2025-10-17 01:47:41');
-
--- --------------------------------------------------------
-
---
--- Estructura Stand-in para la vista `vista_detalle_pedido`
--- (Véase abajo para la vista actual)
---
-CREATE TABLE `vista_detalle_pedido` (
-);
-
--- --------------------------------------------------------
-
---
--- Estructura Stand-in para la vista `vista_pedidos`
--- (Véase abajo para la vista actual)
---
-CREATE TABLE `vista_pedidos` (
-);
-
--- --------------------------------------------------------
-
---
--- Estructura para la vista `vista_detalle_pedido`
---
-DROP TABLE IF EXISTS `vista_detalle_pedido`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_detalle_pedido`  AS SELECT `d`.`id_detalle` AS `id_detalle`, `d`.`id_pedido` AS `id_pedido`, `d`.`id_producto` AS `id_producto`, `d`.`cantidad` AS `cantidad`, `d`.`subtotal` AS `subtotal`, `d`.`modificaciones` AS `modificaciones`, `pr`.`nombre` AS `producto_nombre`, `pr`.`categoria` AS `categoria`, `pr`.`precio` AS `precio`, `pr`.`imagen_url` AS `imagen_url` FROM (`detalle_pedido` `d` left join `producto` `pr` on(`pr`.`id_producto` = `d`.`id_producto`)) ;
-
--- --------------------------------------------------------
-
---
--- Estructura para la vista `vista_pedidos`
---
-DROP TABLE IF EXISTS `vista_pedidos`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vista_pedidos`  AS SELECT `p`.`id_pedido` AS `id_pedido`, `p`.`fecha_hora` AS `fecha_hora`, `p`.`estado` AS `estado`, `p`.`total` AS `total`, `c`.`id_cliente` AS `id_cliente`, `c`.`nombre` AS `cliente_nombre`, `c`.`telefono` AS `telefono`, `c`.`direccion` AS `direccion` FROM (`pedido` `p` left join `cliente` `c` on(`c`.`id_cliente` = `p`.`id_cliente`)) ;
 
 --
 -- Índices para tablas volcadas
@@ -433,78 +396,6 @@ ALTER TABLE `opiniones`
 --
 ALTER TABLE `pedidos`
   MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- AUTO_INCREMENT de la tabla `pedido_detalle`
---
-ALTER TABLE `pedido_detalle`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
---
--- AUTO_INCREMENT de la tabla `pedido_historial`
---
-ALTER TABLE `pedido_historial`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
-
---
--- AUTO_INCREMENT de la tabla `pedido_old`
---
-ALTER TABLE `pedido_old`
-  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- AUTO_INCREMENT de la tabla `producto`
---
-ALTER TABLE `producto`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
-
---
--- AUTO_INCREMENT de la tabla `sobre_nosotros`
---
-ALTER TABLE `sobre_nosotros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT de la tabla `usuario_admin`
---
-ALTER TABLE `usuario_admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `carga`
---
-ALTER TABLE `carga`
-  ADD CONSTRAINT `carga_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`),
-  ADD CONSTRAINT `carga_ibfk_2` FOREIGN KEY (`id_pedido`) REFERENCES `pedido_old` (`id_pedido`);
-
---
--- Filtros para la tabla `compra`
---
-ALTER TABLE `compra`
-  ADD CONSTRAINT `compra_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`),
-  ADD CONSTRAINT `compra_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`);
-
---
--- Filtros para la tabla `pedido_detalle`
---
-ALTER TABLE `pedido_detalle`
-  ADD CONSTRAINT `pedido_detalle_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id_pedido`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `pedido_historial`
---
-ALTER TABLE `pedido_historial`
-  ADD CONSTRAINT `pedido_historial_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido_old` (`id_pedido`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `pedido_old`
---
-ALTER TABLE `pedido_old`
-  ADD CONSTRAINT `pedido_old_ibfk_1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

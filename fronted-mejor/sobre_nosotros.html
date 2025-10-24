@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="./style/style.css" />
 </head>
 
-<body class="pagina-blanca">
+<body class="pagina-blanca" onload="document.body.classList.add('loaded')">
 
   <!-- Navbar igual a Inicio (full-width) -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
@@ -126,8 +126,75 @@
       </div>
     </div>
   </footer>
+<script>
+    // ** 1. Definir el orden de las páginas para la navegación direccional **
+    const pages = [
+      'index.html', 
+      'sobre_nosotros.html', 
+      'opiniones.html', 
+      'menu.html', 
+      'reservas.html', 
+      'calendario.html'
+    ];
 
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const currentPageIndex = pages.indexOf(currentPage);
+
+    // 2. Inicializar la transición de entrada (Slide-In)
+    // Se ejecuta al cargar el DOM, sin el `onload` en el body
+    document.addEventListener('DOMContentLoaded', () => {
+        // Inicialmente, el CSS lo deja en transform: translateX(100vw);
+        // Quitamos la transición por un milisegundo para que el cuerpo se mueva a la posición inicial
+        document.body.style.transition = 'none';
+        document.body.classList.add('slide-right-out');
+        
+        // Pequeño retardo para que el navegador aplique el 'none' antes de poner la clase 'loaded'
+        setTimeout(() => {
+             document.body.style.transition = ''; // Vuelve a aplicar la transición de 0.6s del CSS
+             document.body.classList.remove('slide-right-out');
+             document.body.classList.add('loaded'); // El CSS anima el slide-in a 0
+        }, 50); 
+    });
+
+    // 3. Lógica de transición de salida (Slide-Out Direccional)
+    document.addEventListener('DOMContentLoaded', () => {
+      // Selecciona todos los enlaces que apuntan a otras páginas internas
+      const internalLinks = document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"]):not([data-bs-toggle])');
+      
+      internalLinks.forEach(link => {
+        const targetUrl = link.href.split('/').pop();
+        
+        // Solo aplica a los enlaces del menú principal que están en la lista
+        if (pages.includes(targetUrl)) {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetPageIndex = pages.indexOf(targetUrl);
+            let transitionClass = 'slide-left-out'; // Default
+            
+            // Determinar la dirección de salida
+            if (targetPageIndex > currentPageIndex) {
+              // Va a la derecha en el menú -> Sale por la izquierda
+              transitionClass = 'slide-left-out';
+            } else if (targetPageIndex < currentPageIndex) {
+              // Va a la izquierda en el menú -> Sale por la derecha
+              transitionClass = 'slide-right-out';
+            } 
+            
+            // Aplicar la clase de salida
+            document.body.classList.remove('loaded');
+            document.body.classList.add(transitionClass);
+
+            // Esperar el tiempo de la transición (600ms) antes de navegar
+            setTimeout(() => {
+              window.location.href = this.href;
+            }, 600); 
+          });
+        }
+      });
+    });
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+  </body>
 
 </html>
