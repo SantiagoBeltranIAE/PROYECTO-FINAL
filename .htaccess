@@ -1,0 +1,8 @@
+# Hacer que Apache sea case-insensitive para este directorio
+Options +FollowSymLinks
+RewriteEngine On
+RewriteBase /
+
+# Redirigir proyecto-final (minúsculas) a PROYECTO-FINAL (mayúsculas)
+RewriteCond %{REQUEST_URI} ^/proyecto-final [NC]
+RewriteRule ^proyecto-final/(.*)$ /PROYECTO-FINAL/$1 [R=301,L,NC]

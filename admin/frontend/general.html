@@ -20,10 +20,92 @@
       <main>
         <div class="card">
           <h2>¡Hola, ${u.nombre}!</h2>
-          <p>Usá el menú superior para gestionar <b>Productos</b>, controlar <b>Pedidos</b> en vivo y ver <b>Estadísticas</b>.</p>
-          <div class="flex">
-            <span class="badge">Sugerencia</span>
-            <span>El módulo de <b>Pedidos</b> refresca cada 5 segundos y suena cuando entra uno nuevo.</span>
+          <p style="font-size: 1.1rem; margin-bottom: 2rem;">Bienvenido al panel de administración de Mestiza Street Food. Desde aquí podés gestionar todo el carrito.</p>
+          
+          <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--primary, #f59e0b);">📋 Módulos Disponibles</h3>
+          
+          <div style="display: grid; gap: 1.5rem;">
+            <!-- Productos -->
+            <div style="padding: 1.5rem; border-radius: 8px; background: var(--card-bg, #1a1a1a); border-left: 4px solid #f59e0b;">
+              <h4 style="margin: 0 0 0.5rem 0; color: #f59e0b;">🍔 Productos</h4>
+              <p style="margin: 0 0 0.5rem 0; color: var(--text-muted, #888);">Gestión completa del menú del carrito</p>
+              <ul style="margin: 0; padding-left: 1.5rem; color: var(--text, #e0e0e0);">
+                <li>Agregar nuevos productos con nombre, categoría, precio e imagen</li>
+                <li>Editar productos existentes directamente desde la tabla</li>
+                <li>Eliminar productos del menú</li>
+                <li>Categorías: Hamburguesas, Papas Fritas, Tacos, Toppings</li>
+              </ul>
+            </div>
+
+            <!-- Pedidos -->
+            <div style="padding: 1.5rem; border-radius: 8px; background: var(--card-bg, #1a1a1a); border-left: 4px solid #22c55e;">
+              <h4 style="margin: 0 0 0.5rem 0; color: #22c55e;">📦 Pedidos</h4>
+              <p style="margin: 0 0 0.5rem 0; color: var(--text-muted, #888);">Control en tiempo real de los pedidos</p>
+              <ul style="margin: 0; padding-left: 1.5rem; color: var(--text, #e0e0e0);">
+                <li>Visualización de pedidos en tiempo real (refresco automático cada 5 segundos)</li>
+                <li>Notificación sonora cuando llega un nuevo pedido</li>
+                <li>Cambiar estado: Pendiente → En Preparación → Listo → Entregado</li>
+                <li>Ver detalle completo: productos, cantidades, dirección, método de pago</li>
+                <li>Filtros por estado y fecha para búsqueda rápida</li>
+              </ul>
+            </div>
+
+            <!-- Reservas -->
+            <div style="padding: 1.5rem; border-radius: 8px; background: var(--card-bg, #1a1a1a); border-left: 4px solid #8b5cf6;">
+              <h4 style="margin: 0 0 0.5rem 0; color: #8b5cf6;">📅 Reservas</h4>
+              <p style="margin: 0 0 0.5rem 0; color: var(--text-muted, #888);">Administración de reservas de mesas</p>
+              <ul style="margin: 0; padding-left: 1.5rem; color: var(--text, #e0e0e0);">
+                <li>Ver todas las reservas con información completa (nombre, teléfono, email, fecha, hora, personas)</li>
+                <li>Estadísticas: total de reservas, pendientes, confirmadas, promedio de personas</li>
+                <li>Cambiar estado: Pendiente → Confirmada / Cancelada / Completada</li>
+                <li>Agregar comentarios internos a cada reserva</li>
+                <li>Filtros por estado y rango de fechas</li>
+              </ul>
+            </div>
+
+            <!-- Calendario -->
+            <div style="padding: 1.5rem; border-radius: 8px; background: var(--card-bg, #1a1a1a); border-left: 4px solid #3b82f6;">
+              <h4 style="margin: 0 0 0.5rem 0; color: #3b82f6;">🗓️ Calendario</h4>
+              <p style="margin: 0 0 0.5rem 0; color: var(--text-muted, #888);">Gestión de eventos y promociones</p>
+              <ul style="margin: 0; padding-left: 1.5rem; color: var(--text, #e0e0e0);">
+                <li>Crear eventos especiales (ej: Noche de Jazz, Promociones, Catas)</li>
+                <li>Vista de calendario interactivo con FullCalendar</li>
+                <li>Configurar título, descripción, fecha de inicio/fin y color personalizado</li>
+                <li>Los eventos aparecen automáticamente en el calendario público del sitio web</li>
+                <li>Editar o desactivar eventos sin eliminarlos de la base de datos</li>
+              </ul>
+            </div>
+
+            <!-- Estadísticas -->
+            <div style="padding: 1.5rem; border-radius: 8px; background: var(--card-bg, #1a1a1a); border-left: 4px solid #ef4444;">
+              <h4 style="margin: 0 0 0.5rem 0; color: #ef4444;">📊 Estadísticas</h4>
+              <p style="margin: 0 0 0.5rem 0; color: var(--text-muted, #888);">Análisis completo del negocio</p>
+              <ul style="margin: 0; padding-left: 1.5rem; color: var(--text, #e0e0e0);">
+                <li>Ventas totales con ticket promedio, máximo y mínimo</li>
+                <li>Top 10 productos más vendidos con categorías</li>
+                <li>Ventas por día (últimos 30 días) con gráfico de barras</li>
+                <li>Ventas por categoría de producto</li>
+                <li>Ventas por hora del día para optimizar horarios</li>
+                <li>Estados de pedidos (cuántos están en cada estado)</li>
+                <li>Métodos de pago utilizados</li>
+                <li>Comparación con período anterior (crecimiento/decrecimiento)</li>
+                <li>Filtros personalizados: Hoy, Ayer, Semana, Mes, Trimestre, Año</li>
+              </ul>
+            </div>
+          </div>
+
+          <div style="margin-top: 2rem; padding: 1rem; border-radius: 8px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3);">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+              <span style="font-size: 1.2rem;">💡</span>
+              <strong style="color: #f59e0b;">Consejos de uso</strong>
+            </div>
+            <ul style="margin: 0; padding-left: 1.5rem; color: var(--text, #e0e0e0);">
+              <li>El módulo de <strong>Pedidos</strong> se actualiza automáticamente cada 5 segundos</li>
+              <li>Usa el botón 🌙/☀️ en la esquina superior derecha para cambiar entre modo oscuro y claro</li>
+              <li>Las reservas del público se crean automáticamente como "Pendiente"</li>
+              <li>Los eventos del calendario son visibles inmediatamente en el sitio web público</li>
+              <li>Revisa las <strong>Estadísticas</strong> regularmente para tomar decisiones de negocio</li>
+            </ul>
           </div>
         </div>
       </main>

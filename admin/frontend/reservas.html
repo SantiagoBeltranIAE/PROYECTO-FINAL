@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reservas - Admin</title>
+  <link rel="stylesheet" href="./style/admin.css">
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Tema claro/oscuro -->
+  <script type="module">
+    (function(){
+      const KEY = 'admin_theme';
+      const html = document.documentElement;
+      const applySaved = () => {
+        const saved = localStorage.getItem(KEY);
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'light') html.setAttribute('data-theme','light');
+        else if (saved === 'dark') html.removeAttribute('data-theme');
+        else { if (!prefersDark) html.setAttribute('data-theme','light'); else html.removeAttribute('data-theme'); }
+      };
+      applySaved();
+      const createBtn = () => {
+        const btn = document.createElement('button');
+        btn.id = 'theme-toggle'; btn.title = 'Cambiar modo claro/oscuro'; btn.className = 'btn';
+        btn.style.marginLeft = '8px'; btn.style.minWidth = '40px';
+        btn.style.display = 'inline-flex'; btn.style.alignItems = 'center'; btn.style.justifyContent = 'center';
+        const updateIcon = () => { const isLight = html.getAttribute('data-theme') === 'light'; btn.textContent = isLight ? '☀️' : '🌙'; };
+        btn.addEventListener('click', () => {
+          const isLight = html.getAttribute('data-theme') === 'light';
+          if (isLight) { html.removeAttribute('data-theme'); localStorage.setItem(KEY, 'dark'); }
+          else { html.setAttribute('data-theme','light'); localStorage.setItem(KEY, 'light'); }
+          updateIcon();
+        });
+        updateIcon(); return btn;
+      };
+      const attachToHeader = () => {
+        const header = document.querySelector('header'); if (!header) return false;
+        if (!document.getElementById('theme-toggle')) header.appendChild(createBtn()); return true;
+      };
+      if (!attachToHeader()) {
+        const target = document.getElementById('root') || document.body;
+        const obs = new MutationObserver((mut, o) => { if (attachToHeader()) o.disconnect(); });
+        obs.observe(target, { childList: true, subtree: true });
+      }
+    })();
+  </script>
+
+  <!-- Módulo principal -->
+  <script type="module">
+    import { me, nav, logout, api } from './js/admin-common.js';
+    window._logout = logout;
+
+    const root = document.getElementById('root');
+
+    const u = await me();
+    if (!u.ok) location.href = 'login.html';
+
+    let reservas = [];
+    let filtros = {
+      estado: '',
+      fecha_desde: '',
+      fecha_hasta: ''
+    };
+
+    async function cargarReservas() {
+      const params = new URLSearchParams();
+      if (filtros.estado) params.set('estado', filtros.estado);
+      if (filtros.fecha_desde) params.set('fecha_desde', filtros.fecha_desde);
+      if (filtros.fecha_hasta) params.set('fecha_hasta', filtros.fecha_hasta);
+      
+      const baseUrl = `${location.origin}/PROYECTO-FINAL/admin/backend`;
+      const url = `${baseUrl}/reservas/list.php?action=listar&${params.toString()}`;
+      const res = await fetch(url, { cache: 'no-store' }).then(r => r.json()).catch(() => ({ ok: false }));
+      if (!res.ok) {
+        alert(res.msg || 'Error cargando reservas');
+        return;
+      }
+      reservas = res.reservas || [];
+      
+      // Cargar estadísticas
+      const statsUrl = `${baseUrl}/reservas/list.php?action=estadisticas`;
+      const statsRes = await fetch(statsUrl, { cache: 'no-store' }).then(r => r.json()).catch(() => ({ estadisticas: {} }));
+      const stats = statsRes.estadisticas || {};
+      
+      render(stats);
+    }
+
+    function render(stats) {
+      root.innerHTML = nav('reservas') + `
+        <main>
+          <div class="card">
+            <h2>Gestión de Reservas</h2>
+            
+            <!-- Estadísticas -->
+            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+              <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: var(--card-bg, #1a1a1a);">
+                <div style="font-size: 0.9rem; color: var(--text-muted, #888); margin-bottom: 0.5rem;">Total Reservas (30 días)</div>
+                <div style="font-size: 2rem; font-weight: 600; color: var(--primary, #f59e0b);">${stats.total || 0}</div>
+              </div>
+              <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: var(--card-bg, #1a1a1a);">
+                <div style="font-size: 0.9rem; color: var(--text-muted, #888); margin-bottom: 0.5rem;">Pendientes</div>
+                <div style="font-size: 2rem; font-weight: 600; color: #ef4444;">${stats.pendientes || 0}</div>
+              </div>
+              <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: var(--card-bg, #1a1a1a);">
+                <div style="font-size: 0.9rem; color: var(--text-muted, #888); margin-bottom: 0.5rem;">Confirmadas</div>
+                <div style="font-size: 2rem; font-weight: 600; color: #22c55e;">${stats.confirmadas || 0}</div>
+              </div>
+              <div class="stat-card" style="padding: 1rem; border-radius: 8px; background: var(--card-bg, #1a1a1a);">
+                <div style="font-size: 0.9rem; color: var(--text-muted, #888); margin-bottom: 0.5rem;">Promedio Personas</div>
+                <div style="font-size: 2rem; font-weight: 600; color: var(--primary, #f59e0b);">${parseFloat(stats.promedio_personas || 0).toFixed(1)}</div>
+              </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filters" style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+              <label style="display: flex; flex-direction: column; gap: 0.25rem;">
+                <span style="font-size: 0.875rem;">Estado</span>
+                <select id="filtro-estado" class="form-select" style="min-width: 150px;">
+                  <option value="">Todos</option>
+                  <option value="pendiente">Pendiente</option>
+                  <option value="confirmada">Confirmada</option>
+                  <option value="cancelada">Cancelada</option>
+                  <option value="completada">Completada</option>
+                </select>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 0.25rem;">
+                <span style="font-size: 0.875rem;">Desde</span>
+                <input type="date" id="filtro-desde" class="form-control">
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 0.25rem;">
+                <span style="font-size: 0.875rem;">Hasta</span>
+                <input type="date" id="filtro-hasta" class="form-control">
+              </label>
+              <button id="btn-filtrar" class="btn btn-warning" style="align-self: flex-end;">Filtrar</button>
+              <button id="btn-limpiar" class="btn" style="align-self: flex-end;">Limpiar</button>
+            </div>
+
+            <!-- Tabla de reservas -->
+            <div style="overflow-x: auto;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Personas</th>
+                    <th>Estado</th>
+                    <th>Comentarios</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${reservas.map(r => `
+                    <tr data-id="${r.id_reserva}">
+                      <td>${r.id_reserva}</td>
+                      <td>${r.nombre}</td>
+                      <td>${r.telefono}</td>
+                      <td>${r.email}</td>
+                      <td>${r.fecha}</td>
+                      <td>${r.hora}</td>
+                      <td>${r.personas}</td>
+                      <td>
+                        <select class="form-select estado-select" data-id="${r.id_reserva}" style="min-width: 120px;">
+                          <option value="pendiente" ${r.estado === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+                          <option value="confirmada" ${r.estado === 'confirmada' ? 'selected' : ''}>Confirmada</option>
+                          <option value="cancelada" ${r.estado === 'cancelada' ? 'selected' : ''}>Cancelada</option>
+                          <option value="completada" ${r.estado === 'completada' ? 'selected' : ''}>Completada</option>
+                        </select>
+                      </td>
+                      <td><input class="form-control comentarios-input" data-id="${r.id_reserva}" value="${(r.comentarios || '').replace(/"/g, '&quot;')}" style="min-width: 200px;"></td>
+                      <td class="flex gap">
+                        <button data-act="save" data-id="${r.id_reserva}" class="btn btn-warning">Guardar</button>
+                        <button data-act="del" data-id="${r.id_reserva}" class="btn">Eliminar</button>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </main>
+      `;
+
+      // Listeners de filtros
+      document.getElementById('btn-filtrar').addEventListener('click', () => {
+        filtros.estado = document.getElementById('filtro-estado').value;
+        filtros.fecha_desde = document.getElementById('filtro-desde').value;
+        filtros.fecha_hasta = document.getElementById('filtro-hasta').value;
+        cargarReservas();
+      });
+
+      document.getElementById('btn-limpiar').addEventListener('click', () => {
+        filtros = { estado: '', fecha_desde: '', fecha_hasta: '' };
+        document.getElementById('filtro-estado').value = '';
+        document.getElementById('filtro-desde').value = '';
+        document.getElementById('filtro-hasta').value = '';
+        cargarReservas();
+      });
+
+      // Listeners de acciones
+      document.querySelectorAll('[data-act="save"]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          const estado = document.querySelector(`.estado-select[data-id="${id}"]`).value;
+          const comentarios = document.querySelector(`.comentarios-input[data-id="${id}"]`).value;
+          
+          const fd = new FormData();
+          fd.set('id_reserva', id);
+          fd.set('estado', estado);
+          fd.set('comentarios', comentarios);
+          
+          const res = await fetch(`${location.origin}/PROYECTO-FINAL/admin/backend/reservas/update.php`, {
+            method: 'POST',
+            body: fd
+          });
+          const j = await res.json();
+          
+          if (!res.ok || !j.ok) {
+            alert(j.msg || 'Error al actualizar');
+            return;
+          }
+          
+          alert(j.msg || 'Reserva actualizada');
+          cargarReservas();
+        });
+      });
+
+      document.querySelectorAll('[data-act="del"]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('¿Eliminar esta reserva?')) return;
+          
+          const id = btn.dataset.id;
+          const fd = new FormData();
+          fd.set('id_reserva', id);
+          
+          const res = await fetch(`${location.origin}/PROYECTO-FINAL/admin/backend/reservas/delete.php`, {
+            method: 'POST',
+            body: fd
+          });
+          const j = await res.json();
+          
+          if (!res.ok || !j.ok) {
+            alert(j.msg || 'Error al eliminar');
+            return;
+          }
+          
+          alert(j.msg || 'Reserva eliminada');
+          cargarReservas();
+        });
+      });
+    }
+
+    cargarReservas();
+  </script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 <?php
+require __DIR__ . '/../config/database.php';
 require __DIR__ . '/../models/Producto.php';
 
 /* Instancia del modelo */

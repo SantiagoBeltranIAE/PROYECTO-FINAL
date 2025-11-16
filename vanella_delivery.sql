@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-10-2025 a las 17:50:50
+-- Tiempo de generación: 16-11-2025 a las 02:34:37
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -64,6 +64,34 @@ CREATE TABLE `compra` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `eventos_calendario`
+--
+
+CREATE TABLE `eventos_calendario` (
+  `id_evento` int(11) NOT NULL,
+  `titulo` varchar(200) NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `fecha_inicio` date NOT NULL,
+  `fecha_fin` date DEFAULT NULL,
+  `color` varchar(7) DEFAULT '#f59e0b',
+  `activo` tinyint(1) DEFAULT 1,
+  `fecha_creacion` datetime DEFAULT current_timestamp(),
+  `fecha_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `eventos_calendario`
+--
+
+INSERT INTO `eventos_calendario` (`id_evento`, `titulo`, `descripcion`, `fecha_inicio`, `fecha_fin`, `color`, `activo`, `fecha_creacion`, `fecha_actualizacion`) VALUES
+(1, 'Noche de Jazz', 'Música en vivo todos los viernes', '2025-11-15', NULL, '#f59e0b', 1, '2025-11-15 22:01:51', '2025-11-15 22:01:51'),
+(2, 'Promoción 2x1 en hamburguesas', 'Válido de lunes a miércoles', '2025-11-20', '2025-11-22', '#22c55e', 1, '2025-11-15 22:01:51', '2025-11-15 22:01:51'),
+(3, 'Cata de vinos', 'Selección especial de vinos uruguayyos', '2025-11-25', '2025-11-27', '#8b5cf6', 1, '2025-11-15 22:01:51', '2025-11-15 22:27:23'),
+(4, '3x1', 'Hamburguesas especiales', '2025-11-13', '0000-00-00', '#04f655', 1, '2025-11-15 22:15:09', '2025-11-15 22:15:09');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `meta`
 --
 
@@ -119,6 +147,14 @@ CREATE TABLE `pedidos` (
   `estado` varchar(30) NOT NULL DEFAULT 'pendiente'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `pedidos`
+--
+
+INSERT INTO `pedidos` (`id_pedido`, `fecha_hora`, `cliente_nombre`, `telefono`, `direccion`, `referencia`, `metodo_pago`, `total`, `estado`) VALUES
+(27, '2025-11-15 21:35:45', 'dasda', '2213123123', 'asdasda', 'dasda', '', 750.00, 'aceptado'),
+(28, '2025-11-15 21:50:05', 'dasd', '213123213', 'dsadas', 'dada', '', 2020.00, 'pendiente');
+
 -- --------------------------------------------------------
 
 --
@@ -146,7 +182,16 @@ INSERT INTO `pedido_detalle` (`id`, `id_pedido`, `producto_nombre`, `cantidad`, 
 (20, 25, 'Cheeseburger Kids', 1, 300.00),
 (21, 25, 'Vegetariana (Burger)', 1, 300.00),
 (22, 26, 'Cheeseburger Kids', 1, 300.00),
-(23, 26, 'Vegetariana (Burger)', 1, 300.00);
+(23, 26, 'Vegetariana (Burger)', 1, 300.00),
+(24, 27, 'Cheeseburger Dani', 1, 350.00),
+(25, 27, 'Cheeseburger Javito', 1, 400.00),
+(26, 28, 'Cheeseburger Kids', 1, 300.00),
+(27, 28, 'Cheeseburger Javito', 1, 400.00),
+(28, 28, 'Cheeseburger Dani', 1, 350.00),
+(29, 28, 'Vegetariano (Taco)', 1, 400.00),
+(30, 28, 'Vegano', 1, 400.00),
+(31, 28, 'Papas Fritas', 1, 120.00),
+(32, 28, 'Salsa Picante', 1, 50.00);
 
 -- --------------------------------------------------------
 
@@ -234,6 +279,33 @@ INSERT INTO `producto` (`id_producto`, `nombre`, `descripcion`, `categoria`, `pr
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `reservas`
+--
+
+CREATE TABLE `reservas` (
+  `id_reserva` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `telefono` varchar(20) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `fecha` date NOT NULL,
+  `hora` time NOT NULL,
+  `personas` int(11) NOT NULL,
+  `comentarios` text DEFAULT NULL,
+  `estado` enum('pendiente','confirmada','cancelada','completada') DEFAULT 'pendiente',
+  `fecha_creacion` datetime DEFAULT current_timestamp(),
+  `fecha_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `reservas`
+--
+
+INSERT INTO `reservas` (`id_reserva`, `nombre`, `telefono`, `email`, `fecha`, `hora`, `personas`, `comentarios`, `estado`, `fecha_creacion`, `fecha_actualizacion`) VALUES
+(1, 'Thiago Paulo', '099756927', 'paulothiagoemp@gmail.com', '2025-12-03', '11:02:00', 2, 'hamburguesas triples', 'pendiente', '2025-11-15 22:15:59', '2025-11-15 22:27:10');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `sobre_nosotros`
 --
 
@@ -303,6 +375,14 @@ ALTER TABLE `compra`
   ADD KEY `id_producto` (`id_producto`);
 
 --
+-- Indices de la tabla `eventos_calendario`
+--
+ALTER TABLE `eventos_calendario`
+  ADD PRIMARY KEY (`id_evento`),
+  ADD KEY `idx_fecha_inicio` (`fecha_inicio`),
+  ADD KEY `idx_activo` (`activo`);
+
+--
 -- Indices de la tabla `meta`
 --
 ALTER TABLE `meta`
@@ -351,6 +431,14 @@ ALTER TABLE `producto`
   ADD PRIMARY KEY (`id_producto`);
 
 --
+-- Indices de la tabla `reservas`
+--
+ALTER TABLE `reservas`
+  ADD PRIMARY KEY (`id_reserva`),
+  ADD KEY `idx_fecha` (`fecha`),
+  ADD KEY `idx_estado` (`estado`);
+
+--
 -- Indices de la tabla `sobre_nosotros`
 --
 ALTER TABLE `sobre_nosotros`
@@ -386,6 +474,12 @@ ALTER TABLE `compra`
   MODIFY `id_compra` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `eventos_calendario`
+--
+ALTER TABLE `eventos_calendario`
+  MODIFY `id_evento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT de la tabla `opiniones`
 --
 ALTER TABLE `opiniones`
@@ -395,19 +489,31 @@ ALTER TABLE `opiniones`
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido_detalle`
 --
 ALTER TABLE `pedido_detalle`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido_historial`
 --
 ALTER TABLE `pedido_historial`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+
+--
+-- AUTO_INCREMENT de la tabla `producto`
+--
+ALTER TABLE `producto`
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT de la tabla `reservas`
+--
+ALTER TABLE `reservas`
+  MODIFY `id_reserva` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

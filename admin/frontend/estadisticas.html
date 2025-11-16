@@ -5,11 +5,325 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Estadísticas - Admin</title>
   <link rel="stylesheet" href="./style/admin.css">
+  <style>
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .stat-card {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+    }
+    .stat-card h3 {
+      margin: 0 0 12px 0;
+      font-size: 11px;
+      color: #ccc;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+    [data-theme="light"] .stat-card h3 {
+      color: #666;
+    }
+    .stat-card .value {
+      font-size: 36px;
+      font-weight: bold;
+      color: var(--primary-color, #f59e0b);
+      margin: 8px 0;
+      line-height: 1.2;
+    }
+    .stat-card .change {
+      font-size: 13px;
+      margin-top: 12px;
+      font-weight: 500;
+    }
+    .stat-card .change.positive {
+      color: #10b981;
+    }
+    .stat-card .change.negative {
+      color: #ef4444;
+    }
+    .stat-card .secondary-text {
+      font-size: 12px;
+      margin-top: 8px;
+      color: #bbb;
+    }
+    [data-theme="light"] .stat-card .secondary-text {
+      color: #666;
+    }
+    
+    .chart-container {
+      margin: 20px 0;
+      background: rgba(245, 158, 11, 0.03);
+      border: 1px solid rgba(245, 158, 11, 0.15);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    [data-theme="light"] .chart-container {
+      background: #fff;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    
+    .chart-container h3 {
+      margin: 0 0 20px 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #e0e0e0;
+      border-bottom: 2px solid var(--primary-color, #f59e0b);
+      padding-bottom: 8px;
+    }
+    [data-theme="light"] .chart-container h3 {
+      color: #222;
+    }
+    
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      height: 200px;
+      gap: 8px;
+      margin: 20px 0;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: 8px;
+    }
+    [data-theme="light"] .bar-chart {
+      background: rgba(245, 158, 11, 0.05);
+    }
+    
+    .bar {
+      flex: 1;
+      background: linear-gradient(to top, var(--primary-color, #f59e0b), rgba(245, 158, 11, 0.6));
+      border-radius: 6px 6px 0 0;
+      position: relative;
+      min-width: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+    }
+    .bar:hover {
+      opacity: 0.8;
+      transform: scaleY(1.05);
+    }
+    .bar .label {
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      white-space: nowrap;
+      color: #aaa;
+      font-weight: 500;
+    }
+    [data-theme="light"] .bar .label {
+      color: #666;
+    }
+    
+    .bar .value-label {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      font-weight: bold;
+      white-space: nowrap;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.75);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    [data-theme="light"] .bar .value-label {
+      color: #fff;
+      background: rgba(0, 0, 0, 0.8);
+    }
+    
+    .filters {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      padding: 16px;
+      background: rgba(245, 158, 11, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(245, 158, 11, 0.15);
+    }
+    [data-theme="light"] .filters {
+      background: #fff;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    
+    .filters label {
+      color: #e0e0e0;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+    [data-theme="light"] .filters label {
+      color: #222;
+    }
+    
+    .filters input, .filters select {
+      padding: 8px 12px;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 6px;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #e0e0e0;
+    }
+    [data-theme="light"] .filters input,
+    [data-theme="light"] .filters select {
+      background: #fff;
+      color: #222;
+      border: 1px solid #ddd;
+    }
+    
+    .filters input:focus, .filters select:focus {
+      outline: none;
+      border-color: var(--primary-color, #f59e0b);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+    }
+    .filters button {
+      padding: 8px 16px;
+      background: var(--primary-color, #f59e0b);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .filters button:hover {
+      background: #d97706;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
+    }
+    
+    .quick-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .quick-filters button {
+      padding: 8px 16px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      color: #e0e0e0;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    [data-theme="light"] .quick-filters button {
+      background: #fff;
+      color: #222;
+      border: 1px solid #ddd;
+    }
+    
+    .quick-filters button:hover {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: var(--primary-color, #f59e0b);
+    }
+    .quick-filters button.active {
+      background: var(--primary-color, #f59e0b);
+      color: white;
+      border-color: var(--primary-color, #f59e0b);
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    }
+    
+    .table-compact {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+    }
+    .table-compact th {
+      text-align: left;
+      padding: 12px;
+      background: rgba(245, 158, 11, 0.1);
+      border-bottom: 2px solid var(--primary-color, #f59e0b);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #e0e0e0;
+      font-weight: 600;
+    }
+    [data-theme="light"] .table-compact th {
+      color: #222;
+      background: rgba(245, 158, 11, 0.08);
+    }
+    
+    .table-compact td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(245, 158, 11, 0.15);
+      font-size: 14px;
+      color: #d0d0d0;
+    }
+    [data-theme="light"] .table-compact td {
+      color: #333;
+    }
+    
+    .table-compact tr:hover {
+      background: rgba(245, 158, 11, 0.05);
+    }
+    .table-compact td strong {
+      color: var(--primary-color, #f59e0b);
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 8px;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    [data-theme="light"] .progress-bar {
+      background: rgba(245, 158, 11, 0.1);
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-color, #f59e0b), #fbbf24);
+      transition: width 0.5s ease;
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+    }
+    
+    .two-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    @media (max-width: 768px) {
+      .two-columns {
+        grid-template-columns: 1fr;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="module">
-    import { me, nav, logout, api } from './js/admin-common.js';  // + api
+    import { me, nav, logout, api } from './js/admin-common.js';
     window._logout = logout;
 
     const root = document.getElementById('root');
@@ -18,53 +332,306 @@
 
     let desde = new Date(); desde.setDate(1);
     let hasta = new Date();
+    let currentFilter = 'mes';
 
     function fmt(d){ return d.toISOString().slice(0,10); }
+    
+    function formatMoney(val) {
+      return '$ ' + Number(val || 0).toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+    
+    function formatPercent(val) {
+      const n = Number(val || 0);
+      return (n >= 0 ? '+' : '') + n.toFixed(1) + '%';
+    }
+
+    function setQuickFilter(filter) {
+      currentFilter = filter;
+      const hoy = new Date();
+      switch(filter) {
+        case 'hoy':
+          desde = new Date(hoy);
+          hasta = new Date(hoy);
+          break;
+        case 'ayer':
+          desde = new Date(hoy);
+          desde.setDate(desde.getDate() - 1);
+          hasta = new Date(desde);
+          break;
+        case 'semana':
+          desde = new Date(hoy);
+          desde.setDate(hoy.getDate() - hoy.getDay());
+          hasta = new Date(hoy);
+          break;
+        case 'mes':
+          desde = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+          hasta = new Date(hoy);
+          break;
+        case 'trimestre':
+          desde = new Date(hoy.getFullYear(), Math.floor(hoy.getMonth() / 3) * 3, 1);
+          hasta = new Date(hoy);
+          break;
+        case 'año':
+          desde = new Date(hoy.getFullYear(), 0, 1);
+          hasta = new Date(hoy);
+          break;
+      }
+      load();
+    }
 
     async function load() {
-      const q = `?desde=${fmt(desde)}&hasta=${fmt(hasta)}`;
-      const r = await fetch(api('estadisticas/resumen.php') + q, { cache:'no-store' }); // ruta corregida
-      const data = await r.json().catch(()=>({ ventas:{total_ventas:0,cant_pedidos:0}, top_productos:[], ventas_por_dia:[] }));
-      render(data);
+      try {
+        const q = `?desde=${fmt(desde)}&hasta=${fmt(hasta)}`;
+        console.log('Cargando:', api('estadisticas/resumen.php') + q);
+        const r = await fetch(api('estadisticas/resumen.php') + q, { 
+          cache:'no-store',
+          credentials: 'include'
+        });
+        
+        if (!r.ok) {
+          const txt = await r.text();
+          console.error('Error del servidor:', txt);
+          alert('Error al cargar estadísticas: ' + r.status);
+          return;
+        }
+        
+        const data = await r.json();
+        console.log('Datos recibidos:', data);
+        render(data);
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al cargar estadísticas: ' + error.message);
+      }
     }
 
     function render(x) {
+      const v = x.ventas || {};
+      const comp = x.comparacion || {};
+      
       root.innerHTML = nav('estadisticas') + `
         <main>
           <div class="card">
-            <h2>Resumen</h2>
-            <div class="flex">
-              <input type="date" id="d1" value="${fmt(desde)}">
-              <input type="date" id="d2" value="${fmt(hasta)}">
-              <button class="primary" id="aplicar">Aplicar</button>
+            <h2>Estadísticas de Ventas</h2>
+            
+            <div class="quick-filters">
+              <button class="${currentFilter === 'hoy' ? 'active' : ''}" onclick="setQuickFilter('hoy')">Hoy</button>
+              <button class="${currentFilter === 'ayer' ? 'active' : ''}" onclick="setQuickFilter('ayer')">Ayer</button>
+              <button class="${currentFilter === 'semana' ? 'active' : ''}" onclick="setQuickFilter('semana')">Esta Semana</button>
+              <button class="${currentFilter === 'mes' ? 'active' : ''}" onclick="setQuickFilter('mes')">Este Mes</button>
+              <button class="${currentFilter === 'trimestre' ? 'active' : ''}" onclick="setQuickFilter('trimestre')">Trimestre</button>
+              <button class="${currentFilter === 'año' ? 'active' : ''}" onclick="setQuickFilter('año')">Año</button>
             </div>
-            <p><b>Ventas:</b> $ ${Number(x.ventas?.total_ventas||0).toFixed(2)} — <b>Pedidos:</b> ${x.ventas?.cant_pedidos||0}</p>
+            
+            <div class="filters">
+              <label>Desde: <input type="date" id="d1" value="${fmt(desde)}"></label>
+              <label>Hasta: <input type="date" id="d2" value="${fmt(hasta)}"></label>
+              <button id="aplicar">Aplicar Fechas</button>
+            </div>
 
-            <h3>Top productos</h3>
-            <table class="table">
-              <thead><tr><th>Producto</th><th>Unidades</th><th>Ingreso</th></tr></thead>
-              <tbody>
-                ${(x.top_productos||[]).map(t=>`
-                  <tr><td>${t.nombre}</td><td>${t.unidades}</td><td>$ ${Number(t.ingreso).toFixed(2)}</td></tr>
-                `).join('')}
-              </tbody>
-            </table>
+            <!-- Métricas Principales -->
+            <div class="stats-grid">
+              <div class="stat-card">
+                <h3>Ventas Totales</h3>
+                <div class="value">${formatMoney(v.total_ventas)}</div>
+                <div class="change ${comp.ventas_crecimiento >= 0 ? 'positive' : 'negative'}">
+                  ${formatPercent(comp.ventas_crecimiento)} vs período anterior
+                </div>
+              </div>
+              
+              <div class="stat-card">
+                <h3>Pedidos</h3>
+                <div class="value">${v.cant_pedidos || 0}</div>
+                <div class="change ${comp.pedidos_crecimiento >= 0 ? 'positive' : 'negative'}">
+                  ${formatPercent(comp.pedidos_crecimiento)} vs período anterior
+                </div>
+              </div>
+              
+              <div class="stat-card">
+                <h3>Ticket Promedio</h3>
+                <div class="value">${formatMoney(v.ticket_promedio)}</div>
+                <div class="secondary-text">
+                  Mín: ${formatMoney(v.ticket_minimo)} | Máx: ${formatMoney(v.ticket_maximo)}
+                </div>
+              </div>
+            </div>
 
-            <h3>Ventas por día</h3>
-            <table class="table">
-              <thead><tr><th>Día</th><th>Total</th></tr></thead>
-              <tbody>
-                ${(x.ventas_por_dia||[]).map(d=>`
-                  <tr><td>${d.dia}</td><td>$ ${Number(d.total).toFixed(2)}</td></tr>
-                `).join('')}
-              </tbody>
-            </table>
+            <!-- Ventas por Día -->
+            <div class="chart-container">
+              <h3>Ventas por Día</h3>
+              <div class="bar-chart">
+                ${(x.ventas_por_dia || []).map(d => {
+                  const maxVenta = Math.max(...(x.ventas_por_dia || []).map(dd => Number(dd.total)));
+                  const altura = maxVenta > 0 ? (Number(d.total) / maxVenta * 100) : 0;
+                  return `
+                    <div class="bar" style="height: ${altura}%" title="${formatMoney(d.total)}">
+                      <div class="value-label">${formatMoney(d.total)}</div>
+                      <div class="label">${d.dia.slice(5)}</div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- Top Productos -->
+            <div class="chart-container">
+              <h3>Top 10 Productos</h3>
+              <table class="table-compact">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th style="text-align: right;">Unidades</th>
+                    <th style="text-align: right;">Ingresos</th>
+                    <th style="text-align: right;">Precio Prom.</th>
+                    <th>Participación</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${(x.top_productos || []).map((p, i) => {
+                    const totalIngresos = (x.top_productos || []).reduce((sum, pp) => sum + Number(pp.ingreso), 0);
+                    const participacion = totalIngresos > 0 ? (Number(p.ingreso) / totalIngresos * 100) : 0;
+                    return `
+                      <tr>
+                        <td><strong>${i + 1}.</strong> ${p.nombre}</td>
+                        <td>${p.categoria || '-'}</td>
+                        <td style="text-align: right;">${p.unidades}</td>
+                        <td style="text-align: right;"><strong>${formatMoney(p.ingreso)}</strong></td>
+                        <td style="text-align: right;">${formatMoney(p.precio_promedio)}</td>
+                        <td>
+                          <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 12px;">${participacion.toFixed(1)}%</span>
+                            <div class="progress-bar" style="flex: 1;">
+                              <div class="progress-fill" style="width: ${participacion}%"></div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Ventas por Categoría -->
+            <div class="chart-container">
+              <h3>Ventas por Categoría</h3>
+              <table class="table-compact">
+                <thead>
+                  <tr>
+                    <th>Categoría</th>
+                    <th style="text-align: right;">Pedidos</th>
+                    <th style="text-align: right;">Unidades</th>
+                    <th style="text-align: right;">Ingresos</th>
+                    <th>Participación</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${(x.ventas_por_categoria || []).map(c => {
+                    const totalCat = (x.ventas_por_categoria || []).reduce((sum, cc) => sum + Number(cc.ingreso), 0);
+                    const participacion = totalCat > 0 ? (Number(c.ingreso) / totalCat * 100) : 0;
+                    return `
+                      <tr>
+                        <td><strong>${c.categoria || 'Sin categoría'}</strong></td>
+                        <td style="text-align: right;">${c.pedidos}</td>
+                        <td style="text-align: right;">${c.unidades}</td>
+                        <td style="text-align: right;"><strong>${formatMoney(c.ingreso)}</strong></td>
+                        <td>
+                          <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 12px;">${participacion.toFixed(1)}%</span>
+                            <div class="progress-bar" style="flex: 1;">
+                              <div class="progress-fill" style="width: ${participacion}%"></div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Dos columnas: Estados y Métodos de Pago -->
+            <div class="two-columns">
+              <!-- Estados de Pedidos -->
+              <div class="chart-container">
+                <h3>Estados de Pedidos</h3>
+                <table class="table-compact">
+                  <thead>
+                    <tr>
+                      <th>Estado</th>
+                      <th style="text-align: right;">Cantidad</th>
+                      <th style="text-align: right;">Valor</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${(x.estados_pedidos || []).map(e => `
+                      <tr>
+                        <td><strong>${e.estado}</strong></td>
+                        <td style="text-align: right;">${e.cantidad}</td>
+                        <td style="text-align: right;">${formatMoney(e.total_valor)}</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Métodos de Pago -->
+              <div class="chart-container">
+                <h3>Métodos de Pago</h3>
+                <table class="table-compact">
+                  <thead>
+                    <tr>
+                      <th>Método</th>
+                      <th style="text-align: right;">Cantidad</th>
+                      <th style="text-align: right;">Valor</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${(x.metodos_pago || []).map(m => `
+                      <tr>
+                        <td><strong>${m.metodo_pago || 'Tarjeta'}</strong></td>
+                        <td style="text-align: right;">${m.cantidad}</td>
+                        <td style="text-align: right;">${formatMoney(m.total_valor)}</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Ventas por Hora -->
+            <div class="chart-container">
+              <h3>Ventas por Hora del Día</h3>
+              <div class="bar-chart">
+                ${Array.from({length: 24}, (_, i) => {
+                  const hora = (x.ventas_por_hora || []).find(h => h.hora == i);
+                  const maxVenta = Math.max(...(x.ventas_por_hora || []).map(h => Number(h.total)), 1);
+                  const altura = hora ? (Number(hora.total) / maxVenta * 100) : 0;
+                  return `
+                    <div class="bar" style="height: ${altura}%" title="${hora ? formatMoney(hora.total) : '$0'} (${hora?.pedidos || 0} pedidos)">
+                      ${altura > 10 ? `<div class="value-label">${hora?.pedidos || 0}</div>` : ''}
+                      <div class="label">${i}h</div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
           </div>
         </main>
       `;
-      d1.onchange = () => desde = new Date(d1.value+'T00:00:00');
-      d2.onchange = () => hasta = new Date(d2.value+'T00:00:00');
-      aplicar.onclick = load;
+      
+      // Event listeners
+      window.setQuickFilter = setQuickFilter;
+      document.getElementById('d1').onchange = () => {
+        desde = new Date(document.getElementById('d1').value+'T00:00:00');
+        currentFilter = null;
+      };
+      document.getElementById('d2').onchange = () => {
+        hasta = new Date(document.getElementById('d2').value+'T00:00:00');
+        currentFilter = null;
+      };
+      document.getElementById('aplicar').onclick = load;
     }
 
     load();

@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calendario - Admin</title>
+  <link rel="stylesheet" href="./style/admin.css">
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Tema claro/oscuro -->
+  <script type="module">
+    (function(){
+      const KEY = 'admin_theme';
+      const html = document.documentElement;
+      const applySaved = () => {
+        const saved = localStorage.getItem(KEY);
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'light') html.setAttribute('data-theme','light');
+        else if (saved === 'dark') html.removeAttribute('data-theme');
+        else { if (!prefersDark) html.setAttribute('data-theme','light'); else html.removeAttribute('data-theme'); }
+      };
+      applySaved();
+      const createBtn = () => {
+        const btn = document.createElement('button');
+        btn.id = 'theme-toggle'; btn.title = 'Cambiar modo claro/oscuro'; btn.className = 'btn';
+        btn.style.marginLeft = '8px'; btn.style.minWidth = '40px';
+        btn.style.display = 'inline-flex'; btn.style.alignItems = 'center'; btn.style.justifyContent = 'center';
+        const updateIcon = () => { const isLight = html.getAttribute('data-theme') === 'light'; btn.textContent = isLight ? '☀️' : '🌙'; };
+        btn.addEventListener('click', () => {
+          const isLight = html.getAttribute('data-theme') === 'light';
+          if (isLight) { html.removeAttribute('data-theme'); localStorage.setItem(KEY, 'dark'); }
+          else { html.setAttribute('data-theme','light'); localStorage.setItem(KEY, 'light'); }
+          updateIcon();
+        });
+        updateIcon(); return btn;
+      };
+      const attachToHeader = () => {
+        const header = document.querySelector('header'); if (!header) return false;
+        if (!document.getElementById('theme-toggle')) header.appendChild(createBtn()); return true;
+      };
+      if (!attachToHeader()) {
+        const target = document.getElementById('root') || document.body;
+        const obs = new MutationObserver((mut, o) => { if (attachToHeader()) o.disconnect(); });
+        obs.observe(target, { childList: true, subtree: true });
+      }
+    })();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+  <!-- Módulo principal -->
+  <script type="module">
+    import { me, nav, logout, api } from './js/admin-common.js';
+    window._logout = logout;
+
+    const root = document.getElementById('root');
+
+    const u = await me();
+    if (!u.ok) location.href = 'login.html';
+
+    let eventos = [];
+    let calendar = null;
+
+    async function cargarEventos() {
+      const baseUrl = `${location.origin}/PROYECTO-FINAL/admin/backend`;
+      const url = `${baseUrl}/calendario/list.php?action=listar`;
+      const res = await fetch(url, { cache: 'no-store' }).then(r => r.json()).catch(() => ({ ok: false }));
+      if (!res.ok) {
+        alert(res.msg || 'Error cargando eventos');
+        return;
+      }
+      eventos = res.eventos || [];
+      render();
+    }
+
+    function render() {
+      root.innerHTML = nav('calendario') + `
+        <main>
+          <div class="card">
+            <h2>Gestión de Calendario de Eventos</h2>
+
+            <!-- Formulario para agregar/editar evento -->
+            <form id="evento-form" class="grid gap" style="margin-bottom: 2rem;">
+              <input type="hidden" id="evento-id">
+              
+              <label>Título del evento
+                <input id="evento-titulo" class="form-control" required>
+              </label>
+
+              <label>Descripción
+                <textarea id="evento-descripcion" class="form-control" rows="2"></textarea>
+              </label>
+
+              <div class="grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                <label>Fecha inicio
+                  <input type="date" id="evento-inicio" class="form-control" required>
+                </label>
+
+                <label>Fecha fin (opcional)
+                  <input type="date" id="evento-fin" class="form-control">
+                </label>
+
+                <label>Color
+                  <input type="color" id="evento-color" class="form-control" value="#f59e0b">
+                </label>
+              </div>
+
+              <div class="flex gap">
+                <button type="submit" class="btn btn-warning">Agregar / Guardar</button>
+                <button type="button" id="btn-cancelar" class="btn">Cancelar edición</button>
+              </div>
+            </form>
+
+            <!-- Calendario -->
+            <div id="calendar" style="min-height: 60vh; margin-bottom: 2rem;"></div>
+
+            <!-- Tabla de eventos -->
+            <h3>Lista de Eventos</h3>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Título</th>
+                  <th>Descripción</th>
+                  <th>Fecha Inicio</th>
+                  <th>Fecha Fin</th>
+                  <th>Color</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${eventos.map(e => `
+                  <tr data-id="${e.id}">
+                    <td>${e.id}</td>
+                    <td>${e.title}</td>
+                    <td>${e.description || '-'}</td>
+                    <td>${e.start}</td>
+                    <td>${e.end || '-'}</td>
+                    <td><span style="display: inline-block; width: 30px; height: 20px; background: ${e.color}; border-radius: 4px;"></span></td>
+                    <td class="flex gap">
+                      <button data-act="edit" data-id="${e.id}" class="btn">Editar</button>
+                      <button data-act="del" data-id="${e.id}" class="btn">Eliminar</button>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      `;
+
+      // Inicializar FullCalendar
+      const calendarEl = document.getElementById('calendar');
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'es',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek'
+        },
+        events: eventos,
+        eventDidMount: function(info) {
+          // Agregar tooltip con la descripción
+          if (info.event.extendedProps.description) {
+            info.el.title = info.event.extendedProps.description;
+          }
+        },
+        eventClick: function(info) {
+          // Llenar formulario con el evento seleccionado
+          const evento = eventos.find(e => e.id == info.event.id);
+          if (evento) {
+            document.getElementById('evento-id').value = evento.id;
+            document.getElementById('evento-titulo').value = evento.title;
+            document.getElementById('evento-descripcion').value = evento.description || '';
+            document.getElementById('evento-inicio').value = evento.start;
+            document.getElementById('evento-fin').value = evento.end || '';
+            document.getElementById('evento-color').value = evento.color;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }
+      });
+      calendar.render();
+
+      // Listeners del formulario
+      const form = document.getElementById('evento-form');
+      
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const id = document.getElementById('evento-id').value;
+        const fd = new FormData();
+        
+        if (id) fd.set('id_evento', id);
+        fd.set('titulo', document.getElementById('evento-titulo').value);
+        fd.set('descripcion', document.getElementById('evento-descripcion').value);
+        fd.set('fecha_inicio', document.getElementById('evento-inicio').value);
+        fd.set('fecha_fin', document.getElementById('evento-fin').value);
+        fd.set('color', document.getElementById('evento-color').value);
+        
+        const endpoint = id ? 'update.php' : 'create.php';
+        const res = await fetch(`${location.origin}/PROYECTO-FINAL/admin/backend/calendario/${endpoint}`, {
+          method: 'POST',
+          body: fd
+        });
+        const j = await res.json();
+        
+        if (!res.ok || !j.ok) {
+          alert(j.msg || 'Error al guardar evento');
+          return;
+        }
+        
+        alert(j.msg || (id ? 'Evento actualizado' : 'Evento creado'));
+        form.reset();
+        document.getElementById('evento-id').value = '';
+        document.getElementById('evento-color').value = '#f59e0b';
+        cargarEventos();
+      });
+
+      document.getElementById('btn-cancelar').addEventListener('click', () => {
+        form.reset();
+        document.getElementById('evento-id').value = '';
+        document.getElementById('evento-color').value = '#f59e0b';
+      });
+
+      // Listeners de la tabla
+      document.querySelectorAll('[data-act="edit"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const evento = eventos.find(e => e.id == id);
+          if (evento) {
+            document.getElementById('evento-id').value = evento.id;
+            document.getElementById('evento-titulo').value = evento.title;
+            document.getElementById('evento-descripcion').value = evento.description || '';
+            document.getElementById('evento-inicio').value = evento.start;
+            document.getElementById('evento-fin').value = evento.end || '';
+            document.getElementById('evento-color').value = evento.color;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      });
+
+      document.querySelectorAll('[data-act="del"]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          if (!confirm('¿Eliminar este evento?')) return;
+          
+          const id = btn.dataset.id;
+          const fd = new FormData();
+          fd.set('id_evento', id);
+          
+          const res = await fetch(`${location.origin}/PROYECTO-FINAL/admin/backend/calendario/delete.php`, {
+            method: 'POST',
+            body: fd
+          });
+          const j = await res.json();
+          
+          if (!res.ok || !j.ok) {
+            alert(j.msg || 'Error al eliminar');
+            return;
+          }
+          
+          alert(j.msg || 'Evento eliminado');
+          cargarEventos();
+        });
+      });
+    }
+
+    cargarEventos();
+  </script>
+</body>
+</html>

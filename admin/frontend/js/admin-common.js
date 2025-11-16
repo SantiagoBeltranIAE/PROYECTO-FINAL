@@ -22,6 +22,8 @@ export function nav(active) {
   <nav>
     <button onclick="location.href='productos.html'" class="${active==='productos'?'active':''}">Productos</button>
     <button onclick="location.href='pedidos.html'" class="${active==='pedidos'?'active':''}">Pedidos</button>
+    <button onclick="location.href='reservas.html'" class="${active==='reservas'?'active':''}">Reservas</button>
+    <button onclick="location.href='calendario.html'" class="${active==='calendario'?'active':''}">Calendario</button>
     <button onclick="location.href='estadisticas.html'" class="${active==='estadisticas'?'active':''}">Estadísticas</button>
     <button onclick="location.href='general.html'" class="${active==='general'?'active':''}">General</button>
     <button onclick="window._logout()">Salir</button>

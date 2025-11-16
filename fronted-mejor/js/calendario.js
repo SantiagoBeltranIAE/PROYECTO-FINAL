@@ -1,5 +1,16 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
   const calendarEl = document.getElementById('calendar');
+
+  // Cargar eventos desde el backend
+  let eventosBackend = [];
+  try {
+    const response = await fetch('/PROYECTO-FINAL/admin/backend/calendario/list.php?action=publico');
+    if (response.ok) {
+      eventosBackend = await response.json();
+    }
+  } catch (error) {
+    console.error('Error cargando eventos:', error);
+  }
 
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
@@ -12,21 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     navLinks: false,
     selectable: false,
     dayMaxEvents: true,
-    events: [
-      {
-        title: 'Noche de Jazz',
-        start: new Date().toISOString().split('T')[0], // Evento para hoy
-      },
-      {
-        title: 'Promoción 2x1 en hamburguesas',
-        start: '2025-07-20',
-      },
-      {
-        title: 'Cata de vinos',
-        start: '2025-07-25',
-        end: '2025-07-27',
-      },
-    ],
+    events: eventosBackend,
     eventClick: function (info) {
       alert('Evento: ' + info.event.title);
     },
@@ -34,11 +31,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
   calendar.render();
 });
-
-// Mostrar la fecha actual en tiempo real
-const calendario = document.getElementById('calendario');
-
-setInterval(() => {
-  const fecha = new Date();
-  calendario.innerHTML = fecha.toLocaleString(); // Muestra la fecha y hora actual
-}, 1000);
